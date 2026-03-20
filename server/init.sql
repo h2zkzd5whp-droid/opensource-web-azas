@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS code_editor;
+CREATE USER IF NOT EXISTS 'codeuser'@'localhost' IDENTIFIED BY 'codepass123';
+GRANT ALL PRIVILEGES ON code_editor.* TO 'codeuser'@'localhost';
+FLUSH PRIVILEGES;
+
+USE code_editor;
+
+CREATE TABLE IF NOT EXISTS Users (
+  userId      INTEGER PRIMARY KEY AUTO_INCREMENT,
+  email       VARCHAR(255) UNIQUE NOT NULL,
+  password    VARCHAR(255) NOT NULL,
+  nickname    VARCHAR(50) NOT NULL,
+  theme       VARCHAR(10) DEFAULT 'light',
+  fontSize    INTEGER DEFAULT 14,
+  createdAt   DATETIME NOT NULL,
+  updatedAt   DATETIME NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Codes (
+  codeId      INTEGER PRIMARY KEY AUTO_INCREMENT,
+  userId      INTEGER NOT NULL,
+  title       VARCHAR(255) DEFAULT 'Untitled',
+  language    VARCHAR(20) NOT NULL,
+  source      TEXT NOT NULL,
+  createdAt   DATETIME NOT NULL,
+  updatedAt   DATETIME NOT NULL,
+  FOREIGN KEY (userId) REFERENCES Users(userId)
+);

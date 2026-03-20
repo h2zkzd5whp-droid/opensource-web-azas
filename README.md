@@ -41,74 +41,79 @@ opensource-web-azas/
 ├── CONTRIBUTING.md
 ├── README.md
 │
-├── client/                         # 프론트엔드 (React + Vite)
+├── client/                                 # 프론트엔드 (React + Vite)
 │   ├── .gitignore
 │   ├── README.md
-│   ├── eslint.config.js
-│   ├── index.html
+│   ├── eslint.config.js                    # 코드 스타일 검사 (Vite 기본)
+│   ├── index.html                          # HTML 껍데기 (Vite 기본)
 │   ├── package.json
 │   ├── package-lock.json
-│   ├── vite.config.js
+│   ├── vite.config.js                      # ✅ 프록시 설정 추가됨
 │   ├── public/
 │   │   ├── favicon.svg
 │   │   └── icons.svg
 │   └── src/
-│       ├── App.css
-│       ├── App.jsx
-│       ├── index.css
-│       ├── main.jsx
-│       └── assets/
-│           ├── hero.png
-│           ├── react.svg
-│           └── vite.svg
+│       ├── App.css                         # 전역 스타일 (Vite 기본)
+│       ├── App.jsx                         # ✅ 라우팅 기본 틀로 수정 필요, 지금 vite 기본 내용들어가있음
+│       ├── index.css                       # body 기본 스타일 (Vite 기본)
+│       ├── main.jsx                        # React 진입점 (Vite 기본)
+│       ├── assets/
+│       │   ├── hero.png
+│       │   ├── react.svg
+│       │   └── vite.svg
+│       ├── utils/
+│       │   ├── api.js                      # ✅ API 클라이언트
+│       │   └── constants.js                # ✅ 언어 목록, Judge0 ID, 기본 코드
+│       ├── contexts/
+│       │   └── AuthContext.jsx             # ✅ 인증 상태 관리
+│       ├── components/                     # 📌 빈 파일 
+│       │   ├── ConfirmModal.jsx            # 📌 삭제 확인 모달
+│       │   ├── Editor.jsx                  # 📌 Monaco Editor 래퍼
+│       │   ├── ExecutionPanel.jsx          # 📌 실행 결과 표시
+│       │   ├── LanguageBadge.jsx           # 📌언어 뱃지
+│       │   ├── LanguageSelector.jsx        # 📌 언어 선택 드롭다운
+│       │   ├── ProtectedRoute.jsx          # 📌 비로그인 → /login
+│       │   ├── PublicRoute.jsx             # 📌 로그인 시 → /dashboard
+│       │   ├── ThemeApplier.jsx            # 📌 테마 전환
+│       │   └── Toolbar.jsx                 # 📌 실행/저장 버튼
+│       ├── hooks/
+│       │   └── useCodeExecution.js         # 📌 코드 실행 훅
+│       └── pages/
+│           ├── CodeEditor.jsx              # 📌 에디터 페이지
+│           ├── Dashboard.jsx               # 📌 대시보드
+│           ├── Landing.jsx                 # 📌 랜딩
+│           ├── Login.jsx                   # 📌 로그인
+│           ├── NotFound.jsx                # 📌 404
+│           └── Register.jsx                # 📌 회원가입
 │
-└── server/                         # 백엔드 (Node.js + Express + MySQL)
+└── server/                                 # 백엔드 (Express + MySQL)
+    ├── .env                                # ✅ 환경변수 (Git 제외)
+    ├── .env.example                        # ✅ 환경변수 예시 (Git 포함)
+    ├── init.sql                            # ✅ DB 초기화 스크립트
     ├── package.json
     ├── package-lock.json
     └── src/
-        ├── config/                 # DB 연결 설정
-        ├── controllers/            # 라우트 핸들러
-        ├── middlewares/            # JWT 검증 등 미들웨어
-        ├── models/                 # DB 쿼리 함수
-        └── routes/                 # Express 라우트 정의
+        ├── app.js                          # ✅ Express 진입점
+        ├── config/
+        │   └── db.js                       # ✅ MySQL 커넥션 풀
+        ├── middlewares/
+        │   └── auth.js                     # ✅ JWT 검증 미들웨어
+        ├── routes/
+        │   ├── auth.js                     # ✅ 인증 라우트 (경로 정의)
+        │   └── code.js                     # ✅ 코드 라우트 (경로 정의)
+        ├── controllers/
+        │   ├── authController.js           # 📌 인증 컨트롤러 (TODO 빈 틀)
+        │   └── codeController.js           # 📌 코드 컨트롤러 (TODO 빈 틀)
+        └── models/
+            ├── User.js                     # 📌 빈 파일 (Users 쿼리)
+            └── Code.js                     # 📌 빈 파일 (Codes 쿼리)
 ```
 
-## 데이터베이스 생성
+## 데이터베이스 초기화
 
 ```bash
-sudo mysql
-```
-
-```sql
-CREATE DATABASE code_editor;
-CREATE USER 'codeuser'@'localhost' IDENTIFIED BY 'codepass123';
-GRANT ALL PRIVILEGES ON code_editor.* TO 'codeuser'@'localhost';
-FLUSH PRIVILEGES;
-USE code_editor;
-
-CREATE TABLE Users (
-  userId      INTEGER PRIMARY KEY AUTO_INCREMENT,
-  email       VARCHAR(255) UNIQUE NOT NULL,
-  password    VARCHAR(255) NOT NULL,
-  nickname    VARCHAR(50) NOT NULL,
-  theme       VARCHAR(10) DEFAULT 'light',
-  fontSize    INTEGER DEFAULT 14,
-  createdAt   DATETIME NOT NULL,
-  updatedAt   DATETIME NOT NULL
-);
-
-CREATE TABLE Codes (
-  codeId      INTEGER PRIMARY KEY AUTO_INCREMENT,
-  userId      INTEGER NOT NULL,
-  title       VARCHAR(255) DEFAULT 'Untitled',
-  language    VARCHAR(20) NOT NULL,
-  source      TEXT NOT NULL,
-  createdAt   DATETIME NOT NULL,
-  updatedAt   DATETIME NOT NULL,
-  FOREIGN KEY (userId) REFERENCES Users(userId)
-);
-
-exit;
+sudo service mysql start
+sudo mysql < server/init.sql
 ```
 
 ## 프론트엔드 초기화

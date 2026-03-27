@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const User = require('../models/User')
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 정규표현식으로 이메일 형식 잡아냄
 
 // 회원가입 구현
@@ -91,7 +92,13 @@ exports.login = async (req, res, next) => {
       });
     }
 
-    res.json({ message: 'TODO: token' });
+    // jwt.sign(payload, secretOrprivateKey, [option, callback])
+    const token = jwt.sign({userId: findUser.userId}, process.env.JWT_SECRET, {expiresIn: '24h'});
+
+    res.status(200).json({
+      message: '로그인 성공',
+      token
+    });
   } catch(err) {
     next(err);
   }

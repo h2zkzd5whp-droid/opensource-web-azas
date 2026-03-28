@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const User = require('../models/User')
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 정규표현식으로 이메일 형식 잡아냄
 
 // 회원가입 구현
@@ -60,9 +61,47 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// TODO: 로그인 구현
+// 로그인 구현
 exports.login = async (req, res, next) => {
-  res.json({ message: 'login - TODO' });
+  try{
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: '필수 필드가 누락되었습니다.',
+        errorCode: 'FIELD_MISSING',
+        statusCode: 400
+      });
+    }
+
+    const findUser = await User.findByEmail(email);
+    if (!findUser) {
+      return res.status(401).json({
+        error: '이메일 혹은 비밀번호가 올바르지 않습니다.',
+        errorCode: 'WRONG_PASSWORD',
+        statusCode: 401
+      });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, findUser.password);
+    if(!passwordMatch) {
+      return res.status(401).json({
+        error: '이메일 혹은 비밀번호가 올바르지 않습니다.',
+        errorCode: 'WRONG_PASSWORD',
+        statusCode: 401
+      });
+    }
+
+    // jwt.sign(payload, secretOrprivateKey, [option, callback])
+    const token = jwt.sign({userId: findUser.userId}, process.env.JWT_SECRET, {expiresIn: '24h'});
+
+    res.status(200).json({
+      message: '로그인 성공',
+      token
+    });
+  } catch(err) {
+    next(err);
+  }
 };
 
 // TODO: 내 정보 조회 구현

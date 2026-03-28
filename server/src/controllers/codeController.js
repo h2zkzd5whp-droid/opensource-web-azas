@@ -12,10 +12,17 @@ exports.createCode = async (req, res, next) => {
         const userId = req.user.userId; 
 
         //데이터 검증
-        if (!language || !source) {
+        if (!language) {
             return res.status(400).json({ 
-                message: '언어와 소스 코드는 필수입니다.' ,
-                errorCode: 'LANGUAGE_MISSING·SOURCE_MISSING',
+                error: '언어는 필수입니다.' ,
+                errorCode: 'LANGUAGE_MISSING',
+                statusCode: 400
+            });
+        }
+        if(!source){
+            return res.status(400).json({ 
+                error: '소스 코드는 필수입니다.' ,
+                errorCode: 'SOURCE_MISSING',
                 statusCode: 400
             });
         }

@@ -14,8 +14,9 @@ exports.createCode = async (req, res, next) => {
         //데이터 검증
         if (!language || !source) {
             return res.status(400).json({ 
-                success: false, 
-                message: '언어와 소스 코드는 필수입니다.' 
+                message: '언어와 소스 코드는 필수입니다.' ,
+                errorCode: 'LANGUAGE_MISSING·SOURCE_MISSING',
+                statusCode: 400
             });
         }
 
@@ -29,7 +30,7 @@ exports.createCode = async (req, res, next) => {
 
         res.status(201).json({
             message: '코드가 성공적으로 저장되었습니다.',
-            codeId: result.insertId,
+            codeId: result.codeId,
             createdAt :result.createdAt
         });
 

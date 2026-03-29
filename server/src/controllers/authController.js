@@ -104,9 +104,26 @@ exports.login = async (req, res, next) => {
   }
 };
 
-// TODO: 내 정보 조회 구현
+// 내 정보 조회 구현
 exports.getMe = async (req, res, next) => {
-  res.json({ message: 'getMe - TODO' });
+  try{
+    const findUser = await User.findById(req.user.userId);
+
+    if (!findUser) {
+      return res.status(404).json({
+        error: "유저를 찾을 수 없습니다",
+        errorCode: 'USER_NOT_FOUND',
+        statusCode: 404
+      });
+    }
+
+    const {userId, email, nickname, theme, fontSize} = findUser;
+    res.status(200).json({
+      userId, email, nickname, theme, fontSize
+    }) 
+  } catch(err) {
+    next(err);
+  }
 };
 
 // TODO: 내 정보 수정 구현

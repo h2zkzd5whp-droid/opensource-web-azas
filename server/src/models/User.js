@@ -11,7 +11,11 @@ exports.create = async (email, hashedPassword, nickname) => {
     return result.insertId;
 }
 
-// TODO: findById - getMe용
+// findById - getMe용
+exports.findById = async (userId) => {
+    const [rows] = await pool.query('SELECT * FROM Users WHERE UserId = ?', [userId]);
+    return rows[0];
+}
 // TODO: update - updateMe용
 // TODO: updatePassword - changePassword용
 

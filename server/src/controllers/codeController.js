@@ -48,7 +48,17 @@ exports.createCode = async (req, res, next) => {
 
 // TODO: 코드 목록 구현
 exports.listCodes = async (req, res, next) => {
-  res.json({ message: 'listCodes - TODO' });
+    try {
+        const userId = req.user.userId;
+        const codes = await Code.findAllByUserId(userId);
+
+        res.status(200).json({
+            codes: codes,
+            total: codes.length
+        });
+    } catch (err) {
+        next(err);
+    }
 };
 
 // TODO: 코드 불러오기 구현

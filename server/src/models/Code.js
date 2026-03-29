@@ -14,3 +14,13 @@ exports.create = async ({userId, title, language, source}) => {
 
     return rows[0]; 
 };
+
+exports.findAllByUserId = async (userId) => {
+    const [rows] = await pool.query(
+        `SELECT codeId, title, language, createdAt, updatedAt 
+         FROM Codes WHERE userId = ? ORDER BY createdAt DESC`,
+        [userId]
+    );
+    
+    return rows;
+};

@@ -24,3 +24,12 @@ exports.findAllByUserId = async (userId) => {
     
     return rows;
 };
+
+exports.findById = async (codeId) => {
+    const [rows] = await pool.query(
+        `SELECT codeId, userId, title, language, source, createdAt, updatedAt 
+        FROM Codes WHERE codeId = ?`, [codeId]
+    );
+    //데이터 유효성 검증
+    return rows.length > 0 ? rows[0] : null;
+};

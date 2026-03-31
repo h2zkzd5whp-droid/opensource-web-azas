@@ -63,7 +63,40 @@ exports.listCodes = async (req, res, next) => {
 
 // TODO: 코드 불러오기 구현
 exports.getCode = async (req, res, next) => {
-  res.json({ message: 'getCode - TODO' });
+  try {
+        const { codeId } = req.params;
+        const userId = req.user.userId;
+
+        const code = await Code.findById(codeId);
+
+        //received null from models
+        if (!code) {
+            return res.status(404).json({
+                error: '해당 소스코드를 찾을 수 없습니다.',
+                errorCode: 'NOT_FOUND',
+                statusCode: 404
+            });
+        }
+        if (code.userId !== userId) {
+            return res.status(403).json({
+                error: '접근 권한이 없습니다.',
+                errorCode: 'FORBIDDEN',
+                statusCode: 403
+            });
+        }
+
+        res.status(200).json({
+            codeId: code.codeId,
+            title: code.title,
+            language: code.language,
+            source: code.source,
+            createdAt: code.createdAt,
+            updatedAt: code.updatedAt
+        });
+
+    } catch (err) {
+        next(err);
+    }
 };
 
 // TODO: 코드 수정 구현

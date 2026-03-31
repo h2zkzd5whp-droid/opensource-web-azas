@@ -126,9 +126,76 @@ exports.getMe = async (req, res, next) => {
   }
 };
 
-// TODO: 내 정보 수정 구현
+// 내 정보 수정 구현
 exports.updateMe = async (req, res, next) => {
-  res.json({ message: 'updateMe - TODO' });
+  try{
+    const { nickname, theme, fontSize } = req.body;
+
+    const findUser = await User.findById(req.user.userId);
+    
+    if (!findUser) {
+      return res.status(404).json({
+        error: "유저를 찾을 수 없습니다",
+        errorCode: "USER_NOT_FOUND",
+        statusCode: 404
+      });
+    }
+
+    const finalNickname = nickname !== undefined ? nickname : findUser.nickname;  //삼항연산자
+    const finalTheme = theme !== undefined ? theme : findUser.theme;
+    const finalFontSize = fontSize !== undefined ? fontSize : findUser.fontSize;
+
+    if (nickname !== undefined) {
+      if (!nickname.trim()) {
+        return res.status(400).json({
+        error: "닉네임이 비어있습니다",
+        errorCode: "NICKNAME_EMPTY",
+        statusCode: 400
+      });
+      }
+      if (!nickname) {
+        return res.status(400).json({
+          error: "닉네임이 비어있습니다.",
+          errorCode: "NICKNAME_EMPTY",
+          statusCode: 400
+        });
+      }
+    }
+
+    if (theme !== undefined && theme !== 'dark' && theme !== 'light') {
+      return res.status(400).json({
+        error: "테마 값이 잘못되었습니다",
+        errorCode: "INVALID_VALUE",
+        statusCode: 400
+      });
+    }
+
+    if (fontSize !== undefined) {
+      const size = Number(fontSize);
+      if(!Number.isInteger(size) || size < 12 || size > 24) {
+        return res.status(400).json({
+          error: "폰트 값이 잘못되었습니다",
+          errorCode: "INVALID_VALUE",
+          statusCode: 400
+        });
+      }
+    }
+
+    const updateUser = await User.update(req.user.userId, finalNickname, finalTheme, finalFontSize);
+
+    res.status(200).json({
+      message: "변경 성공",
+      user: { userId: findUser.userId, 
+        email: findUser.email,
+        nickname: finalNickname, 
+        theme: finalTheme, 
+        fontSize: finalFontSize
+      }
+    });
+    
+  } catch(err){
+    next(err);
+  }
 };
 
 // TODO: 비밀번호 변경 구현

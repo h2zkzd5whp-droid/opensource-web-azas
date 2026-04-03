@@ -101,7 +101,54 @@ exports.getCode = async (req, res, next) => {
 
 // TODO: 코드 수정 구현
 exports.updateCode = async (req, res, next) => {
-  res.json({ message: 'updateCode - TODO' });
+    try {
+        const { codeId } = req.params;
+        const { title, source, language } = req.body;
+        const userId = req.user.userId;
+
+        if (!source) {
+            return res.status(400).json({
+                error: '소스코드는 필수 항목입니다.',
+                errorCode: 'SOURCE_MISSING',
+                statusCode: 400
+            });
+        }
+
+        const existingCode = await Code.findById(codeId);
+        
+        if (!existingCode) {
+            return res.status(404).json({
+                error: '해당 코드를 찾을 수 없습니다.',
+                errorCode: 'NOT_FOUND',
+                statusCode: 404
+            });
+        }
+
+        if (existingCode.userId !== userId) {
+            return res.status(403).json({
+                error: '본인의 페이지만 수정할 수 있습니다.',
+                errorCode: 'FORBIDDEN',
+                statusCode: 403
+            });
+        }
+
+        const updatedData = {
+            // title이 들어오면 새 값, 없으면 기존 값 유지
+            title: (title !== undefined && title.trim() !== "") ? title : existingCode.title,
+            language: language || existingCode.language,
+            source: source
+        };
+
+        const isUpdated = await Code.update(codeId, updatedData);
+        if (isUpdated) {
+            res.status(200).json({
+                message: '코드가 성공적으로 수정되었습니다.',
+                updatedAt: new Date()
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
 };
 
 // TODO: 코드 삭제 구현

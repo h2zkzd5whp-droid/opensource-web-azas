@@ -33,3 +33,12 @@ exports.findById = async (codeId) => {
     //데이터 유효성 검증
     return rows.length > 0 ? rows[0] : null;
 };
+
+exports.update = async (codeId, { title, language, source }) => {
+    const [rows] = await pool.query(
+        `UPDATE Codes SET title = ?, language = ?, source = ?, updatedAt = NOW()
+        WHERE codeId = ?`, [title, language, source, codeId]
+    );
+    
+    return rows.affectedRows > 0;
+};

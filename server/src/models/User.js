@@ -16,10 +16,15 @@ exports.findById = async (userId) => {
     const [rows] = await pool.query('SELECT * FROM Users WHERE UserId = ?', [userId]);
     return rows[0];
 }
+
 // update - updateMe용
 exports.update = async (userId, nickname, theme, fontSize) => {
     const[result] = await pool.query('UPDATE Users SET nickname=?, theme=?, fontSize=? WHERE userId=?',
         [nickname, theme, fontSize, userId]);
 }
-// TODO: updatePassword - changePassword용
 
+// updatePassword - changePassword용
+exports.updatePassword = async (userId, password) => {
+    const[result] = await pool.query('UPDATE Users SET password=? WHERE userId=?',
+        [password, userId]);
+}

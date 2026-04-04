@@ -198,7 +198,7 @@ exports.updateMe = async (req, res, next) => {
   }
 };
 
-// TODO: 비밀번호 변경 구현
+// 비밀번호 변경 구현
 exports.changePassword = async (req, res, next) => {
   try{
     const { oldPassword, newPassword } = req.body;

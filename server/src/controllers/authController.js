@@ -198,7 +198,52 @@ exports.updateMe = async (req, res, next) => {
   }
 };
 
-// TODO: 비밀번호 변경 구현
+// 비밀번호 변경 구현
 exports.changePassword = async (req, res, next) => {
-  res.json({ message: 'changePassword - TODO' });
+  try{
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword) {
+      return res.status(400).json({
+        error: "기존 비밀번호를 입력해주세요",
+        errorCode: "FIELD_MISSING",
+        statusCode: 400
+      });
+    }
+    
+    if (!newPassword) {
+      return res.status(400).json({
+        error: "새 비밀번호를 입력해주세요",
+        errorCode: "FIELD_MISSING",
+        statusCode: 400
+      });
+    }
+
+    if(newPassword.length < 8) {
+      return res.status(400).json({
+        error: '패스워드가 너무 짧습니다. 8자 이상으로 작성해주세요.',
+        errorCode: 'PASSWORD_TOO_SHORT',
+        statusCode: 400
+      });
+    }
+
+    const findUser = await User.findById(req.user.userId);
+    const passwordMatch = await bcrypt.compare(oldPassword, findUser.password);
+
+    if(!passwordMatch) {
+      return res.status(401).json({
+        error: '기존 비밀번호가 올바르지 않습니다.',
+        errorCode: 'WRONG_PASSWORD',
+        statusCode: 401
+      });
+    }
+    const hashedNew = await bcrypt.hash(newPassword, 10);
+    await User.updatePassword(req.user.userId, hashedNew);
+    res.status(200).json({
+      message: "비밀번호 변경이 완료되었습니다."
+    });
+
+  } catch(err){
+    next(err);
+  }
 };

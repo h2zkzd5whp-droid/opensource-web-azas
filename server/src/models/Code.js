@@ -49,4 +49,4 @@ exports.delete = async(codeId) => {
     );
 
     return rows.affectedRows >0;
-}
+};

@@ -153,5 +153,32 @@ exports.updateCode = async (req, res, next) => {
 
 // TODO: 코드 삭제 구현
 exports.deleteCode = async (req, res, next) => {
-  res.json({ message: 'deleteCode - TODO' });
+  try{
+        const userId = req.user.userId;
+        const { codeId } =req.params;
+        const code = await Code.findById(codeId);
+
+        if (!code) {
+            return res.status(404).json({
+                error: '해당 소스코드를 찾을 수 없습니다.',
+                errorCode: 'NOT_FOUND',
+                statusCode: 404
+            });
+        }
+
+        if (code.userId !== userId) {
+            return res.status(403).json({
+                error: '접근 권한이 없습니다.',
+                errorCode: 'FORBIDDEN',
+                statusCode: 403
+            });
+        }
+
+        const deleted = await Code.delete(codeId);
+        if(deleted){
+            return res.status(204).json();
+        }
+    } catch(err){
+        next(err);
+    }
 };

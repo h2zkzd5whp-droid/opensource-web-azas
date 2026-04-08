@@ -42,3 +42,11 @@ exports.update = async (codeId, { title, language, source }) => {
     
     return rows.affectedRows > 0;
 };
+
+exports.delete = async(codeId) => {
+    const [rows] = await pool.query(
+        'DELETE FROM Codes WHERE codeId = ?' , [codeId]
+    );
+
+    return rows.affectedRows >0;
+}

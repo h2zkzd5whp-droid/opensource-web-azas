@@ -1,10 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { AuthProvider } from './contexts/AuthContext';
+import './index.css';
+import App from './App.jsx';
 
-createRoot(document.getElementById('root')).render(
+// createRoot(domNode, options?) setting start point on index.html
+
+const domNode = document.getElementById('root');
+
+createRoot(domNode).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </StrictMode>
+);

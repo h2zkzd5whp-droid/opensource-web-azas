@@ -46,7 +46,7 @@ export default function Login() {
 
         {error && <div className={styles.errorBanner}>{error}</div>}
 
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.field}>
             <span className={styles.label}>Email</span>
             <div className={styles.inputWrap}>

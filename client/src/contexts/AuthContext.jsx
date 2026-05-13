@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
         .catch(() => localStorage.removeItem('token'))
         .finally(() => setLoading(false));
     } else {
-      setLoading(false);
+      Promise.resolve().then(() => setLoading(false));
     }
   }, []);
 

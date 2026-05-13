@@ -21,7 +21,7 @@ const authMiddleware = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
-  } catch (err) {
+  } catch (_err) {
     return res.status(401).json({
       error: '인증이 필요합니다',
       errorCode: 'UNAUTHORIZED',

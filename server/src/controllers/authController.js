@@ -181,7 +181,7 @@ exports.updateMe = async (req, res, next) => {
       }
     }
 
-    const updateUser = await User.update(req.user.userId, finalNickname, finalTheme, finalFontSize);
+    await User.update(req.user.userId, finalNickname, finalTheme, finalFontSize);
 
     res.status(200).json({
       message: "변경 성공",

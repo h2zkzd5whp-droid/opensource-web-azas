@@ -37,12 +37,12 @@ describe('Login — server error messages', () => {
     });
   }
 
-  test('WRONG_PASSWORD', () => submitAndExpect('WRONG_PASSWORD', '이메일 또는 비밀번호가 올바르지 않습니다.'));
-  test('FIELD_MISSING', () => submitAndExpect('FIELD_MISSING', '이메일과 비밀번호를 모두 입력해주세요.'));
+  test('WRONG_PASSWORD', () => submitAndExpect('WRONG_PASSWORD', 'Incorrect email or password.'));
+  test('FIELD_MISSING', () => submitAndExpect('FIELD_MISSING', 'Please enter your email and password.'));
 });
 
 describe('Login — success', () => {
-  test('성공 시 /dashboard로 이동', async () => {
+  test('success → navigate to /dashboard', async () => {
     mockLogin.mockResolvedValueOnce();
     renderLogin();
 
@@ -57,7 +57,7 @@ describe('Login — success', () => {
 });
 
 describe('Login — UI', () => {
-  test('Sign up 링크가 /register로 연결', () => {
+  test('Sign up link points to /register', () => {
     renderLogin();
     expect(screen.getByRole('link', { name: /sign up/i })).toHaveAttribute('href', '/register');
   });

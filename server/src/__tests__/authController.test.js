@@ -3,13 +3,13 @@ const request = require('supertest');
 const app = require('../app');
 
 describe('POST /api/register', () => {
-  test('필드 누락 → 400 FIELD_MISSING', async () => {
+  test('missing fields → 400 FIELD_MISSING', async () => {
     const res = await request(app).post('/api/register').send({ email: 'a@a.com' });
     expect(res.status).toBe(400);
     expect(res.body.errorCode).toBe('FIELD_MISSING');
   });
 
-  test('비밀번호 8자 미만 → 400 PASSWORD_TOO_SHORT', async () => {
+  test('password too short → 400 PASSWORD_TOO_SHORT', async () => {
     const res = await request(app).post('/api/register').send({
       email: 'a@a.com', password: '123', nickname: 'nick'
     });
@@ -17,7 +17,7 @@ describe('POST /api/register', () => {
     expect(res.body.errorCode).toBe('PASSWORD_TOO_SHORT');
   });
 
-  test('닉네임 공백만 → 400 NICKNAME_EMPTY', async () => {
+  test('whitespace-only nickname → 400 NICKNAME_EMPTY', async () => {
     const res = await request(app).post('/api/register').send({
       email: 'a@a.com', password: 'pass1234', nickname: '   '
     });
@@ -25,7 +25,7 @@ describe('POST /api/register', () => {
     expect(res.body.errorCode).toBe('NICKNAME_EMPTY');
   });
 
-  test('이메일 형식 오류 → 400 INVALID_EMAIL', async () => {
+  test('invalid email format → 400 INVALID_EMAIL', async () => {
     const res = await request(app).post('/api/register').send({
       email: 'notanemail', password: 'pass1234', nickname: 'nick'
     });
@@ -33,7 +33,7 @@ describe('POST /api/register', () => {
     expect(res.body.errorCode).toBe('INVALID_EMAIL');
   });
 
-  test('중복 이메일 → 409 EMAIL_DUPLICATE', async () => {
+  test('duplicate email → 409 EMAIL_DUPLICATE', async () => {
     await request(app).post('/api/register').send({
       email: 'dup@a.com', password: 'pass1234', nickname: 'nick'
     });
@@ -44,7 +44,7 @@ describe('POST /api/register', () => {
     expect(res.body.errorCode).toBe('EMAIL_DUPLICATE');
   });
 
-  test('정상 가입 → 201', async () => {
+  test('valid input → 201', async () => {
     const res = await request(app).post('/api/register').send({
       email: 'new@a.com', password: 'pass1234', nickname: 'nick'
     });
@@ -61,13 +61,13 @@ describe('POST /api/login', () => {
     });
   });
 
-  test('필드 누락 → 400 FIELD_MISSING', async () => {
+  test('missing fields → 400 FIELD_MISSING', async () => {
     const res = await request(app).post('/api/login').send({ email: 'user@a.com' });
     expect(res.status).toBe(400);
     expect(res.body.errorCode).toBe('FIELD_MISSING');
   });
 
-  test('없는 이메일 → 401 WRONG_PASSWORD', async () => {
+  test('unknown email → 401 WRONG_PASSWORD', async () => {
     const res = await request(app).post('/api/login').send({
       email: 'none@a.com', password: 'pass1234'
     });
@@ -75,7 +75,7 @@ describe('POST /api/login', () => {
     expect(res.body.errorCode).toBe('WRONG_PASSWORD');
   });
 
-  test('비밀번호 틀림 → 401 WRONG_PASSWORD', async () => {
+  test('wrong password → 401 WRONG_PASSWORD', async () => {
     const res = await request(app).post('/api/login').send({
       email: 'user@a.com', password: 'wrongpass'
     });
@@ -83,7 +83,7 @@ describe('POST /api/login', () => {
     expect(res.body.errorCode).toBe('WRONG_PASSWORD');
   });
 
-  test('정상 로그인 → 200 + token', async () => {
+  test('valid credentials → 200 + token', async () => {
     const res = await request(app).post('/api/login').send({
       email: 'user@a.com', password: 'pass1234'
     });
@@ -105,12 +105,12 @@ describe('GET /api/auth/me', () => {
     token = res.body.token;
   });
 
-  test('토큰 없음 → 401', async () => {
+  test('no token → 401', async () => {
     const res = await request(app).get('/api/auth/me');
     expect(res.status).toBe(401);
   });
 
-  test('정상 조회 → 200', async () => {
+  test('valid token → 200', async () => {
     const res = await request(app).get('/api/auth/me')
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
@@ -132,7 +132,7 @@ describe('PUT /api/auth/me', () => {
     token = res.body.token;
   });
 
-  test('닉네임 공백 → 400 NICKNAME_EMPTY', async () => {
+  test('whitespace-only nickname → 400 NICKNAME_EMPTY', async () => {
     const res = await request(app).put('/api/auth/me')
       .set('Authorization', `Bearer ${token}`)
       .send({ nickname: '   ' });
@@ -140,7 +140,7 @@ describe('PUT /api/auth/me', () => {
     expect(res.body.errorCode).toBe('NICKNAME_EMPTY');
   });
 
-  test('theme 잘못된 값 → 400 INVALID_VALUE', async () => {
+  test('invalid theme → 400 INVALID_VALUE', async () => {
     const res = await request(app).put('/api/auth/me')
       .set('Authorization', `Bearer ${token}`)
       .send({ theme: 'blue' });
@@ -148,7 +148,7 @@ describe('PUT /api/auth/me', () => {
     expect(res.body.errorCode).toBe('INVALID_VALUE');
   });
 
-  test('fontSize 범위 초과 → 400 INVALID_VALUE', async () => {
+  test('fontSize out of range → 400 INVALID_VALUE', async () => {
     const res = await request(app).put('/api/auth/me')
       .set('Authorization', `Bearer ${token}`)
       .send({ fontSize: 30 });
@@ -156,7 +156,7 @@ describe('PUT /api/auth/me', () => {
     expect(res.body.errorCode).toBe('INVALID_VALUE');
   });
 
-  test('정상 수정 → 200', async () => {
+  test('valid input → 200', async () => {
     const res = await request(app).put('/api/auth/me')
       .set('Authorization', `Bearer ${token}`)
       .send({ nickname: 'newnick', theme: 'dark', fontSize: 16 });
@@ -178,7 +178,7 @@ describe('PUT /api/auth/password', () => {
     token = res.body.token;
   });
 
-  test('oldPassword 누락 → 400 FIELD_MISSING', async () => {
+  test('missing oldPassword → 400 FIELD_MISSING', async () => {
     const res = await request(app).put('/api/auth/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ newPassword: 'newpass1234' });
@@ -186,7 +186,7 @@ describe('PUT /api/auth/password', () => {
     expect(res.body.errorCode).toBe('FIELD_MISSING');
   });
 
-  test('newPassword 누락 → 400 FIELD_MISSING', async () => {
+  test('missing newPassword → 400 FIELD_MISSING', async () => {
     const res = await request(app).put('/api/auth/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword: 'pass1234' });
@@ -194,7 +194,7 @@ describe('PUT /api/auth/password', () => {
     expect(res.body.errorCode).toBe('FIELD_MISSING');
   });
 
-  test('newPassword 8자 미만 → 400 PASSWORD_TOO_SHORT', async () => {
+  test('new password too short → 400 PASSWORD_TOO_SHORT', async () => {
     const res = await request(app).put('/api/auth/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword: 'pass1234', newPassword: 'short' });
@@ -202,7 +202,7 @@ describe('PUT /api/auth/password', () => {
     expect(res.body.errorCode).toBe('PASSWORD_TOO_SHORT');
   });
 
-  test('oldPassword 틀림 → 401 WRONG_PASSWORD', async () => {
+  test('wrong old password → 401 WRONG_PASSWORD', async () => {
     const res = await request(app).put('/api/auth/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword: 'wrongpass', newPassword: 'newpass1234' });
@@ -210,7 +210,7 @@ describe('PUT /api/auth/password', () => {
     expect(res.body.errorCode).toBe('WRONG_PASSWORD');
   });
 
-  test('정상 변경 → 200', async () => {
+  test('valid input → 200', async () => {
     const res = await request(app).put('/api/auth/password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword: 'pass1234', newPassword: 'newpass1234' });

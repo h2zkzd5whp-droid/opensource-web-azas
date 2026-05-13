@@ -7,7 +7,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //새로 고침시 토큰이 있으면 서버에 유저 정보 요청해서 복원
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -20,7 +19,6 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // 로그인 함수
   const login = async (email, password) => {
     const data = await apiRequest('/login', {
       method: 'POST',
@@ -31,7 +29,6 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
 
-  // 로그아웃함수
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);

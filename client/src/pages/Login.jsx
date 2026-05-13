@@ -4,8 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import styles from '../styles/Login.module.css';
 
 const ERROR_MESSAGES = {
-  WRONG_PASSWORD: '이메일 또는 비밀번호가 올바르지 않습니다.',
-  FIELD_MISSING: '이메일과 비밀번호를 모두 입력해주세요.',
+  WRONG_PASSWORD: 'Incorrect email or password.',
+  FIELD_MISSING: 'Please enter your email and password.',
 };
 
 export default function Login() {
@@ -26,7 +26,7 @@ export default function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || '로그인에 실패했습니다.';
+      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Login failed.';
       setError(msg);
     } finally {
       setSubmitting(false);

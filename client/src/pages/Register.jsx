@@ -4,11 +4,11 @@ import { apiRequest } from '../utils/api';
 import styles from '../styles/Register.module.css';
 
 const ERROR_MESSAGES = {
-  FIELD_MISSING: '모든 항목을 입력해주세요.',
-  INVALID_EMAIL: '유효한 이메일 주소를 입력해주세요.',
-  PASSWORD_TOO_SHORT: '비밀번호는 8자 이상이어야 합니다.',
-  NICKNAME_EMPTY: '닉네임을 입력해주세요.',
-  EMAIL_DUPLICATE: '이미 사용 중인 이메일입니다.',
+  FIELD_MISSING: 'Please fill in all fields.',
+  INVALID_EMAIL: 'Please enter a valid email address.',
+  PASSWORD_TOO_SHORT: 'Password must be at least 8 characters.',
+  NICKNAME_EMPTY: 'Please enter a nickname.',
+  EMAIL_DUPLICATE: 'This email is already in use.',
 };
 
 export default function Register() {
@@ -26,7 +26,7 @@ export default function Register() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
+      setError('Passwords do not match.');
       return;
     }
 
@@ -38,7 +38,7 @@ export default function Register() {
       });
       navigate('/login');
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || '회원가입에 실패했습니다.';
+      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Registration failed.';
       setError(msg);
     } finally {
       setSubmitting(false);

@@ -14,8 +14,7 @@
 3. Commit your changes.
 4. `git push -u origin feature/<feature-name>` to push.
 5. Create a Pull Request on GitHub.
-6. Get at least 1 review approval.
-7. Merge after approval.
+6. Merge after CI passes.
 8. Delete the merged branch.
 
 ## Commit Convention
@@ -38,7 +37,7 @@
 
 - PR title should clearly describe the work done.
 - Link related issues with `closes #<issue-number>` in the PR body.
-- Minimum 1 review approval required.
+- Merge after CI passes.
 
 ## Milestones
 
@@ -61,6 +60,6 @@ We use GitHub Milestones to track project progress.
 ## Branch Protection Rules (main)
 
 - No direct push without PR
-- Minimum 1 review approval required
+- CI must pass before merge
 - Force push prohibited
 - Branch deletion prohibited

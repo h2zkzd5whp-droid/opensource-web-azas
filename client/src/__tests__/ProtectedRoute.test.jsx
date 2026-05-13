@@ -16,19 +16,19 @@ import { useAuth } from '../contexts/AuthContext';
 
 beforeEach(() => vi.clearAllMocks());
 
-test('loading 중 → "loading..." 표시', () => {
+test('loading → show "loading..."', () => {
   useAuth.mockReturnValue({ user: null, loading: true });
   render(<ProtectedRoute><div>content</div></ProtectedRoute>);
   expect(screen.getByText('loading...')).toBeInTheDocument();
 });
 
-test('user 없음 → /login으로 redirect', () => {
+test('no user → redirect to /login', () => {
   useAuth.mockReturnValue({ user: null, loading: false });
   render(<ProtectedRoute><div>content</div></ProtectedRoute>);
   expect(mockNavigate).toHaveBeenCalledWith('/login');
 });
 
-test('user 있음 → children 렌더링', () => {
+test('user exists → render children', () => {
   useAuth.mockReturnValue({ user: { userId: 1 }, loading: false });
   render(<ProtectedRoute><div>content</div></ProtectedRoute>);
   expect(screen.getByText('content')).toBeInTheDocument();

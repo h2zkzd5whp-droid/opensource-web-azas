@@ -27,12 +27,12 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-test('토큰 없을 때 → user null, loading false', async () => {
+test('no token → user null, loading false', async () => {
   renderWithProvider();
   await waitFor(() => expect(screen.getByText('no user')).toBeInTheDocument());
 });
 
-test('토큰 있을 때 → /auth/me 호출 후 user 세팅', async () => {
+test('valid token → calls /auth/me and sets user', async () => {
   localStorage.setItem('token', 'valid-token');
   apiRequest.mockResolvedValueOnce({ email: 'a@a.com' });
 
@@ -42,7 +42,7 @@ test('토큰 있을 때 → /auth/me 호출 후 user 세팅', async () => {
   expect(apiRequest).toHaveBeenCalledWith('/auth/me');
 });
 
-test('토큰 있는데 /auth/me 실패 → 토큰 제거', async () => {
+test('/auth/me fails → removes token', async () => {
   localStorage.setItem('token', 'bad-token');
   apiRequest.mockRejectedValueOnce(new Error('Unauthorized'));
 
@@ -52,7 +52,7 @@ test('토큰 있는데 /auth/me 실패 → 토큰 제거', async () => {
   expect(localStorage.getItem('token')).toBeNull();
 });
 
-test('login() → token 저장 + user 세팅', async () => {
+test('login() → saves token and sets user', async () => {
   apiRequest
     .mockResolvedValueOnce({ token: 'new-token' })
     .mockResolvedValueOnce({ email: 'b@b.com' });
@@ -78,7 +78,7 @@ test('login() → token 저장 + user 세팅', async () => {
   expect(localStorage.getItem('token')).toBe('new-token');
 });
 
-test('logout() → token 제거 + user null', async () => {
+test('logout() → removes token and clears user', async () => {
   localStorage.setItem('token', 'valid-token');
   apiRequest.mockResolvedValueOnce({ email: 'a@a.com' });
 

@@ -25,7 +25,7 @@ beforeEach(() => {
 });
 
 describe('Register — client validation', () => {
-  test('비밀번호 불일치 시 에러 메시지 표시', async () => {
+  test('passwords do not match → show error', async () => {
     renderRegister();
 
     await userEvent.type(screen.getByPlaceholderText('you@example.com'), 'a@a.com');
@@ -37,10 +37,10 @@ describe('Register — client validation', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /sign up/i }));
 
-    expect(screen.getByText('비밀번호가 일치하지 않습니다.')).toBeInTheDocument();
+    expect(screen.getByText('Passwords do not match.')).toBeInTheDocument();
   });
 
-  test('비밀번호 불일치 시 apiRequest 호출 안 됨', async () => {
+  test('passwords do not match → apiRequest not called', async () => {
     renderRegister();
 
     await userEvent.type(screen.getByPlaceholderText('you@example.com'), 'a@a.com');
@@ -75,15 +75,15 @@ describe('Register — server error messages', () => {
     });
   }
 
-  test('FIELD_MISSING', () => submitAndExpect('FIELD_MISSING', '모든 항목을 입력해주세요.'));
-  test('INVALID_EMAIL', () => submitAndExpect('INVALID_EMAIL', '유효한 이메일 주소를 입력해주세요.'));
-  test('PASSWORD_TOO_SHORT', () => submitAndExpect('PASSWORD_TOO_SHORT', '비밀번호는 8자 이상이어야 합니다.'));
-  test('NICKNAME_EMPTY', () => submitAndExpect('NICKNAME_EMPTY', '닉네임을 입력해주세요.'));
-  test('EMAIL_DUPLICATE', () => submitAndExpect('EMAIL_DUPLICATE', '이미 사용 중인 이메일입니다.'));
+  test('FIELD_MISSING', () => submitAndExpect('FIELD_MISSING', 'Please fill in all fields.'));
+  test('INVALID_EMAIL', () => submitAndExpect('INVALID_EMAIL', 'Please enter a valid email address.'));
+  test('PASSWORD_TOO_SHORT', () => submitAndExpect('PASSWORD_TOO_SHORT', 'Password must be at least 8 characters.'));
+  test('NICKNAME_EMPTY', () => submitAndExpect('NICKNAME_EMPTY', 'Please enter a nickname.'));
+  test('EMAIL_DUPLICATE', () => submitAndExpect('EMAIL_DUPLICATE', 'This email is already in use.'));
 });
 
 describe('Register — success', () => {
-  test('성공 시 /login으로 이동', async () => {
+  test('success → navigate to /login', async () => {
     apiRequest.mockResolvedValueOnce({});
     renderRegister();
 
@@ -103,7 +103,7 @@ describe('Register — success', () => {
 });
 
 describe('Register — UI', () => {
-  test('Sign in 링크가 /login으로 연결', () => {
+  test('Sign in link points to /login', () => {
     renderRegister();
     expect(screen.getByRole('link', { name: /sign in/i })).toHaveAttribute('href', '/login');
   });

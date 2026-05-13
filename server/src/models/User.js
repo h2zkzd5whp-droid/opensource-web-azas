@@ -19,12 +19,12 @@ exports.findById = async (userId) => {
 
 // update - updateMe용
 exports.update = async (userId, nickname, theme, fontSize) => {
-    const[result] = await pool.query('UPDATE Users SET nickname=?, theme=?, fontSize=? WHERE userId=?',
+    await pool.query('UPDATE Users SET nickname=?, theme=?, fontSize=? WHERE userId=?',
         [nickname, theme, fontSize, userId]);
 }
 
 // updatePassword - changePassword용
 exports.updatePassword = async (userId, password) => {
-    const[result] = await pool.query('UPDATE Users SET password=? WHERE userId=?',
+    await pool.query('UPDATE Users SET password=? WHERE userId=?',
         [password, userId]);
 }

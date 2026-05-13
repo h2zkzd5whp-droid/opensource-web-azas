@@ -14,7 +14,7 @@ app.use('/api', require('./routes/auth'));
 app.use('/api/code', require('./routes/code'));
 
 // 에러 헨들링
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   res.status(err.statusCode || 500).json({
     error: err.message || '서버 내부 오류',
     errorCode: err.errorCode || 'INTERNAL_ERROR',

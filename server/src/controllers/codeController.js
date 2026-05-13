@@ -1,7 +1,7 @@
 const Code = require('../models/Code');
 
 // TODO: 코드 실행 구현 (Judge0 CE API)
-exports.runCode = async (req, res, next) => {
+exports.runCode = async (req, res, _next) => {
   res.json({ message: 'runCode - TODO' });
 };
 

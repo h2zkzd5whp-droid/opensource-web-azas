@@ -32,6 +32,8 @@ A browser-based online code editor where you can write and execute code.
 | Environment | dotenv | 17.3.1 |
 | Code Execution | Judge0 CE API | External API |
 | Dev Tool | nodemon | 3.1.14 |
+| Test (Server) | Jest, Supertest | 30.x, 7.x |
+| Test (Client) | Vitest, React Testing Library | 4.x, 16.x |
 
 ## Project Structure
 
@@ -45,14 +47,14 @@ opensource-web-azas/
 │   ├── eslint.config.js
 │   ├── index.html
 │   ├── package.json
-│   ├── vite.config.js                      # Dev server proxy configured
+│   ├── vite.config.js                      # Dev server proxy + Vitest config
 │   ├── public/
 │   │   ├── favicon.svg
 │   │   └── icons.svg
 │   └── src/
-│       ├── App.css                         # Global styles (to be updated)
+│       ├── App.css
 │       ├── App.jsx                         # Route definitions
-│       ├── index.css                       # Base styles (to be updated)
+│       ├── index.css
 │       ├── main.jsx                        # React entry point with AuthProvider
 │       ├── assets/
 │       ├── utils/
@@ -79,21 +81,30 @@ opensource-web-azas/
 │       │   ├── Dashboard.module.css
 │       │   ├── CodeEditor.module.css
 │       │   └── NotFound.module.css
-│       └── pages/
-│           ├── CodeEditor.jsx              # Editor page
-│           ├── Dashboard.jsx               # Saved code list
-│           ├── Landing.jsx                 # Landing page
-│           ├── Login.jsx                   # Login page
-│           ├── NotFound.jsx                # 404 page
-│           └── Register.jsx                # Register page
+│       ├── pages/
+│       │   ├── CodeEditor.jsx              # Editor page
+│       │   ├── Dashboard.jsx               # Saved code list
+│       │   ├── Landing.jsx                 # Landing page
+│       │   ├── Login.jsx                   # Login page
+│       │   ├── NotFound.jsx                # 404 page
+│       │   └── Register.jsx                # Register page
+│       └── __tests__/                      # Client unit tests (Vitest)
+│           ├── setup.js
+│           ├── AuthContext.test.jsx
+│           ├── Login.test.jsx
+│           ├── Register.test.jsx
+│           ├── ProtectedRoute.test.jsx
+│           └── PublicRoute.test.jsx
 │
 └── server/                                 # Backend (Express + MySQL)
     ├── .env                                # Environment variables (git ignored)
     ├── .env.example                        # Environment variable template
+    ├── .env.test.example                   # Test environment variable template
     ├── init.sql                            # DB initialization script
     ├── package.json
     └── src/
-        ├── app.js                          # Express entry point
+        ├── app.js                          # Express app (no listen)
+        ├── server.js                       # Entry point (app.listen)
         ├── config/
         │   └── db.js                       # MySQL connection pool
         ├── middlewares/
@@ -104,9 +115,13 @@ opensource-web-azas/
         ├── controllers/
         │   ├── authController.js           # Auth controller
         │   └── codeController.js           # Code controller
-        └── models/
-            ├── User.js                     # User model (DB queries)
-            └── Code.js                     # Code model (DB queries)
+        ├── models/
+        │   ├── User.js                     # User model (DB queries)
+        │   └── Code.js                     # Code model (DB queries)
+        └── __tests__/                      # Server integration tests (Jest + Supertest)
+            ├── setup.js
+            ├── authController.test.js
+            └── codeController.test.js
 ```
 
 ## Getting Started
@@ -157,6 +172,19 @@ npm run dev
 ```
 
 Open the URL shown in the client terminal (default: `http://localhost:5173`).
+
+### 5. Run Tests
+
+```bash
+# Server tests (requires MySQL)
+cd server
+cp .env.test.example .env.test  # fill in DB credentials
+npm run test
+
+# Client tests
+cd client
+npm run test
+```
 
 ## API Endpoints
 

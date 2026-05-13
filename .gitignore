@@ -25,9 +25,4 @@ Thumbs.db
 npm-debug.log*
 
 # Claude / Agent
-CLAUDE.md
-TASK.md
 .claude/
-
-# Docs (agent-internal)
-docs/

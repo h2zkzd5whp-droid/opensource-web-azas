@@ -26,3 +26,6 @@ npm-debug.log*
 
 # Claude / Agent
 .claude/
+docs/
+CLAUDE.md
+TASK.md

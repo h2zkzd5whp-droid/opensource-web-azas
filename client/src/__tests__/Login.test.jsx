@@ -57,8 +57,8 @@ describe('Login — success', () => {
 });
 
 describe('Login — UI', () => {
-  test('Sign up link points to /register', () => {
+  test('Create-account link points to /register', () => {
     renderLogin();
-    expect(screen.getByRole('link', { name: /sign up/i })).toHaveAttribute('href', '/register');
+    expect(screen.getByRole('link', { name: /create one/i })).toHaveAttribute('href', '/register');
   });
 });

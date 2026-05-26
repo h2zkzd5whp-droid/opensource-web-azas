@@ -49,14 +49,11 @@ opensource-web-azas/
 │   ├── package.json
 │   ├── vite.config.js                      # Dev server proxy + Vitest config
 │   ├── public/
-│   │   ├── favicon.svg
-│   │   └── icons.svg
+│   │   └── favicon.svg
 │   └── src/
-│       ├── App.css
 │       ├── App.jsx                         # Route definitions
-│       ├── index.css
+│       ├── index.css                       # Global design tokens (light/dark)
 │       ├── main.jsx                        # React entry point with AuthProvider
-│       ├── assets/
 │       ├── utils/
 │       │   ├── api.js                      # API client (fetch wrapper with JWT)
 │       │   └── constants.js                # Language list, Judge0 IDs, default code
@@ -74,13 +71,8 @@ opensource-web-azas/
 │       │   └── Toolbar.jsx                 # Run/Save buttons
 │       ├── hooks/
 │       │   └── useCodeExecution.js         # Code execution hook (Judge0)
-│       ├── styles/                         # CSS Modules per page
-│       │   ├── Landing.module.css
-│       │   ├── Login.module.css
-│       │   ├── Register.module.css
-│       │   ├── Dashboard.module.css
-│       │   ├── CodeEditor.module.css
-│       │   └── NotFound.module.css
+│       ├── styles/
+│       │   └── Auth.module.css             # Shared Login/Register styles
 │       ├── pages/
 │       │   ├── CodeEditor.jsx              # Editor page
 │       │   ├── Dashboard.jsx               # Saved code list

@@ -12,6 +12,17 @@
   --error: #c0392b;
   --error-bg: #fef2f2;
   --error-border: rgba(192, 57, 43, 0.2);
+  --divider: rgba(0, 0, 0, 0.06);
+  --hover: rgba(0, 0, 0, 0.03);
+
+  --editor-bg: #1c1c1b;
+  --editor-line: #2a2a28;
+  --editor-text: #e7e5e4;
+  --editor-muted: #a8a29e;
+
+  --term-bg: #111110;
+  --term-text: #e7e5e4;
+  --term-muted: #78716c;
 
   --mono: ui-monospace, 'JetBrains Mono', Consolas, monospace;
   --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -38,6 +49,8 @@
     --input-border-focus: #e8e8e6;
     --btn-bg: #e8e8e6;
     --btn-text: #111110;
+    --divider: rgba(255, 255, 255, 0.07);
+    --hover: rgba(255, 255, 255, 0.04);
   }
 }
 

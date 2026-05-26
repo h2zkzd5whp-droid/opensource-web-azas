@@ -1,0 +1,236 @@
+.page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.appBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--card-bg);
+  flex-shrink: 0;
+  min-height: 48px;
+  gap: 16px;
+}
+
+.appBarLeft,
+.appBarRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.brandMark {
+  color: var(--text-muted);
+}
+
+.brandName {
+  color: var(--text);
+}
+
+.fileTitle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text);
+  min-width: 0;
+}
+
+.fileSep {
+  color: var(--text-muted);
+}
+
+.fileName {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  min-width: 0;
+  width: 160px;
+  outline: none;
+}
+
+.fileName:hover {
+  border-color: var(--input-border);
+}
+
+.fileName:focus {
+  border-color: var(--input-border-focus);
+  background: var(--input-bg);
+}
+
+.fileExt {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.dirtyDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.langBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--bg);
+  border: 1px solid var(--divider);
+  color: var(--text);
+}
+
+.langDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.btnGhost,
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 12px;
+  cursor: pointer;
+  line-height: 1;
+  border: 1px solid transparent;
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--input-border);
+}
+
+.btnGhost:hover {
+  background: var(--hover);
+}
+
+.btnPrimary {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border-color: var(--btn-bg);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.side {
+  width: 56px;
+  border-right: 1px solid var(--divider);
+  background: var(--card-bg);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  gap: 8px;
+}
+
+.sideBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sideBtn:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.sideBtnActive {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+}
+
+.sideBtnActive:hover {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  opacity: 0.92;
+}
+
+.sideDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.editorArea {
+  flex: 1;
+  background: var(--editor-bg);
+  color: var(--editor-text);
+  min-height: 0;
+}
+
+.terminal {
+  height: 200px;
+  background: var(--term-bg);
+  color: var(--term-text);
+  border-top: 1px solid #000;
+  flex-shrink: 0;
+}

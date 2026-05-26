@@ -1,7 +1,7 @@
 export const SUPPORTED_LANGUAGES = [
-  { id: 'javascript', label: 'JavaScript', judge0Id: 63 },
-  { id: 'python',     label: 'Python',     judge0Id: 71 },
-  { id: 'java',       label: 'Java',       judge0Id: 62 },
+  { id: 'javascript', label: 'JavaScript', judge0Id: 63, ext: 'js' },
+  { id: 'python',     label: 'Python',     judge0Id: 71, ext: 'py' },
+  { id: 'java',       label: 'Java',       judge0Id: 62, ext: 'java' },
 ];
 
 export const DEFAULT_CODE = {

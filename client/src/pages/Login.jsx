@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import styles from '../styles/Login.module.css';
+import styles from '../styles/Auth.module.css';
 
 const ERROR_MESSAGES = {
-  WRONG_PASSWORD: 'Incorrect email or password.',
   FIELD_MISSING: 'Please enter your email and password.',
+  WRONG_PASSWORD: 'Incorrect email or password.',
 };
 
 export default function Login() {
-  const { login } = useAuth();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,8 +20,8 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSubmitting(true);
 
+    setSubmitting(true);
     try {
       await login(email, password);
       navigate('/dashboard');
@@ -35,48 +35,44 @@ export default function Login() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.brand}>
-        <span className={styles.brandPrompt}>&gt;_</span>
-        <span className={styles.brandName}>Code Editor</span>
-      </div>
-
       <div className={styles.card}>
-        <h1 className={styles.title}>Welcome back</h1>
-        <p className={styles.subtitle}>Sign in to your account</p>
+        <div className={styles.brand}>
+          <span className={styles.brandMark}>AJAS</span>
+          <span className={styles.brandName}>editor</span>
+        </div>
+
+        <div className={styles.header}>
+          <h1 className={styles.title}>Welcome back</h1>
+          <p className={styles.subtitle}>Sign in to continue</p>
+        </div>
 
         {error && <div className={styles.errorBanner}>{error}</div>}
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.field}>
             <span className={styles.label}>Email</span>
-            <div className={styles.inputWrap}>
-              <span className={styles.inputIcon}>✉</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-                className={styles.input}
-              />
-            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+              className={styles.input}
+            />
           </label>
 
           <label className={styles.field}>
             <span className={styles.label}>Password</span>
-            <div className={styles.inputWrap}>
-              <span className={styles.inputIcon}>🔒</span>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                autoComplete="current-password"
-                required
-                className={styles.input}
-              />
-            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              required
+              className={styles.input}
+            />
           </label>
 
           <button
@@ -84,12 +80,13 @@ export default function Login() {
             disabled={submitting}
             className={styles.submitBtn}
           >
-            {submitting ? 'Signing in...' : 'Sign In →'}
+            {submitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
         <p className={styles.footer}>
-          Don't have an account? <Link to="/register" className={styles.link}>Sign up</Link>
+          No account?{' '}
+          <Link to="/register" className={styles.link}>Create one</Link>
         </p>
       </div>
     </div>

@@ -1,24 +1,25 @@
-import LanguageBadge from './LanguageBadge';
 import styles from '../styles/Editor.module.css';
 
-// 상단 앱바. 파일명·언어·저장·실행 컨트롤 표시
+// 상단 앱바. 브랜드(랜딩 이동)·파일명·대시보드·로드·저장·실행 컨트롤
 export default function Toolbar({
   name,
   onNameChange,
   extension,
-  language,
   dirty,
   onSave,
   onRun,
+  onLoad,
+  onDashboard,
+  onHome,
   running,
 }) {
   return (
     <div className={styles.appBar}>
       <div className={styles.appBarLeft}>
-        <div className={styles.brand}>
+        <button type="button" className={styles.brand} onClick={onHome}>
           <span className={styles.brandMark}>AJAS</span>
           <span className={styles.brandName}>editor</span>
-        </div>
+        </button>
         <div className={styles.fileTitle}>
           <span className={styles.fileSep}>/</span>
           <input
@@ -33,7 +34,12 @@ export default function Toolbar({
         </div>
       </div>
       <div className={styles.appBarRight}>
-        <LanguageBadge language={language} />
+        <button type="button" className={styles.btnGhost} onClick={onDashboard}>
+          Dashboard
+        </button>
+        <button type="button" className={styles.btnGhost} onClick={onLoad}>
+          Load
+        </button>
         <button type="button" className={styles.btnGhost} onClick={onSave}>
           Save
         </button>

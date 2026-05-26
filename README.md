@@ -56,23 +56,27 @@ opensource-web-azas/
 │       ├── main.jsx                        # React entry point with AuthProvider
 │       ├── utils/
 │       │   ├── api.js                      # API client (fetch wrapper with JWT)
-│       │   └── constants.js                # Language list, Judge0 IDs, default code
+│       │   ├── constants.js                # Language list, Judge0 IDs, default code
+│       │   └── languageIcons.jsx           # Per-language official-logo SVG components
 │       ├── contexts/
 │       │   └── AuthContext.jsx             # Auth state management (login/logout/user)
 │       ├── components/
-│       │   ├── ConfirmModal.jsx            # Delete confirmation modal
-│       │   ├── Editor.jsx                  # Monaco Editor wrapper
-│       │   ├── ExecutionPanel.jsx          # Code execution result display
-│       │   ├── LanguageBadge.jsx           # Language badge
-│       │   ├── LanguageSelector.jsx        # Language dropdown
+│       │   ├── ConfirmModal.jsx            # Confirmation modal for risky/irreversible actions
+│       │   ├── Editor.jsx                  # Monaco Editor wrapper (ajas-light custom theme)
+│       │   ├── ExecutionPanel.jsx          # stdout/stderr terminal with exit/time meta
+│       │   ├── LanguageSelector.jsx        # Left side panel with language logo buttons
+│       │   ├── LoadCodeModal.jsx           # Modal listing saved codes (GET /api/code)
 │       │   ├── ProtectedRoute.jsx          # Redirects unauthenticated users to /login
 │       │   ├── PublicRoute.jsx             # Redirects authenticated users to /dashboard
-│       │   ├── ThemeApplier.jsx            # Theme toggle
-│       │   └── Toolbar.jsx                 # Run/Save buttons
+│       │   ├── ThemeApplier.jsx            # Apply user.theme to documentElement data-theme
+│       │   └── Toolbar.jsx                 # Editor top app bar (brand/file/dashboard/load/save/run)
 │       ├── hooks/
 │       │   └── useCodeExecution.js         # Code execution hook (Judge0)
 │       ├── styles/
-│       │   └── Auth.module.css             # Shared Login/Register styles
+│       │   ├── Auth.module.css             # Shared Login/Register styles
+│       │   ├── ConfirmModal.module.css     # ConfirmModal styles
+│       │   ├── Editor.module.css           # Editor page layout (app bar, side, terminal, resizer)
+│       │   └── LoadCodeModal.module.css    # LoadCodeModal styles
 │       ├── pages/
 │       │   ├── CodeEditor.jsx              # Editor page
 │       │   ├── Dashboard.jsx               # Saved code list

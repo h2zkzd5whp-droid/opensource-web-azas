@@ -54,6 +54,36 @@
   }
 }
 
+:root[data-theme='light'] {
+  --bg: #f5f5f4;
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --text: #111110;
+  --text-muted: #78716c;
+  --input-bg: #f5f5f4;
+  --input-border: rgba(0, 0, 0, 0.12);
+  --input-border-focus: #111110;
+  --btn-bg: #111110;
+  --btn-text: #ffffff;
+  --divider: rgba(0, 0, 0, 0.06);
+  --hover: rgba(0, 0, 0, 0.03);
+}
+
+:root[data-theme='dark'] {
+  --bg: #0c0c0e;
+  --card-bg: #141416;
+  --card-border: rgba(255, 255, 255, 0.07);
+  --text: #e8e8e6;
+  --text-muted: #6b6b68;
+  --input-bg: #1c1c1f;
+  --input-border: rgba(255, 255, 255, 0.08);
+  --input-border-focus: #e8e8e6;
+  --btn-bg: #e8e8e6;
+  --btn-text: #111110;
+  --divider: rgba(255, 255, 255, 0.07);
+  --hover: rgba(255, 255, 255, 0.04);
+}
+
 body {
   margin: 0;
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import styles from '../styles/Login.module.css';
+import styles from '../styles/Auth.module.css';
 
 const ERROR_MESSAGES = {
   FIELD_MISSING: 'Please enter your email and password.',

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../utils/api';
-import styles from '../styles/Register.module.css';
+import styles from '../styles/Auth.module.css';
  
 const ERROR_MESSAGES = {
   FIELD_MISSING: 'Please fill in all fields.',

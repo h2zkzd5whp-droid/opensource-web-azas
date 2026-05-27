@@ -75,6 +75,7 @@ opensource-web-azas/
 │       ├── styles/
 │       │   ├── Auth.module.css             # Shared Login/Register styles
 │       │   ├── ConfirmModal.module.css     # ConfirmModal styles
+│       │   ├── Dashboard.module.css        # Dashboard page styles
 │       │   ├── Editor.module.css           # Editor page layout (app bar, side, terminal, resizer)
 │       │   └── LoadCodeModal.module.css    # LoadCodeModal styles
 │       ├── pages/
@@ -87,6 +88,8 @@ opensource-web-azas/
 │       └── __tests__/                      # Client unit tests (Vitest)
 │           ├── setup.js
 │           ├── AuthContext.test.jsx
+│           ├── CodeEditor.test.jsx
+│           ├── Dashboard.test.jsx
 │           ├── Login.test.jsx
 │           ├── Register.test.jsx
 │           ├── ProtectedRoute.test.jsx

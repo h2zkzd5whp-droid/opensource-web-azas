@@ -1,8 +1,6 @@
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi, afterEach } from 'vitest';
-
-afterEach(() => cleanup());
+import { vi } from 'vitest';
 import Dashboard from '../pages/Dashboard';
 
 const mockNavigate = vi.fn();
@@ -37,6 +35,8 @@ const sampleCodes = [
 function renderDashboard() {
   return render(<Dashboard />);
 }
+
+afterEach(() => cleanup());
 
 beforeEach(() => {
   vi.resetAllMocks();

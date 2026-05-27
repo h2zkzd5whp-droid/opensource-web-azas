@@ -50,9 +50,13 @@ export default function Dashboard() {
   }
 
   async function handleDeleteConfirm() {
-    await apiRequest(`/code/${deleteTarget.codeId}`, { method: 'DELETE' });
-    setDeleteTarget(null);
-    loadCodes();
+    try {
+      await apiRequest(`/code/${deleteTarget.codeId}`, { method: 'DELETE' });
+      setDeleteTarget(null);
+      loadCodes();
+    } catch {
+      setDeleteTarget(null);
+    }
   }
 
   async function handleThemeToggle() {
@@ -183,113 +187,114 @@ export default function Dashboard() {
 
           {/* Settings panel */}
           <div className={styles.panel}>
-              <div className={styles.panelHead}>
-                <h4 className={styles.panelTitle}>Settings</h4>
+            <div className={styles.panelHead}>
+              <h4 className={styles.panelTitle}>Settings</h4>
+            </div>
+            <div className={styles.panelBody}>
+              {/* Theme */}
+              <div className={styles.setting}>
+                <div className={styles.labelBlock}>
+                  <span className={styles.settingName}>Theme</span>
+                  <span className={styles.settingDesc}>Editor appearance</span>
+                </div>
+                <button
+                  type="button"
+                  className={`${styles.toggle} ${user?.theme !== 'dark' ? styles.toggleOff : ''}`}
+                  aria-label="theme"
+                  title={user?.theme}
+                  onClick={handleThemeToggle}
+                />
               </div>
-              <div className={styles.panelBody}>
-                {/* Theme */}
-                <div className={styles.setting}>
-                  <div className={styles.labelBlock}>
-                    <span className={styles.settingName}>Theme</span>
-                    <span className={styles.settingDesc}>Editor appearance</span>
-                  </div>
+
+              {/* Font size */}
+              <div className={styles.setting}>
+                <div className={styles.labelBlock}>
+                  <span className={styles.settingName}>Font size</span>
+                  <span className={styles.settingDesc}>12–24</span>
+                </div>
+                <div className={styles.stepper}>
                   <button
                     type="button"
-                    className={`${styles.toggle} ${user?.theme !== 'dark' ? styles.toggleOff : ''}`}
-                    aria-label="theme"
-                    title={user?.theme}
-                    onClick={handleThemeToggle}
+                    aria-label="decrease font"
+                    disabled={fontSize <= 12}
+                    onClick={() => handleFontChange(-1)}
+                  >
+                    −
+                  </button>
+                  <span className={styles.stepperVal}>{fontSize}</span>
+                  <button
+                    type="button"
+                    aria-label="increase font"
+                    disabled={fontSize >= 24}
+                    onClick={() => handleFontChange(1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className={styles.setting}>
+                <div className={styles.labelBlock}>
+                  <span className={styles.settingName}>Password</span>
+                  <span className={styles.settingDesc}>Change password</span>
+                </div>
+                <button
+                  type="button"
+                  aria-label="change password"
+                  className={styles.btnGhost}
+                  onClick={() => {
+                    setShowPasswordForm((v) => !v);
+                    setPasswordError('');
+                    setOldPassword('');
+                    setNewPassword('');
+                  }}
+                >
+                  Change
+                </button>
+              </div>
+
+              {showPasswordForm && (
+                <form className={styles.passwordForm} onSubmit={handlePasswordSave}>
+                  {passwordError && (
+                    <div className={styles.errorBanner}>{passwordError}</div>
+                  )}
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="Current password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
                   />
-                </div>
-
-                {/* Font size */}
-                <div className={styles.setting}>
-                  <div className={styles.labelBlock}>
-                    <span className={styles.settingName}>Font size</span>
-                    <span className={styles.settingDesc}>12–24</span>
-                  </div>
-                  <div className={styles.stepper}>
-                    <button
-                      type="button"
-                      aria-label="decrease font"
-                      disabled={fontSize <= 12}
-                      onClick={() => handleFontChange(-1)}
-                    >
-                      −
-                    </button>
-                    <span className={styles.stepperVal}>{fontSize}</span>
-                    <button
-                      type="button"
-                      aria-label="increase font"
-                      disabled={fontSize >= 24}
-                      onClick={() => handleFontChange(1)}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                {/* Password */}
-                <div className={styles.setting}>
-                  <div className={styles.labelBlock}>
-                    <span className={styles.settingName}>Password</span>
-                    <span className={styles.settingDesc}>Change password</span>
-                  </div>
-                  <button
-                    type="button"
-                    className={styles.btnGhost}
-                    onClick={() => {
-                      setShowPasswordForm((v) => !v);
-                      setPasswordError('');
-                      setOldPassword('');
-                      setNewPassword('');
-                    }}
-                  >
-                    Change
+                  <input
+                    className={styles.input}
+                    type="password"
+                    placeholder="New password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <button type="submit" className={styles.btnPrimary}>
+                    Save
                   </button>
-                </div>
+                </form>
+              )}
 
-                {showPasswordForm && (
-                  <form className={styles.passwordForm} onSubmit={handlePasswordSave}>
-                    {passwordError && (
-                      <div className={styles.errorBanner}>{passwordError}</div>
-                    )}
-                    <input
-                      className={styles.input}
-                      type="password"
-                      placeholder="Current password"
-                      value={oldPassword}
-                      onChange={(e) => setOldPassword(e.target.value)}
-                    />
-                    <input
-                      className={styles.input}
-                      type="password"
-                      placeholder="New password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                    <button type="submit" className={styles.btnPrimary}>
-                      Save
-                    </button>
-                  </form>
-                )}
-
-                {/* Logout */}
-                <div className={styles.setting}>
-                  <div className={styles.labelBlock}>
-                    <span className={styles.settingName}>Session</span>
-                    <span className={styles.settingDesc}>Sign out of this browser</span>
-                  </div>
-                  <button
-                    type="button"
-                    className={styles.btnDanger}
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
+              {/* Logout */}
+              <div className={styles.setting}>
+                <div className={styles.labelBlock}>
+                  <span className={styles.settingName}>Session</span>
+                  <span className={styles.settingDesc}>Sign out of this browser</span>
                 </div>
+                <button
+                  type="button"
+                  className={styles.btnDanger}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
               </div>
             </div>
+          </div>
         </div>
       </div>
 

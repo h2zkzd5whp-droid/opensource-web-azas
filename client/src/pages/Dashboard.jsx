@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { apiRequest } from '../utils/api';
 import ConfirmModal from '../components/ConfirmModal';
+import ThemeApplier from '../components/ThemeApplier';
 import { LANG_ICONS } from '../utils/languageIcons';
 import styles from '../styles/Dashboard.module.css';
 
@@ -103,6 +104,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles.page}>
+      <ThemeApplier theme={user?.theme} />
       <div className={styles.dash}>
         {/* Top bar */}
         <div className={styles.dashBar}>
@@ -111,13 +113,6 @@ export default function Dashboard() {
             <span className={styles.brandName}>editor</span>
           </div>
           <div className={styles.barRight}>
-            <button
-              type="button"
-              className={styles.btnPrimary}
-              onClick={handleNewProject}
-            >
-              + New project
-            </button>
             <div className={styles.avatar} title={user?.nickname || user?.email}>
               {avatarInitial}
             </div>

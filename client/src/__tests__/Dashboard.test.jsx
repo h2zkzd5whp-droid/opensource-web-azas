@@ -23,6 +23,10 @@ vi.mock('../utils/api', () => ({
   apiRequest: vi.fn(),
 }));
 
+vi.mock('../components/ThemeApplier', () => ({
+  default: () => null,
+}));
+
 import { apiRequest } from '../utils/api';
 
 const sampleCodes = [
@@ -69,14 +73,19 @@ describe('Dashboard — Step 1: 기본 렌더링', () => {
     });
   });
 
-  test('New Project 버튼이 렌더된다', () => {
+  test('빈 상태에서 New Project 버튼이 렌더된다', async () => {
+    apiRequest.mockResolvedValueOnce({ codes: [], total: 0 });
     renderDashboard();
-    expect(screen.getAllByRole('button', { name: /new project/i }).length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /new project/i })).toBeInTheDocument();
+    });
   });
 
   test('New Project 버튼 클릭 시 /code로 이동한다', async () => {
+    apiRequest.mockResolvedValueOnce({ codes: [], total: 0 });
     renderDashboard();
-    await userEvent.click(screen.getAllByRole('button', { name: /new project/i })[0]);
+    await waitFor(() => screen.getByRole('button', { name: /new project/i }));
+    await userEvent.click(screen.getByRole('button', { name: /new project/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/code');
   });
 });

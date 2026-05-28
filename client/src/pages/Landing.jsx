@@ -12,9 +12,14 @@ export default function Landing() {
     const el = pageRef.current;
     if (!el) return;
 
-    function onScroll() {
+    let ticking = false;
+
+    function update() {
       const wrap = heroWrapRef.current;
-      if (!wrap) return;
+      if (!wrap) {
+        ticking = false;
+        return;
+      }
       const { top, height } = wrap.getBoundingClientRect();
       const scrolled = -top;
       const sectionH = height - window.innerHeight;
@@ -23,6 +28,14 @@ export default function Landing() {
       if (progress < 0.33) setStep(0);
       else if (progress < 0.66) setStep(1);
       else setStep(2);
+
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
     }
 
     el.addEventListener('scroll', onScroll, { passive: true });

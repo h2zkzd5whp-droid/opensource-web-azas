@@ -26,7 +26,7 @@ export default function Landing() {
     }
 
     el.addEventListener('scroll', onScroll, { passive: true });
-    return () => el.removeEventListener('scroll', onScroll);
+    return () => el.removeEventListener('scroll', onScroll, { passive: true });
   }, []);
 
   return (

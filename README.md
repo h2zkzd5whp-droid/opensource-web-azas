@@ -72,16 +72,19 @@ opensource-web-azas/
 │       │   └── Toolbar.jsx                 # Editor top app bar (brand/file/dashboard/load/save/run)
 │       ├── hooks/
 │       │   └── useCodeExecution.js         # Code execution hook (Judge0)
+│       ├── assets/
+│       │   └── landing_image.png           # Landing page hero background image
 │       ├── styles/
 │       │   ├── Auth.module.css             # Shared Login/Register styles
 │       │   ├── ConfirmModal.module.css     # ConfirmModal styles
 │       │   ├── Dashboard.module.css        # Dashboard page styles
 │       │   ├── Editor.module.css           # Editor page layout (app bar, side, terminal, resizer)
+│       │   ├── Landing.module.css          # Landing page styles (sticky hero, scroll steps, nav)
 │       │   └── LoadCodeModal.module.css    # LoadCodeModal styles
 │       ├── pages/
 │       │   ├── CodeEditor.jsx              # Editor page
 │       │   ├── Dashboard.jsx               # Saved code list
-│       │   ├── Landing.jsx                 # Landing page
+│       │   ├── Landing.jsx                 # Landing page (sticky scroll interaction, 3 steps)
 │       │   ├── Login.jsx                   # Login page
 │       │   ├── NotFound.jsx                # 404 page
 │       │   └── Register.jsx                # Register page
@@ -90,6 +93,7 @@ opensource-web-azas/
 │           ├── AuthContext.test.jsx
 │           ├── CodeEditor.test.jsx
 │           ├── Dashboard.test.jsx
+│           ├── Landing.test.jsx
 │           ├── Login.test.jsx
 │           ├── Register.test.jsx
 │           ├── ProtectedRoute.test.jsx

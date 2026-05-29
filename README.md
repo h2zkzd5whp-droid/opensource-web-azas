@@ -80,7 +80,8 @@ opensource-web-azas/
 │       │   ├── Dashboard.module.css        # Dashboard page styles
 │       │   ├── Editor.module.css           # Editor page layout (app bar, side, terminal, resizer)
 │       │   ├── Landing.module.css          # Landing page styles (sticky hero, scroll steps, nav)
-│       │   └── LoadCodeModal.module.css    # LoadCodeModal styles
+│       │   ├── LoadCodeModal.module.css    # LoadCodeModal styles
+│       │   └── NotFound.module.css         # 404 page styles
 │       ├── pages/
 │       │   ├── CodeEditor.jsx              # Editor page
 │       │   ├── Dashboard.jsx               # Saved code list
@@ -95,6 +96,7 @@ opensource-web-azas/
 │           ├── Dashboard.test.jsx
 │           ├── Landing.test.jsx
 │           ├── Login.test.jsx
+│           ├── NotFound.test.jsx
 │           ├── Register.test.jsx
 │           ├── ProtectedRoute.test.jsx
 │           └── PublicRoute.test.jsx

@@ -53,11 +53,6 @@
   align-items: start;
 }
 
-.dashSingle {
-  display: flex;
-  flex-direction: column;
-}
-
 /* Panel */
 .panel {
   background: var(--card-bg);

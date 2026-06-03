@@ -59,24 +59,6 @@
   padding: 24px 40px;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.brandMark {
-  color: var(--text-muted);
-}
-
-.brandName {
-  color: var(--text);
-}
-
 .navActions {
   display: flex;
   gap: 8px;

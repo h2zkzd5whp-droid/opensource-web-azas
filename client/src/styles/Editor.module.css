@@ -27,32 +27,14 @@
 }
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 500;
   flex-shrink: 0;
-  background: transparent;
-  border: none;
   padding: 4px 6px;
   margin-left: -6px;
   border-radius: 4px;
-  cursor: pointer;
-  color: inherit;
 }
 
 .brand:hover {
   background: var(--hover);
-}
-
-.brandMark {
-  color: var(--text-muted);
-}
-
-.brandName {
-  color: var(--text);
 }
 
 .fileTitle {

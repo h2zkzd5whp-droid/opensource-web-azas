@@ -13,9 +13,9 @@ function renderLanding() {
 }
 
 describe('Landing — nav', () => {
-  test('renders brand name', () => {
+  test('renders brand logo linking home', () => {
     renderLanding();
-    expect(screen.getByText('editor')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /ajas editor/i })).toHaveAttribute('href', '/');
   });
 
   test('Sign in link points to /login', () => {

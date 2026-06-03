@@ -82,48 +82,6 @@
   gap: 8px;
 }
 
-.btnGhost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--btn-ghost-border, rgba(0, 0, 0, 0.16));
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnGhost:hover {
-  background: var(--hover);
-}
-
-.btnPrimary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: 1px solid var(--btn-bg);
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnPrimary:hover {
-  opacity: 0.85;
-}
-
 /* ===== Hero content (scroll steps) ===== */
 .heroContent {
   position: absolute;
@@ -199,49 +157,6 @@
   justify-content: center;
   margin-top: 32px;
 }
-
-.btnPrimaryLg {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: 1px solid var(--btn-bg);
-  border-radius: 6px;
-  padding: 12px 22px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnPrimaryLg:hover {
-  opacity: 0.85;
-}
-
-.btnGhostLg {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--btn-ghost-border, rgba(0, 0, 0, 0.16));
-  border-radius: 6px;
-  padding: 12px 22px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnGhostLg:hover {
-  background: var(--hover);
-}
-
 
 /* ===== Step 3: features ===== */
 .featuresGrid {

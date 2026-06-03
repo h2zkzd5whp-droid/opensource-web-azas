@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { apiRequest } from '../utils/api';
 import ConfirmModal from '../components/ConfirmModal';
 import ThemeApplier from '../components/ThemeApplier';
+import Button from '../components/Button';
 import { LANG_ICONS } from '../utils/languageIcons';
 import styles from '../styles/Dashboard.module.css';
 
@@ -136,13 +137,9 @@ export default function Dashboard() {
               <div className={styles.empty}>
                 <h5>No projects yet</h5>
                 <p>Create your first snippet — it&apos;ll show up here after the first save.</p>
-                <button
-                  type="button"
-                  className={styles.btnPrimary}
-                  onClick={handleNewProject}
-                >
+                <Button variant="primary" onClick={handleNewProject}>
                   + New project
-                </button>
+                </Button>
               </div>
             ) : (
               <div className={styles.panelBody}>
@@ -239,10 +236,9 @@ export default function Dashboard() {
                   <span className={styles.settingName}>Password</span>
                   <span className={styles.settingDesc}>Change password</span>
                 </div>
-                <button
-                  type="button"
+                <Button
+                  variant="ghost"
                   aria-label="change password"
-                  className={styles.btnGhost}
                   onClick={() => {
                     setShowPasswordForm((v) => !v);
                     setPasswordError('');
@@ -251,7 +247,7 @@ export default function Dashboard() {
                   }}
                 >
                   Change
-                </button>
+                </Button>
               </div>
 
               {showPasswordForm && (
@@ -273,9 +269,9 @@ export default function Dashboard() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
-                  <button type="submit" className={styles.btnPrimary}>
+                  <Button type="submit" variant="primary">
                     Save
-                  </button>
+                  </Button>
                 </form>
               )}
 
@@ -285,13 +281,9 @@ export default function Dashboard() {
                   <span className={styles.settingName}>Session</span>
                   <span className={styles.settingDesc}>Sign out of this browser</span>
                 </div>
-                <button
-                  type="button"
-                  className={styles.btnDanger}
-                  onClick={handleLogout}
-                >
+                <Button variant="danger" onClick={handleLogout}>
                   Logout
-                </button>
+                </Button>
               </div>
             </div>
           </div>

@@ -347,67 +347,6 @@
   font-size: 12px;
 }
 
-/* Buttons */
-.btnPrimary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: 1px solid var(--btn-bg);
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.btnPrimary:hover {
-  opacity: 0.85;
-}
-
-.btnGhost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--btn-ghost-border);
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.btnGhost:hover {
-  background: var(--hover);
-}
-
-.btnDanger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--error);
-  border: 1px solid var(--error-border);
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.btnDanger:hover {
-  background: var(--error-bg);
-}
-
 @media (max-width: 768px) {
   .dashGrid {
     grid-template-columns: 1fr;

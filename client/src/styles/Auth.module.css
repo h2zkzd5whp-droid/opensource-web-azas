@@ -108,27 +108,7 @@
 }
 
 .submitBtn {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: none;
-  border-radius: 6px;
-  padding: 11px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
   margin-top: 4px;
-  transition: opacity 0.15s;
-  width: 100%;
-}
-
-.submitBtn:hover:not(:disabled) {
-  opacity: 0.85;
-}
-
-.submitBtn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
 }
 
 .footer {

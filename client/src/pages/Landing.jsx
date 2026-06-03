@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import heroBg from '../assets/landing_image.png';
+import Button from '../components/Button';
 import s from '../styles/Landing.module.css';
 
 export default function Landing() {
@@ -57,8 +58,8 @@ export default function Landing() {
               <span className={s.brandName}>editor</span>
             </Link>
             <div className={s.navActions}>
-              <Link to="/login" className={s.btnGhost}>Sign in</Link>
-              <Link to="/register" className={s.btnPrimary}>Get started</Link>
+              <Button as={Link} to="/login" variant="ghost">Sign in</Button>
+              <Button as={Link} to="/register" variant="primary">Get started</Button>
             </div>
           </nav>
 
@@ -69,8 +70,8 @@ export default function Landing() {
               <p className={s.eyebrow}>Ready to start?</p>
               <h1 className={s.heroTitle}>Open the editor.<br /><span className={s.accent}>// no setup required.</span></h1>
               <div className={s.ctaActions}>
-                <Link to="/code" className={s.btnPrimaryLg}>Open editor →</Link>
-                <Link to="/register" className={s.btnGhostLg}>Create account</Link>
+                <Button as={Link} to="/code" variant="primary" size="md">Open editor →</Button>
+                <Button as={Link} to="/register" variant="ghost" size="md">Create account</Button>
               </div>
             </div>
 

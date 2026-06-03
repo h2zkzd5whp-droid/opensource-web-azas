@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Button from '../components/Button';
 import styles from '../styles/Auth.module.css';
 
 const ERROR_MESSAGES = {
@@ -75,13 +76,16 @@ export default function Login() {
             />
           </label>
 
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="submit"
+            fullWidth
             disabled={submitting}
             className={styles.submitBtn}
           >
             {submitting ? 'Signing in...' : 'Sign in'}
-          </button>
+          </Button>
         </form>
 
         <p className={styles.footer}>

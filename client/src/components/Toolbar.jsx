@@ -1,3 +1,4 @@
+import Button from './Button';
 import styles from '../styles/Editor.module.css';
 
 // 상단 앱바. 브랜드(랜딩 이동)·파일명·대시보드·로드·저장·실행 컨트롤
@@ -34,18 +35,18 @@ export default function Toolbar({
         </div>
       </div>
       <div className={styles.appBarRight}>
-        <button type="button" className={styles.btnGhost} onClick={onDashboard}>
+        <Button variant="ghost" onClick={onDashboard}>
           Dashboard
-        </button>
-        <button type="button" className={styles.btnGhost} onClick={onLoad}>
+        </Button>
+        <Button variant="ghost" onClick={onLoad}>
           Load
-        </button>
-        <button type="button" className={styles.btnGhost} onClick={onSave}>
+        </Button>
+        <Button variant="ghost" onClick={onSave}>
           Save
-        </button>
-        <button type="button" className={styles.btnPrimary} onClick={onRun} disabled={running}>
+        </Button>
+        <Button variant="primary" onClick={onRun} disabled={running}>
           {running ? 'Running…' : '▶  Run'}
-        </button>
+        </Button>
       </div>
     </div>
   );

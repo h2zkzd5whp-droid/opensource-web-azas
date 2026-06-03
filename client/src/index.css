@@ -9,6 +9,7 @@
   --input-border-focus: #111110;
   --btn-bg: #111110;
   --btn-text: #ffffff;
+  --btn-ghost-border: rgba(0, 0, 0, 0.16);
   --error: #c0392b;
   --error-bg: #fef2f2;
   --error-border: rgba(192, 57, 43, 0.2);
@@ -49,6 +50,7 @@
     --input-border-focus: #e8e8e6;
     --btn-bg: #e8e8e6;
     --btn-text: #111110;
+    --btn-ghost-border: rgba(255, 255, 255, 0.16);
     --divider: rgba(255, 255, 255, 0.07);
     --hover: rgba(255, 255, 255, 0.04);
   }
@@ -65,6 +67,7 @@
   --input-border-focus: #111110;
   --btn-bg: #111110;
   --btn-text: #ffffff;
+  --btn-ghost-border: rgba(0, 0, 0, 0.16);
   --divider: rgba(0, 0, 0, 0.06);
   --hover: rgba(0, 0, 0, 0.03);
 }

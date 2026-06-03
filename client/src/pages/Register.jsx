@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../utils/api';
 import Button from '../components/Button';
 import Brand from '../components/Brand';
+import { toUserMessage } from '../utils/errorMessage';
 import styles from '../styles/Auth.module.css';
  
 const ERROR_MESSAGES = {
@@ -40,8 +41,7 @@ export default function Register() {
       });
       navigate('/login');
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Registration failed.';
-      setError(msg);
+      setError(toUserMessage(err, ERROR_MESSAGES, 'Registration failed.'));
     } finally {
       setSubmitting(false);
     }

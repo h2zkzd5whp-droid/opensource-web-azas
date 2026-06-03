@@ -5,6 +5,7 @@ import { apiRequest } from '../utils/api';
 import ConfirmModal from '../components/ConfirmModal';
 import ThemeApplier from '../components/ThemeApplier';
 import Button from '../components/Button';
+import Brand from '../components/Brand';
 import { LANG_ICONS } from '../utils/languageIcons';
 import styles from '../styles/Dashboard.module.css';
 
@@ -113,10 +114,7 @@ export default function Dashboard() {
       <div className={styles.dash}>
         {/* Top bar */}
         <div className={styles.dashBar}>
-          <div className={styles.brand}>
-            <span className={styles.brandMark}>AJAS</span>
-            <span className={styles.brandName}>editor</span>
-          </div>
+          <Brand />
           <div className={styles.barRight}>
             <div className={styles.avatar} title={user?.nickname || user?.email}>
               {avatarInitial}

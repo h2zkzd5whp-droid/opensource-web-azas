@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
+import Brand from '../components/Brand';
 import styles from '../styles/Auth.module.css';
 
 const ERROR_MESSAGES = {
@@ -37,10 +38,7 @@ export default function Login() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.brand}>
-          <span className={styles.brandMark}>AJAS</span>
-          <span className={styles.brandName}>editor</span>
-        </div>
+        <Brand className={styles.brand} />
 
         <div className={styles.header}>
           <h1 className={styles.title}>Welcome back</h1>

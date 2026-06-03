@@ -25,18 +25,6 @@
   border-radius: 10px;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.brandMark { color: var(--text-muted); }
-.brandName  { color: var(--text); }
-
 .barRight {
   display: flex;
   align-items: center;

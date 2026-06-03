@@ -57,10 +57,14 @@ opensource-web-azas/
 │       ├── utils/
 │       │   ├── api.js                      # API client (fetch wrapper with JWT)
 │       │   ├── constants.js                # Language list, Judge0 IDs, default code
+│       │   ├── date.js                     # formatRelative / formatAbsolute
+│       │   ├── errorMessage.js             # toUserMessage(err, table, fallback)
 │       │   └── languageIcons.jsx           # Per-language official-logo SVG components
 │       ├── contexts/
 │       │   └── AuthContext.jsx             # Auth state management (login/logout/user)
 │       ├── components/
+│       │   ├── Brand.jsx                   # Shared brand logo mark (button/Link/span)
+│       │   ├── Button.jsx                  # Shared button (primary/ghost/danger variants)
 │       │   ├── ConfirmModal.jsx            # Confirmation modal for risky/irreversible actions
 │       │   ├── Editor.jsx                  # Monaco Editor wrapper (ajas-light custom theme)
 │       │   ├── ExecutionPanel.jsx          # stdout/stderr terminal with exit/time meta
@@ -71,11 +75,14 @@ opensource-web-azas/
 │       │   ├── ThemeApplier.jsx            # Apply user.theme to documentElement data-theme
 │       │   └── Toolbar.jsx                 # Editor top app bar (brand/file/dashboard/load/save/run)
 │       ├── hooks/
-│       │   └── useCodeExecution.js         # Code execution hook (Judge0)
+│       │   ├── useCodeExecution.js         # Code execution hook (Judge0)
+│       │   └── useEscapeKey.js             # Call handler on Escape while active
 │       ├── assets/
 │       │   └── landing_image.png           # Landing page hero background image
 │       ├── styles/
 │       │   ├── Auth.module.css             # Shared Login/Register styles
+│       │   ├── Brand.module.css            # Brand logo styles
+│       │   ├── Button.module.css           # Shared button styles (variants/sizes)
 │       │   ├── ConfirmModal.module.css     # ConfirmModal styles
 │       │   ├── Dashboard.module.css        # Dashboard page styles
 │       │   ├── Editor.module.css           # Editor page layout (app bar, side, terminal, resizer)

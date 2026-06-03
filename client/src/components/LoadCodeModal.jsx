@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
 import { apiRequest } from '../utils/api';
+import { formatAbsolute } from '../utils/date';
+import useEscapeKey from '../hooks/useEscapeKey';
 import styles from '../styles/LoadCodeModal.module.css';
-
-// 날짜 포맷. YYYY-MM-DD HH:MM
-const formatDate = (iso) => {
-  if (!iso) return '';
-  const d = new Date(iso);
-  const pad = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-};
 
 // 저장된 코드 목록 모달. 선택 시 onSelect(codeId) 호출
 export default function LoadCodeModal({ open, onSelect, onClose }) {
@@ -45,14 +39,7 @@ export default function LoadCodeModal({ open, onSelect, onClose }) {
   }, [open]);
 
   // ESC로 닫기
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose?.();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  useEscapeKey(open, onClose);
 
   if (!open) return null;
 
@@ -84,7 +71,7 @@ export default function LoadCodeModal({ open, onSelect, onClose }) {
             >
               <div className={styles.rowMain}>
                 <span className={styles.rowTitle}>{c.title}</span>
-                <span className={styles.rowMeta}>{formatDate(c.updatedAt)}</span>
+                <span className={styles.rowMeta}>{formatAbsolute(c.updatedAt)}</span>
               </div>
               <span className={styles.rowLang}>{c.language}</span>
             </button>

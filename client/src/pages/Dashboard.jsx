@@ -7,17 +7,8 @@ import ThemeApplier from '../components/ThemeApplier';
 import Button from '../components/Button';
 import Brand from '../components/Brand';
 import { LANG_ICONS } from '../utils/languageIcons';
+import { formatRelative } from '../utils/date';
 import styles from '../styles/Dashboard.module.css';
-
-function formatDate(iso) {
-  const diff = Date.now() - new Date(iso).getTime();
-  const days = Math.floor(diff / 86400000);
-  if (days === 0) return 'today';
-  if (days === 1) return '1d ago';
-  if (days < 7) return `${days}d ago`;
-  if (days < 14) return '1w ago';
-  return `${Math.floor(days / 7)}w ago`;
-}
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -170,7 +161,7 @@ export default function Dashboard() {
                             {Icon && <Icon size={14} />}
                             {code.language}
                           </span>
-                          <span>{formatDate(code.updatedAt)}</span>
+                          <span>{formatRelative(code.updatedAt)}</span>
                         </div>
                       </div>
                     );

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import Brand from '../components/Brand';
+import { toUserMessage } from '../utils/errorMessage';
 import styles from '../styles/Auth.module.css';
 
 const ERROR_MESSAGES = {
@@ -28,8 +29,7 @@ export default function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Login failed.';
-      setError(msg);
+      setError(toUserMessage(err, ERROR_MESSAGES, 'Login failed.'));
     } finally {
       setSubmitting(false);
     }

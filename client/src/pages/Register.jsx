@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../utils/api';
 import Button from '../components/Button';
 import Brand from '../components/Brand';
+import Navbar from '../components/Navbar';
 import { toUserMessage } from '../utils/errorMessage';
 import styles from '../styles/Auth.module.css';
  
@@ -48,7 +49,9 @@ export default function Register() {
   };
  
   return (
-    <div className={styles.page}>
+    <div className={styles.shell}>
+      <Navbar />
+      <div className={styles.page}>
       <div className={styles.card}>
         <Brand className={styles.brand} />
  
@@ -128,6 +131,7 @@ export default function Register() {
           Already have an account?{' '}
           <Link to="/login" className={styles.link}>Sign in</Link>
         </p>
+      </div>
       </div>
     </div>
   );

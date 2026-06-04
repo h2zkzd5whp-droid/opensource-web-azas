@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import Brand from '../components/Brand';
+import Navbar from '../components/Navbar';
 import { toUserMessage } from '../utils/errorMessage';
 import styles from '../styles/Auth.module.css';
 
@@ -36,7 +37,9 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.page}>
+    <div className={styles.shell}>
+      <Navbar />
+      <div className={styles.page}>
       <div className={styles.card}>
         <Brand className={styles.brand} />
 
@@ -90,6 +93,7 @@ export default function Login() {
           No account?{' '}
           <Link to="/register" className={styles.link}>Create one</Link>
         </p>
+      </div>
       </div>
     </div>
   );

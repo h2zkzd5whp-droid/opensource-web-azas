@@ -140,7 +140,9 @@ opensource-web-azas/
 - open docker settings check on "Use the WSL 2 based engine" in General tab
 - move Docker setting -> Resource -> File Sharing and add your project root path, click Apply & restart
 - setting GEMINI_API in envfile
-
+```bash
+npm install @google/genai
+```
 ### 1. Database Setup
 
 ```bash

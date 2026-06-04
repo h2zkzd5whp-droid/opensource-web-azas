@@ -102,7 +102,7 @@ export default function Navbar({
   const fontSize = user?.fontSize || 14;
 
   return (
-    <header className={`${styles.bar} ${transparent ? styles.transparent : ''}`}>
+    <header className={[styles.bar, transparent && styles.transparent].filter(Boolean).join(' ')}>
       <div className={styles.left}>
         <Brand as={Link} to="/" className={styles.brand} />
         {editor && (
@@ -168,7 +168,7 @@ export default function Navbar({
                       </div>
                       <button
                         type="button"
-                        className={`${styles.toggle} ${user?.theme !== 'dark' ? styles.toggleOff : ''}`}
+                        className={[styles.toggle, user?.theme !== 'dark' && styles.toggleOff].filter(Boolean).join(' ')}
                         aria-label="theme"
                         title={user?.theme}
                         onClick={handleThemeToggle}

@@ -32,12 +32,16 @@ export default function Navbar({
   const [passwordError, setPasswordError] = useState('');
   const popoverRef = useRef(null);
 
-  function closePopover() {
-    setPopoverOpen(false);
+  function resetPasswordForm() {
     setShowPasswordForm(false);
     setPasswordError('');
     setOldPassword('');
     setNewPassword('');
+  }
+
+  function closePopover() {
+    setPopoverOpen(false);
+    resetPasswordForm();
   }
 
   useEscapeKey(popoverOpen, closePopover);
@@ -73,9 +77,7 @@ export default function Navbar({
         method: 'PUT',
         body: JSON.stringify({ oldPassword, newPassword }),
       });
-      setShowPasswordForm(false);
-      setOldPassword('');
-      setNewPassword('');
+      resetPasswordForm();
     } catch (err) {
       if (err.errorCode === 'WRONG_PASSWORD') {
         setPasswordError('Incorrect current password.');
@@ -83,6 +85,11 @@ export default function Navbar({
         setPasswordError('Failed to change password.');
       }
     }
+  }
+
+  function togglePasswordForm() {
+    if (showPasswordForm) resetPasswordForm();
+    else setShowPasswordForm(true);
   }
 
   function handleLogout() {
@@ -116,20 +123,25 @@ export default function Navbar({
       <div className={styles.right}>
         {user ? (
           <>
-            <Button as={Link} to="/dashboard" variant="ghost">
+            <Link to="/dashboard" className={styles.navLink}>
               Dashboard
-            </Button>
+            </Link>
             {editor && (
               <>
-                <Button variant="ghost" onClick={onLoad}>
+                <button type="button" className={styles.navLink} onClick={onLoad}>
                   Load
-                </Button>
-                <Button variant="ghost" onClick={onSave}>
+                </button>
+                <button type="button" className={styles.navLink} onClick={onSave}>
                   Save
-                </Button>
-                <Button variant="primary" onClick={onRun} disabled={running}>
+                </button>
+                <button
+                  type="button"
+                  className={styles.navLink}
+                  onClick={onRun}
+                  disabled={running}
+                >
                   {running ? 'Running…' : '▶  Run'}
-                </Button>
+                </button>
               </>
             )}
             <div className={styles.profile}>
@@ -198,12 +210,7 @@ export default function Navbar({
                       <Button
                         variant="ghost"
                         aria-label="change password"
-                        onClick={() => {
-                          setShowPasswordForm((v) => !v);
-                          setPasswordError('');
-                          setOldPassword('');
-                          setNewPassword('');
-                        }}
+                        onClick={togglePasswordForm}
                       >
                         Change
                       </Button>
@@ -251,12 +258,12 @@ export default function Navbar({
           </>
         ) : (
           <>
-            <Button as={Link} to="/login" variant="ghost">
+            <Link to="/login" className={styles.navLink}>
               Sign in
-            </Button>
-            <Button as={Link} to="/register" variant="primary">
+            </Link>
+            <Link to="/register" className={styles.navLink}>
               Get started
-            </Button>
+            </Link>
           </>
         )}
       </div>

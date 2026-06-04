@@ -85,7 +85,7 @@ exports.runCode = async (req, res, _next) => {
         const absoluteTempDir = path.resolve(tempDir).replace(/\\/g, '/');
         const cmd = `docker run --rm -v "${absoluteTempDir}:/app" -w /app ${config.image} sh -c "${config.cmd}"`;
         const startTime = Date.now();
-        
+        //timeout = 5ms
         exec(cmd, { timeout: 5000 }, async (error, stdout, stderr) => {
             try { await fs.unlink(filePath); } catch (e) { }
 
@@ -93,7 +93,7 @@ exports.runCode = async (req, res, _next) => {
             
             const exitCode = error ? error.code : 0;
             if (exitCode !== 0) {
-                return res.status(400).json({ error: 'EXECUTION_FAILED', stderr });
+                return res.status(502).json({ error: 'EXECUTION_FAILED', stderr });
             }
 
             res.status(200).json({
@@ -104,8 +104,7 @@ exports.runCode = async (req, res, _next) => {
             });
         });
     } catch (err) {
-        console.error(err); 
-        res.status(502).json({ error: 'SERVER_EXECUTION_ERROR', details: err.message });
+        next(err);
     }
 };
 

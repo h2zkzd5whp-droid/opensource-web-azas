@@ -3,20 +3,25 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-// 미들웨어
+// middleware
 app.use(cors());
 app.use(express.json());
 
-// 라우트 연결
+// connect route
 app.use('/api', require('./routes/auth'));
 app.use('/api/code', require('./routes/code'));
 
-// 에러 헨들링
+// error handling
 app.use((err, req, res, _next) => {
-  res.status(err.statusCode || 500).json({
-    error: err.message || '서버 내부 오류',
-    errorCode: err.errorCode || 'INTERNAL_ERROR',
-    statusCode: err.statusCode || 500
+  let statusCode = err.statusCode || 500;
+  let errorCode = err.errorCode || 'INTERNAL_ERROR';
+  let message = err.message || '서버 내부 오류';
+
+  //basic error handling
+  res.status(statusCode).json({
+    error: message,
+    errorCode: errorCode,
+    statusCode: statusCode
   });
 });
 

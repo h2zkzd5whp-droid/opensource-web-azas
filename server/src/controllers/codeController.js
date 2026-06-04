@@ -85,8 +85,8 @@ exports.runCode = async (req, res, _next) => {
         const absoluteTempDir = path.resolve(tempDir).replace(/\\/g, '/');
         const cmd = `docker run --rm -v "${absoluteTempDir}:/app" -w /app ${config.image} sh -c "${config.cmd}"`;
         const startTime = Date.now();
-        //timeout = 5ms
-        exec(cmd, { timeout: 5000 }, async (error, stdout, stderr) => {
+        //timeout = 10ms
+        exec(cmd, { timeout: 10000 }, async (error, stdout, stderr) => {
             try { await fs.unlink(filePath); } catch (e) { }
 
             if (error && error.killed) return res.status(504).json({ error: 'EXECUTION_TIMEOUT' });

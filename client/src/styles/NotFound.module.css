@@ -1,8 +1,14 @@
-.page {
+.shell {
   position: fixed;
   inset: 0;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
+}
+
+.page {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;

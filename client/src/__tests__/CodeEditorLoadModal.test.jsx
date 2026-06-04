@@ -12,10 +12,15 @@ const mockUseParams = vi.fn();
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
   useParams: () => mockUseParams(),
+  Link: ({ children, to }) => <a href={to}>{children}</a>,
 }));
 
 vi.mock('../contexts/AuthContext', () => ({
-  useAuth: () => ({ user: { email: 'a@a.com', theme: 'dark', fontSize: 14 } }),
+  useAuth: () => ({
+    user: { email: 'a@a.com', theme: 'dark', fontSize: 14 },
+    logout: vi.fn(),
+    updateUser: vi.fn(),
+  }),
 }));
 
 vi.mock('../utils/api', () => ({

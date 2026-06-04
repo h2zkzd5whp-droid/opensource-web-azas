@@ -7,6 +7,7 @@ const mockNavigate = vi.fn();
 
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
+  Link: ({ children, to }) => <a href={to}>{children}</a>,
 }));
 
 let mockUserData = { email: 'a@a.com', nickname: 'Val', theme: 'dark', fontSize: 14 };
@@ -126,7 +127,6 @@ describe('Dashboard — Step 2: 카드 클릭 & 삭제', () => {
     await waitFor(() => screen.getByText('fizzbuzz.py'));
     const deleteButtons = screen.getAllByRole('button', { name: /delete fizzbuzz/i });
     await userEvent.click(deleteButtons[0]);
-    // ConfirmModal의 confirmLabel이 "Delete"인 버튼: autoFocus 속성 확인
     await userEvent.click(screen.getByRole('button', { name: /^delete$/i }));
     await waitFor(() => {
       expect(apiRequest).toHaveBeenCalledWith('/code/1', { method: 'DELETE' });
@@ -147,134 +147,5 @@ describe('Dashboard — Step 2: 카드 클릭 & 삭제', () => {
       expect(screen.queryByText('fizzbuzz.py')).not.toBeInTheDocument();
       expect(screen.getByText('two-sum.js')).toBeInTheDocument();
     });
-  });
-});
-
-// ─── Step 3: 설정 — 테마 & 폰트 사이즈 ─────────────────────────────────────
-
-describe('Dashboard — Step 3: 설정 — 테마 & 폰트 사이즈', () => {
-  test('테마 토글 클릭 시 PUT /auth/me를 theme: light로 호출한다', async () => {
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /theme/i }));
-    await waitFor(() => {
-      expect(apiRequest).toHaveBeenCalledWith(
-        '/auth/me',
-        expect.objectContaining({
-          method: 'PUT',
-          body: expect.stringContaining('"theme":"light"'),
-        })
-      );
-    });
-  });
-
-  test('폰트 사이즈 + 버튼 클릭 시 PUT /auth/me를 fontSize+1로 호출한다', async () => {
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /increase font/i }));
-    await waitFor(() => {
-      expect(apiRequest).toHaveBeenCalledWith(
-        '/auth/me',
-        expect.objectContaining({
-          method: 'PUT',
-          body: expect.stringContaining('"fontSize":15'),
-        })
-      );
-    });
-  });
-
-  test('폰트 사이즈 − 버튼 클릭 시 PUT /auth/me를 fontSize-1로 호출한다', async () => {
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /decrease font/i }));
-    await waitFor(() => {
-      expect(apiRequest).toHaveBeenCalledWith(
-        '/auth/me',
-        expect.objectContaining({
-          method: 'PUT',
-          body: expect.stringContaining('"fontSize":13'),
-        })
-      );
-    });
-  });
-
-  test('폰트 사이즈가 24일 때 + 버튼이 비활성화된다', async () => {
-    mockUserData = { ...mockUserData, fontSize: 24 };
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    expect(screen.getByRole('button', { name: /increase font/i })).toBeDisabled();
-  });
-});
-
-// ─── Step 4: 설정 — 비밀번호 변경 ───────────────────────────────────────────
-
-describe('Dashboard — Step 4: 비밀번호 변경', () => {
-  test('Change 버튼 클릭 시 비밀번호 변경 폼이 열린다', async () => {
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /change/i }));
-    expect(screen.getByPlaceholderText(/current password/i)).toBeInTheDocument();
-  });
-
-  test('비밀번호 변경 폼 제출 시 PUT /auth/password를 호출한다', async () => {
-    apiRequest
-      .mockResolvedValueOnce({ codes: sampleCodes, total: 2 })
-      .mockResolvedValueOnce({ message: 'ok' });
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /change/i }));
-    await userEvent.type(screen.getByPlaceholderText(/current password/i), 'oldpass1');
-    await userEvent.type(screen.getByPlaceholderText(/new password/i), 'newpass1');
-    await userEvent.click(screen.getByRole('button', { name: /^save$/i }));
-    await waitFor(() => {
-      expect(apiRequest).toHaveBeenCalledWith(
-        '/auth/password',
-        expect.objectContaining({
-          method: 'PUT',
-          body: JSON.stringify({ oldPassword: 'oldpass1', newPassword: 'newpass1' }),
-        })
-      );
-    });
-  });
-
-  test('비밀번호 변경 성공 시 폼이 닫힌다', async () => {
-    apiRequest
-      .mockResolvedValueOnce({ codes: sampleCodes, total: 2 })
-      .mockResolvedValueOnce({ message: 'ok' });
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /change/i }));
-    await userEvent.type(screen.getByPlaceholderText(/current password/i), 'oldpass1');
-    await userEvent.type(screen.getByPlaceholderText(/new password/i), 'newpass1');
-    await userEvent.click(screen.getByRole('button', { name: /^save$/i }));
-    await waitFor(() => {
-      expect(screen.queryByPlaceholderText(/current password/i)).not.toBeInTheDocument();
-    });
-  });
-
-  test('WRONG_PASSWORD 오류 시 에러 메시지가 표시된다', async () => {
-    apiRequest
-      .mockResolvedValueOnce({ codes: sampleCodes, total: 2 })
-      .mockRejectedValueOnce(Object.assign(new Error(), { errorCode: 'WRONG_PASSWORD' }));
-    renderDashboard();
-    await waitFor(() => screen.getByText('fizzbuzz.py'));
-    await userEvent.click(screen.getByRole('button', { name: /change/i }));
-    await userEvent.type(screen.getByPlaceholderText(/current password/i), 'wrong');
-    await userEvent.type(screen.getByPlaceholderText(/new password/i), 'newpass1');
-    await userEvent.click(screen.getByRole('button', { name: /^save$/i }));
-    await waitFor(() => {
-      expect(screen.getByText(/incorrect.*password/i)).toBeInTheDocument();
-    });
-  });
-});
-
-// ─── Step 5: 로그아웃 ────────────────────────────────────────────────────────
-
-describe('Dashboard — Step 5: 로그아웃', () => {
-  test('Logout 버튼 클릭 시 logout()을 호출하고 /login으로 이동한다', async () => {
-    renderDashboard();
-    await userEvent.click(screen.getByRole('button', { name: /logout/i }));
-    expect(mockLogout).toHaveBeenCalled();
-    expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
 });

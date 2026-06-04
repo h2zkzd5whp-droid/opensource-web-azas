@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Toolbar from '../components/Toolbar';
+import Navbar from '../components/Navbar';
 import LanguageSelector from '../components/LanguageSelector';
 import Editor from '../components/Editor';
 import ExecutionPanel from '../components/ExecutionPanel';
@@ -183,16 +183,15 @@ export default function CodeEditor() {
   return (
     <div className={styles.page}>
       <ThemeApplier theme={editorTheme} />
-      <Toolbar
+      <Navbar
+        editor
         name={name}
         onNameChange={handleNameChange}
-        extension={ext}
+        ext={ext}
         dirty={dirty}
         onSave={save}
         onRun={() => run(language, source)}
         onLoad={() => setLoadOpen(true)}
-        onDashboard={() => navigate('/dashboard')}
-        onHome={() => navigate('/')}
         running={running}
       />
       <div className={styles.body}>

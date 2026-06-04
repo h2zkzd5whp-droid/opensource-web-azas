@@ -70,10 +70,10 @@ opensource-web-azas/
 │       │   ├── ExecutionPanel.jsx          # stdout/stderr terminal with exit/time meta
 │       │   ├── LanguageSelector.jsx        # Left side panel with language logo buttons
 │       │   ├── LoadCodeModal.jsx           # Modal listing saved codes (GET /api/code)
+│       │   ├── Navbar.jsx                   # Shared top bar (logo→/, auth-aware links, profile popover, editor mode)
 │       │   ├── ProtectedRoute.jsx          # Redirects unauthenticated users to /login
 │       │   ├── PublicRoute.jsx             # Redirects authenticated users to /dashboard
-│       │   ├── ThemeApplier.jsx            # Apply user.theme to documentElement data-theme
-│       │   └── Toolbar.jsx                 # Editor top app bar (brand/file/dashboard/load/save/run)
+│       │   └── ThemeApplier.jsx            # Apply user.theme to documentElement data-theme
 │       ├── hooks/
 │       │   ├── useCodeExecution.js         # Code execution hook (Judge0)
 │       │   └── useEscapeKey.js             # Call handler on Escape while active
@@ -85,9 +85,10 @@ opensource-web-azas/
 │       │   ├── Button.module.css           # Shared button styles (variants/sizes)
 │       │   ├── ConfirmModal.module.css     # ConfirmModal styles
 │       │   ├── Dashboard.module.css        # Dashboard page styles
-│       │   ├── Editor.module.css           # Editor page layout (app bar, side, terminal, resizer)
+│       │   ├── Editor.module.css           # Editor page layout (side, terminal, resizer)
 │       │   ├── Landing.module.css          # Landing page styles (sticky hero, scroll steps, nav)
 │       │   ├── LoadCodeModal.module.css    # LoadCodeModal styles
+│       │   ├── Navbar.module.css           # Shared top bar styles (logo, links, profile popover, file controls)
 │       │   └── NotFound.module.css         # 404 page styles
 │       ├── pages/
 │       │   ├── CodeEditor.jsx              # Editor page

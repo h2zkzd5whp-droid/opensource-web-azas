@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import heroBg from '../assets/landing_image.png';
 import Button from '../components/Button';
-import Brand from '../components/Brand';
+import Navbar from '../components/Navbar';
 import s from '../styles/Landing.module.css';
 
 export default function Landing() {
@@ -53,13 +53,9 @@ export default function Landing() {
           <div className={s.heroOverlay} />
 
           {/* Nav */}
-          <nav className={s.nav}>
-            <Brand as={Link} to="/" />
-            <div className={s.navActions}>
-              <Button as={Link} to="/login" variant="ghost">Sign in</Button>
-              <Button as={Link} to="/register" variant="primary">Get started</Button>
-            </div>
-          </nav>
+          <div className={s.nav}>
+            <Navbar transparent />
+          </div>
 
           {/* Hero content — steps */}
           <div className={s.heroContent}>

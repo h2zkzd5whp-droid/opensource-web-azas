@@ -9,10 +9,15 @@ const mockUseParams = vi.fn();
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
   useParams: () => mockUseParams(),
+  Link: ({ children, to }) => <a href={to}>{children}</a>,
 }));
 
 vi.mock('../contexts/AuthContext', () => ({
-  useAuth: () => ({ user: { email: 'a@a.com', theme: 'dark', fontSize: 14 } }),
+  useAuth: () => ({
+    user: { email: 'a@a.com', theme: 'dark', fontSize: 14 },
+    logout: vi.fn(),
+    updateUser: vi.fn(),
+  }),
 }));
 
 vi.mock('../utils/api', () => ({
@@ -47,24 +52,24 @@ beforeEach(() => {
 });
 
 describe('CodeEditor — Step 1: 기본 렌더링', () => {
-  test('Toolbar의 Save 버튼이 렌더된다', () => {
+  test('Navbar의 Save 버튼이 렌더된다', () => {
     renderCodeEditor();
     expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
   });
 
-  test('Toolbar의 Run 버튼이 렌더된다', () => {
+  test('Navbar의 Run 버튼이 렌더된다', () => {
     renderCodeEditor();
     expect(screen.getByRole('button', { name: /run/i })).toBeInTheDocument();
   });
 
-  test('Toolbar의 Load 버튼이 렌더된다', () => {
+  test('Navbar의 Load 버튼이 렌더된다', () => {
     renderCodeEditor();
     expect(screen.getByRole('button', { name: /load/i })).toBeInTheDocument();
   });
 
-  test('Toolbar의 Dashboard 버튼이 렌더된다', () => {
+  test('Navbar의 Dashboard 링크가 렌더된다', () => {
     renderCodeEditor();
-    expect(screen.getByRole('button', { name: /dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /dashboard/i })).toHaveAttribute('href', '/dashboard');
   });
 
   test('파일명 입력 필드가 렌더된다', () => {
@@ -104,7 +109,7 @@ describe('CodeEditor — Step 2: codeId 진입 시 코드 로드', () => {
     });
   });
 
-  test('로드 성공 시 파일명(확장자 제외)이 Toolbar에 반영된다', async () => {
+  test('로드 성공 시 파일명(확장자 제외)이 Navbar에 반영된다', async () => {
     mockUseParams.mockReturnValue({ codeId: '42' });
     apiRequest.mockResolvedValueOnce({
       language: 'python',

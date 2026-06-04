@@ -67,7 +67,7 @@ const languageConfig = {
     }
 };
 
-exports.runCode = async (req, res, _next) => {
+exports.runCode = async (req, res, next) => {
     const { language, source } = req.body;
 
     if (!language) return res.status(400).json({ error: 'LANGUAGE_MISSING' });

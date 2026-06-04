@@ -134,13 +134,13 @@ opensource-web-azas/
 ## Getting Started
 
 ### 0. setting
-'''
-install docker and connect the Docker Desktop app before running the code.
-docker is based on linux , if you use windows os, install wsl2 or already installed than do "wsl --update" in terminal
-open docker settings check on "Use the WSL 2 based engine" in General tab
-move Docker setting -> Resource -> File Sharing and add your project root path, click Apply & restart
-setting GEMINI_API in envfile
-'''
+
+- install docker and connect the Docker Desktop app before running the code.
+- docker is based on linux , if you use windows os, install wsl2 or already installed than do "wsl --update" in terminal
+- open docker settings check on "Use the WSL 2 based engine" in General tab
+- move Docker setting -> Resource -> File Sharing and add your project root path, click Apply & restart
+- setting GEMINI_API in envfile
+
 ### 1. Database Setup
 
 ```bash

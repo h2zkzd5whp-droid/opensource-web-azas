@@ -10,11 +10,17 @@
   gap: 16px;
 }
 
+/* Transparent variant for the landing hero (sits over the background image) */
+.transparent {
+  background: transparent;
+  border-bottom: none;
+}
+
 .left,
 .right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   min-width: 0;
 }
 

@@ -13,6 +13,7 @@ import styles from '../styles/Navbar.module.css';
 // previously owned by Toolbar (name input · Load · Save · ▶ Run).
 export default function Navbar({
   editor = false,
+  transparent = false,
   name,
   onNameChange,
   ext,
@@ -101,7 +102,7 @@ export default function Navbar({
   const fontSize = user?.fontSize || 14;
 
   return (
-    <header className={styles.bar}>
+    <header className={`${styles.bar} ${transparent ? styles.transparent : ''}`}>
       <div className={styles.left}>
         <Brand as={Link} to="/" className={styles.brand} />
         {editor && (

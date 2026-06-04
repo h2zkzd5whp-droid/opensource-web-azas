@@ -54,7 +54,7 @@ export default function Landing() {
 
           {/* Nav */}
           <div className={s.nav}>
-            <Navbar />
+            <Navbar transparent />
           </div>
 
           {/* Hero content — steps */}

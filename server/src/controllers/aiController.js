@@ -4,21 +4,31 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
 //Error Explainer
-exports.explainer = async (req, res) => {
+exports.explainer = async (req, res, next) => {
   const { code, language, errorLog } = req.body;
 
   if (!code || !errorLog) {
     return res.status(400).json({ error: "Source code and errorlog is required." });
   }
-
-  const prompt = `The user's code encountered an error. Analyze the source code and error log meticulously to find the root cause.\n\n[Language]: ${language}\n[Error Log]: ${errorLog}\n[Source Code]:\n${code}`;
+  
+  const prompt = `[Language]: ${language}\n[Error Log]: ${errorLog}\n[Source Code]:\n${code}`;
 
   try {
     const response = await ai.models.generateContent({
       model: GEMINI_MODEL,
       contents: prompt,
       config: {
-        systemInstruction: "You are an expert senior software engineer helping developers debug their code. Identify the exact root cause and provide a solution. CRITICAL: You must output strictly in the specified JSON format. Write the values for 'errorCause' and 'explanation' in Korean so the user can easily understand.",
+        systemInstruction: 
+          "You are an expert senior software engineer helping developers debug complex compilation or runtime errors. " +
+          "Identify the exact root cause, pinpoint the most relevant line, and provide a clear solution. " +
+          "\n\n" +
+          "CRITICAL INSTRUCTIONS FOR VISUAL INDEXING:\n" +
+          "1. To explain the error clearly without conflicts, use dynamic numbered tags like [TAG:1], [TAG:2], [TAG:3] etc., to index different code identifiers, variables, types, or expressions involved in the error.\n" +
+          "2. Increment the number (1, 2, 3...) for each unique code element you reference so that they never overlap.\n" +
+          "3. You MUST embed these exact tags naturally inside the 'explanation' field text.\n" +
+          "4. Write the values for 'errorCause' and 'explanation' in Korean. (Example: '5번 라인의 [TAG:1] 변수는 정의되지 않았습니다.')\n" +
+          "5. You must output strictly in the specified JSON format.",
+
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -26,7 +36,7 @@ exports.explainer = async (req, res) => {
             errorCause: { type: Type.STRING, description: "Summary of the root cause written in Korean" },
             line: { type: Type.INTEGER, description: "The line number most relevant to the error" },
             fixedCode: { type: Type.STRING, description: "The complete fixed code or the core corrected code snippet" },
-            explanation: { type: Type.STRING, description: "Detailed explanation of how to solve it written in Korean" }
+            explanation: { type: Type.STRING, description: "Detailed explanation of how to solve it written in Korean, embedding the [TAG:n] tokens properly." }
           },
           required: ["errorCause", "line", "fixedCode", "explanation"]
         }
@@ -39,7 +49,7 @@ exports.explainer = async (req, res) => {
   }
 };
 //Style Reviewer
-exports.reviewer = async (req, res) => {
+exports.reviewer = async (req, res, next) => {
   const { code, language } = req.body;
 
   if (!code) {
@@ -84,7 +94,7 @@ exports.reviewer = async (req, res) => {
   }
 };
 //Code Optimizer
-exports.optimizer =  async (req, res) => {
+exports.optimizer =  async (req, res, next) => {
   const { code, language } = req.body;
 
   if (!code) {

@@ -53,75 +53,6 @@
   left: 0;
   right: 0;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 40px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.brandMark {
-  color: var(--text-muted);
-}
-
-.brandName {
-  color: var(--text);
-}
-
-.navActions {
-  display: flex;
-  gap: 8px;
-}
-
-.btnGhost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--btn-ghost-border, rgba(0, 0, 0, 0.16));
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnGhost:hover {
-  background: var(--hover);
-}
-
-.btnPrimary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: 1px solid var(--btn-bg);
-  border-radius: 6px;
-  padding: 7px 11px;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnPrimary:hover {
-  opacity: 0.85;
 }
 
 /* ===== Hero content (scroll steps) ===== */
@@ -199,49 +130,6 @@
   justify-content: center;
   margin-top: 32px;
 }
-
-.btnPrimaryLg {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: 1px solid var(--btn-bg);
-  border-radius: 6px;
-  padding: 12px 22px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnPrimaryLg:hover {
-  opacity: 0.85;
-}
-
-.btnGhostLg {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--btn-ghost-border, rgba(0, 0, 0, 0.16));
-  border-radius: 6px;
-  padding: 12px 22px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.btnGhostLg:hover {
-  background: var(--hover);
-}
-
 
 /* ===== Step 3: features ===== */
 .featuresGrid {

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Button from '../components/Button';
+import Brand from '../components/Brand';
+import Navbar from '../components/Navbar';
+import { toUserMessage } from '../utils/errorMessage';
 import styles from '../styles/Auth.module.css';
 
 const ERROR_MESSAGES = {
@@ -26,20 +30,18 @@ export default function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Login failed.';
-      setError(msg);
+      setError(toUserMessage(err, ERROR_MESSAGES, 'Login failed.'));
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className={styles.page}>
+    <div className={styles.shell}>
+      <Navbar />
+      <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.brand}>
-          <span className={styles.brandMark}>AJAS</span>
-          <span className={styles.brandName}>editor</span>
-        </div>
+        <Brand className={styles.brand} />
 
         <div className={styles.header}>
           <h1 className={styles.title}>Welcome back</h1>
@@ -75,19 +77,23 @@ export default function Login() {
             />
           </label>
 
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="submit"
+            fullWidth
             disabled={submitting}
             className={styles.submitBtn}
           >
             {submitting ? 'Signing in...' : 'Sign in'}
-          </button>
+          </Button>
         </form>
 
         <p className={styles.footer}>
           No account?{' '}
           <Link to="/register" className={styles.link}>Create one</Link>
         </p>
+      </div>
       </div>
     </div>
   );

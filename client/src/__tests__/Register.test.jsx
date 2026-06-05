@@ -10,6 +10,10 @@ vi.mock('react-router-dom', () => ({
   Link: ({ children, to }) => <a href={to}>{children}</a>,
 }));
 
+vi.mock('../contexts/AuthContext', () => ({
+  useAuth: () => ({ user: null, logout: vi.fn(), updateUser: vi.fn() }),
+}));
+
 vi.mock('../utils/api', () => ({
   apiRequest: vi.fn(),
 }));
@@ -105,6 +109,9 @@ describe('Register — success', () => {
 describe('Register — UI', () => {
   test('Sign in link points to /login', () => {
     renderRegister();
-    expect(screen.getByRole('link', { name: /sign in/i })).toHaveAttribute('href', '/login');
+    // Both the footer link and the navbar "Sign in" point to /login
+    const signInLinks = screen.getAllByRole('link', { name: /sign in/i });
+    expect(signInLinks.length).toBeGreaterThan(0);
+    signInLinks.forEach((link) => expect(link).toHaveAttribute('href', '/login'));
   });
 });

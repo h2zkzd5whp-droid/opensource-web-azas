@@ -1,0 +1,288 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 16px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--card-bg);
+  flex-shrink: 0;
+  min-height: 40px;
+  gap: 16px;
+}
+
+/* Transparent variant for the landing hero (sits over the background image) */
+.transparent {
+  background: transparent;
+  border-bottom: none;
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.brand {
+  flex-shrink: 0;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border-radius: 4px;
+}
+
+.brand:hover {
+  background: var(--hover);
+}
+
+/* ── Text navigation links (no button chrome) ── */
+.navLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--text-muted);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.navLink:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.navLink:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Editor mode: file title ── */
+.fileTitle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text);
+  min-width: 0;
+}
+
+.fileSep {
+  color: var(--text-muted);
+}
+
+.fileName {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  min-width: 0;
+  width: 180px;
+  outline: none;
+}
+
+.fileName:hover {
+  border-color: var(--text-muted);
+}
+
+.fileName:focus {
+  border-color: var(--input-border-focus);
+}
+
+.fileExt {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.dirtyDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Profile avatar + popover ── */
+.profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--card-bg);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 41;
+  width: 300px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  padding: 6px 18px;
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.setting:last-of-type {
+  border-bottom: none;
+}
+
+.labelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.settingName {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.settingDesc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Toggle */
+.toggle {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--text);
+  border: none;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  right: 3px;
+  transition: right 0.15s, left 0.15s;
+}
+
+.toggleOff {
+  background: var(--input-border);
+}
+
+.toggleOff::after {
+  right: auto;
+  left: 3px;
+}
+
+/* Stepper */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.stepper button {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.stepper button:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.stepperVal {
+  font-family: var(--mono);
+  font-size: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Password form */
+.passwordForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0 4px;
+}
+
+.input {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: var(--input-border-focus);
+}
+
+.errorBanner {
+  background: var(--error-bg);
+  color: var(--error);
+  border: 1px solid var(--error-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+}

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../utils/api';
+import Button from '../components/Button';
+import Brand from '../components/Brand';
+import Navbar from '../components/Navbar';
+import { toUserMessage } from '../utils/errorMessage';
 import styles from '../styles/Auth.module.css';
  
 const ERROR_MESSAGES = {
@@ -38,20 +42,18 @@ export default function Register() {
       });
       navigate('/login');
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Registration failed.';
-      setError(msg);
+      setError(toUserMessage(err, ERROR_MESSAGES, 'Registration failed.'));
     } finally {
       setSubmitting(false);
     }
   };
  
   return (
-    <div className={styles.page}>
+    <div className={styles.shell}>
+      <Navbar />
+      <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.brand}>
-          <span className={styles.brandMark}>AJAS</span>
-          <span className={styles.brandName}>editor</span>
-        </div>
+        <Brand className={styles.brand} />
  
         <div className={styles.header}>
           <h1 className={styles.title}>Create account</h1>
@@ -113,19 +115,23 @@ export default function Register() {
             />
           </label>
  
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="submit"
+            fullWidth
             disabled={submitting}
             className={styles.submitBtn}
           >
             {submitting ? 'Creating account...' : 'Sign up'}
-          </button>
+          </Button>
         </form>
  
         <p className={styles.footer}>
           Already have an account?{' '}
           <Link to="/login" className={styles.link}>Sign in</Link>
         </p>
+      </div>
       </div>
     </div>
   );

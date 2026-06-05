@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { apiRequest } from '../utils/api';
+import { toUserMessage } from '../utils/errorMessage';
 
 const ERROR_MESSAGES = {
   LANGUAGE_MISSING: 'Language is missing.',
@@ -25,8 +26,7 @@ export default function useCodeExecution() {
       });
       setResult(data);
     } catch (err) {
-      const msg = ERROR_MESSAGES[err.errorCode] || err.message || 'Execution failed.';
-      setError(msg);
+      setError(toUserMessage(err, ERROR_MESSAGES, 'Execution failed.'));
       setResult(null);
     } finally {
       setLoading(false);

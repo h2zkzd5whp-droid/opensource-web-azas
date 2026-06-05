@@ -1,8 +1,14 @@
-.page {
+.shell {
   position: fixed;
   inset: 0;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
+}
+
+.page {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,22 +25,7 @@
 }
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   margin-bottom: 28px;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.brandMark {
-  color: var(--text-muted);
-}
-
-.brandName {
-  color: var(--text);
 }
 
 .header {
@@ -108,27 +99,7 @@
 }
 
 .submitBtn {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: none;
-  border-radius: 6px;
-  padding: 11px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
   margin-top: 4px;
-  transition: opacity 0.15s;
-  width: 100%;
-}
-
-.submitBtn:hover:not(:disabled) {
-  opacity: 0.85;
-}
-
-.submitBtn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
 }
 
 .footer {

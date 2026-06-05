@@ -1,0 +1,74 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+}
+
+/* Variants */
+.primary {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border-color: var(--btn-bg);
+}
+
+.primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--btn-ghost-border);
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.danger {
+  background: transparent;
+  color: var(--error);
+  border-color: var(--error-border);
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--error-bg);
+}
+
+/* Sizes */
+.sm {
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+.md {
+  padding: 12px 22px;
+  font-size: 14px;
+}
+
+.modal {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.submit {
+  padding: 11px;
+  font-size: 14px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

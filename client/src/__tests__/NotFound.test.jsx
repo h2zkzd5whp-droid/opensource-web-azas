@@ -4,6 +4,11 @@ import NotFound from '../pages/NotFound';
 
 vi.mock('react-router-dom', () => ({
   Link: ({ children, to }) => <a href={to}>{children}</a>,
+  useNavigate: () => vi.fn(),
+}));
+
+vi.mock('../contexts/AuthContext', () => ({
+  useAuth: () => ({ user: null, logout: vi.fn(), updateUser: vi.fn() }),
 }));
 
 function renderNotFound() {

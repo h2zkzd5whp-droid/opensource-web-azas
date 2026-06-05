@@ -89,17 +89,19 @@ exports.runCode = async (req, res, next) => {
         exec(cmd, { timeout: 10000 }, async (error, stdout, stderr) => {
             try { await fs.unlink(filePath); } catch (e) { }
 
-            if (error && error.killed) return res.status(504).json({ error: 'EXECUTION_TIMEOUT' });
+            if (error && error.killed) return res.status(200).json({ 
+                stdout: "",
+                stderr: "Execution timeout",
+                exitCode: 124,
+                executionTime: `${Date.now() - startTime}ms`
+            });
             
             const exitCode = error ? error.code : 0;
-            if (exitCode !== 0) {
-                return res.status(502).json({ error: 'EXECUTION_FAILED', stderr });
-            }
 
             res.status(200).json({
                 stdout: stdout || "",
                 stderr: stderr || "",
-                exitCode: 0,
+                exitCode: exitCode,
                 executionTime: `${Date.now() - startTime}ms`
             });
         });

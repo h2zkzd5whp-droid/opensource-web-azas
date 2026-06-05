@@ -12,8 +12,8 @@ const handleBeforeMount = (monaco) => {
   });
 };
 
-// Monaco 에디터 래퍼. source/language/fontSize/theme 연결
-export default function Editor({ source, language, fontSize, theme, onChange }) {
+// 부모로부터 주입받을 onMount 프롭 추가
+export default function Editor({ source, language, fontSize, theme, onChange, onMount }) {
   return (
     <MonacoEditor
       height="100%"
@@ -21,6 +21,14 @@ export default function Editor({ source, language, fontSize, theme, onChange }) 
       value={source}
       onChange={(value) => onChange(value ?? '')}
       beforeMount={handleBeforeMount}
+      
+      // 모나코 마운트 시 부모 컴포넌트로 editor 인스턴스를 올려보냄
+      onMount={(editor, monaco) => {
+        if (onMount) {
+          onMount(editor, monaco);
+        }
+      }}
+      
       theme={theme === 'light' ? 'ajas-light' : 'vs-dark'}
       options={{
         fontSize,
@@ -31,6 +39,7 @@ export default function Editor({ source, language, fontSize, theme, onChange }) 
         tabSize: 2,
         padding: { top: 14, bottom: 8 },
         fontFamily: "ui-monospace, 'JetBrains Mono', Consolas, monospace",
+        glyphMargin: true, // 에러가 났을 때 좌측 여백에 빨간 점 아이콘을 띄우려면 필수
       }}
     />
   );

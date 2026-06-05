@@ -8,7 +8,7 @@
 /* ===== Background image (sticky hero) ===== */
 .heroWrap {
   position: relative;
-  height: 200vh;
+  height: 300vh;
 }
 
 .heroSticky {
@@ -24,6 +24,15 @@
   background-image: var(--hero-img);
   background-size: cover;
   background-position: center;
+  transition: opacity 0.5s ease;
+}
+
+.heroBgVisible {
+  opacity: 1;
+}
+
+.heroBgHidden {
+  opacity: 0;
 }
 
 .heroOverlay {

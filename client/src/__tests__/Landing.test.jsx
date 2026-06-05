@@ -12,6 +12,9 @@ vi.mock('../contexts/AuthContext', () => ({
 }));
 
 vi.mock('../assets/landing_image.png', () => ({ default: 'landing_image.png' }));
+vi.mock('../assets/landing_slide_1.png', () => ({ default: 'landing_slide_1.png' }));
+vi.mock('../assets/landing_slide_2.png', () => ({ default: 'landing_slide_2.png' }));
+vi.mock('../assets/landing_slide_3.png', () => ({ default: 'landing_slide_3.png' }));
 
 function renderLanding() {
   return render(<Landing />);
@@ -65,5 +68,12 @@ describe('Landing — step 2 (hero)', () => {
   test('renders hero tagline', () => {
     renderLanding();
     expect(screen.getByText(/write, run, save/i)).toBeInTheDocument();
+  });
+});
+
+describe('Landing — step 3 (placeholder)', () => {
+  test('renders placeholder content', () => {
+    renderLanding();
+    expect(screen.getByText(/placeholder title/i)).toBeInTheDocument();
   });
 });

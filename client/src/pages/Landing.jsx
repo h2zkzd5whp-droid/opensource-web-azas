@@ -4,14 +4,35 @@ import Button from '../components/Button';
 import Navbar from '../components/Navbar';
 import s from '../styles/Landing.module.css';
 import landingGif from '../assets/landingPage.gif';
+import { apiRequest } from '../utils/api';
 
 const SLIDE_COUNT = 4;
+
+// Role별 아바타 이모지 매핑
+const ROLE_AVATAR = {
+  'AI Developer': '🤖',
+  'Backend Developer': '⚙️',
+  'LandingPage Developer': '🎨',
+  'Dashboard Developer': '📊',
+};
+
+function getAvatar(role) {
+  return ROLE_AVATAR[role] ?? '👨‍💻';
+}
 
 
 export default function Landing() {
   const pageRef = useRef(null);
   const heroWrapRef = useRef(null);
   const [step, setStep] = useState(0);
+  const [members, setMembers] = useState([]);
+
+  // Fetch team members on mount
+  useEffect(() => {
+    apiRequest('/team')
+      .then((data) => setMembers(data?.members ?? []))
+      .catch(() => setMembers([]));
+  }, []);
 
   useEffect(() => {
     const el = pageRef.current;
@@ -67,8 +88,8 @@ export default function Landing() {
               <div className={s.leftCol}>
                 <p className={s.eyebrow}></p>
                 <h1 className={s.heroTitle}>
-                  Open the editor.<br />
-                  <span className={s.accent}>// no setup required.</span>
+                  AZAS Editor.<br />
+                  <span className={s.accent}>// With AI, No setup.</span>
                 </h1>
                 <p className={s.heroDescLeft}>
                   A powerful, web-based multi-language editor & online compiler.
@@ -89,7 +110,7 @@ export default function Landing() {
               <div className={s.leftColCentered}>
                 <div className={s.vectorEditor}>
                   <div className={s.vectorHeader}>
-                    <div className={s.vectorTab}>index.js</div>
+                    <div className={s.vectorTab}>main.c</div>
                   </div>
                   <div className={s.vectorBody}>
                     <div className={s.vectorGutter}>
@@ -97,10 +118,20 @@ export default function Landing() {
                     </div>
                     <pre className={s.vectorCode}>
                       <code>
-                        <span className={s.keyword}>import</span> &#123; exec &#125; <span className={s.keyword}>from</span> <span className={s.string}>'compiler'</span>;<br />
+                        <span className={s.keyword}>#include</span> <span className={s.string}>&lt;stdio.h&gt;</span><br />
                         <br />
-                        <span className={s.keyword}>const</span> res = <span className={s.keyword}>await</span> exec(<span className={s.string}>'js'</span>);<br />
-                        console.log(res.status);
+                        <span className={s.keyword}>int</span> main() &#123;<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"[Online Compiler]\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"An online compiler is a\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"web-based tool that allows\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"you to write, compile, and\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"run source code.\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"It eliminates the need for\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"local environment setup,\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"enabling quick testing\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;printf(<span className={s.string}>"across various languages.\n"</span>);<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span className={s.keyword}>return</span> <span className={s.number || ''}>0</span>;<br />
+                        &#125;
                       </code>
                     </pre>
                   </div>
@@ -108,19 +139,25 @@ export default function Landing() {
               </div>
               <div className={s.rightColPlaceholders}>
                 <div className={s.placeholderItem}>
-                  <span className={s.featureTag}>01 · EDIT</span>
-                  <h4 className={s.placeholderTitleText}>Monaco Editor</h4>
-                  <p className={s.placeholderDesc}>Rich editing experience with autocomplete & syntax highlighting.</p>
+                  <span className={s.featureTag}>01 · Style Reviewer AI</span>
+                  <h4 className={s.placeholderTitleText}>Code Style Review</h4>
+                  <p className={s.placeholderDesc}>
+                    Detects readability issues, anti-patterns, and convention violations with line-by-line quality scores.
+                  </p>
                 </div>
                 <div className={s.placeholderItem}>
-                  <span className={s.featureTag}>02 · RUN</span>
-                  <h4 className={s.placeholderTitleText}>Instant Execution</h4>
-                  <p className={s.placeholderDesc}>Execute in a sandboxed runtime environment and see real-time output.</p>
+                  <span className={s.featureTag}>02 · Performance Optimizer AI</span>
+                  <h4 className={s.placeholderTitleText}>Algorithm Optimization</h4>
+                  <p className={s.placeholderDesc}>
+                    Eliminates redundant operations and refactors code with complexity analysis ($O(N)$) for peak efficiency.
+                  </p>
                 </div>
                 <div className={s.placeholderItem}>
-                  <span className={s.featureTag}>03 · SAVE</span>
-                  <h4 className={s.placeholderTitleText}>Sync & Share</h4>
-                  <p className={s.placeholderDesc}>Save snippets to your account and access them from anywhere.</p>
+                  <span className={s.featureTag}>03 · Debugging Expert AI</span>
+                  <h4 className={s.placeholderTitleText}>Error Debugging</h4>
+                  <p className={s.placeholderDesc}>
+                    Pinpoints root causes of compilation/runtime errors, providing corrected code and indexed explanations.
+                  </p>
                 </div>
               </div>
             </div>
@@ -131,14 +168,18 @@ export default function Landing() {
               <h2 className={s.sectionHeading}>Compiler Features</h2>
               <div className={s.compilerCards}>
                 <div className={s.card}>
-                  <div className={s.cardIcon}>⚡</div>
-                  <h4 className={s.cardTitle}>Super Fast Execution</h4>
-                  <p className={s.cardDesc}>Powered by high-performance compilation containers for immediate stdout/stderr feedback.</p>
+                  <div className={s.cardIcon}>✨</div>
+                  <h4 className={s.cardTitle}>Code Style Review</h4>
+                  <p className={s.cardDesc}>
+                    Detects readability issues, anti-patterns, and convention violations with precise line-by-line.
+                  </p>
                 </div>
                 <div className={s.card}>
-                  <div className={s.cardIcon}>🔒</div>
-                  <h4 className={s.cardTitle}>Safe Sandboxing</h4>
-                  <p className={s.cardDesc}>Your code is securely isolated and run in a protected container environment.</p>
+                  <div className={s.cardIcon}>🏷️</div>
+                  <h4 className={s.cardTitle}>Dynamic Error Notation</h4>
+                  <p className={s.cardDesc}>
+                    Pinpoints compilation or runtime root causes using indexed tags for intuitive visual tracking.
+                  </p>
                 </div>
                 <div className={s.card}>
                   <div className={s.cardIcon}>🌐</div>
@@ -148,36 +189,49 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Slide 4: Contributors */}
+            {/* Slide 4: Contributors (from DB) */}
             <div className={`${s.step} ${step === 3 ? s.stepVisible : s.stepHidden}`}>
               <p className={s.eyebrow}>Our Team</p>
               <h2 className={s.sectionHeading}>Contributors</h2>
               <div className={s.contributorsGrid}>
-                <div className={s.contributorCard}>
-                  <div className={s.avatar}>👨‍💻</div>
-                  <h4 className={s.contributorName}>Lead Architect</h4>
-                  <p className={s.contributorRole}>Core Compiler & Backend</p>
-                  <p className={s.contributorDesc}>Designed sandboxed execution engines and API orchestrations.</p>
-                </div>
-                <div className={s.contributorCard}>
-                  <div className={s.avatar}>🎨</div>
-                  <h4 className={s.contributorName}>Frontend Specialist</h4>
-                  <p className={s.contributorRole}>UI/UX Designer & Engineer</p>
-                  <p className={s.contributorDesc}>Crafted beautiful and responsive components and dashboard layout.</p>
-                </div>
-                <div className={s.contributorCard}>
-                  <div className={s.avatar}>🔍</div>
-                  <h4 className={s.contributorName}>QA & Tester</h4>
-                  <p className={s.contributorRole}>Reliability Engineer</p>
-                  <p className={s.contributorDesc}>Maintained comprehensive integration test suites and security sandboxes.</p>
-                </div>
+                {members.map((member) => {
+                  // 1. DB 데이터 구조에 맞게 명확히 imgKey 추출
+                  const imageName = member.imgKey;
+                  // 2. src/assets 폴더 내의 모든 이미지 자원을 미리 맵으로 빌드 (Vite 표준 기법)
+                  const images = import.meta.glob('../assets/team/*.{png,jpg,jpeg,svg}', { eager: true });
+                  // 3. 맵에서 해당 이미지 파일의 실제 서빙 URL을 안전하게 조회
+                  const matchedImage = images[`../assets/team/${imageName}`];
+                  const imageUrl = matchedImage ? matchedImage.default : null;
+                  return (
+                    <div key={member.memberId} className={s.contributorCard}>
+                      <div className={s.avatar}>
+                        {imageUrl ? (
+                          <img
+                            src={`${imageUrl}`}
+                            alt={`${member.name} 프로필`}
+                            className={s.avatarImage}
+                            onError={(e) => {
+                              console.error(`이미지 렌더링 실패: ${imageUrl}`);
+                              e.target.style.display = 'none';
+                              e.target.parentElement.innerHTML = getAvatar(member.role);
+                            }}
+                          />
+                        ) : (
+                          getAvatar(member.role)
+                        )}
+                      </div>
+                      <h4 className={s.contributorName}>{member.name}</h4>
+                      <p className={s.contributorRole}>{member.role}</p>
+                      <p className={s.contributorDesc}>{member.email}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

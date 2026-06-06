@@ -42,7 +42,7 @@ export default function AiSidebar({
           return (
             <button
               key={tab} onClick={() => onTabChange(tab)}
-              className={`${styles.tabbtn} ${isSelected ? '': 'is-selected' }`}>
+              className={`${styles.tabbtn} ${isSelected ? 'is-selected': '' }`}>
               {label}
             </button>
           );

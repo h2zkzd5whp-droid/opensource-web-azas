@@ -19,7 +19,7 @@
   font-Size: 11px;
   font-Weight: 600;
   color: #e2e2f0;
-  border-Bottom: 2px solid #a78bfa;
+  border-Bottom: 2px solid #1e1e2e;
   background: #1e1e2e;
   cursor: pointer;
   transition: all 0.15s;
@@ -34,9 +34,9 @@
   padding: 10px 4px;
   font-Size: 11px;
   font-Weight: 400;
-  color: #555;
-  border-Bottom: 2px solid transparent;
-  background: transparent;
+  color: #e2e2f0;
+  border-Bottom: 2px solid #a78bfa;
+  background: #242436;
   cursor: pointer;
   transition: all 0.15s;
   letter-Spacing: 0.01em;

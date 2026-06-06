@@ -30,7 +30,7 @@ A browser-based online code editor where you can write and execute code.
 | HTTP Client | axios | 1.13.6 |
 | CORS | cors | 2.8.6 |
 | Environment | dotenv | 17.3.1 |
-| Code Execution | Judge0 CE API | External API |
+| Code Execution | Isolated Code Execution Sandbox | External API |
 | Dev Tool | nodemon | 3.1.14 |
 | Test (Server) | Jest, Supertest | 30.x, 7.x |
 | Test (Client) | Vitest, React Testing Library | 4.x, 16.x |

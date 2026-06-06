@@ -56,7 +56,7 @@ opensource-web-azas/
 │       ├── main.jsx                        # React entry point with AuthProvider
 │       ├── utils/
 │       │   ├── api.js                      # API client (fetch wrapper with JWT)
-│       │   ├── constants.js                # Language list, Judge0 IDs, default code
+│       │   ├── constants.js                # Language list and default code
 │       │   ├── date.js                     # formatRelative / formatAbsolute
 │       │   ├── errorMessage.js             # toUserMessage(err, table, fallback)
 │       │   └── languageIcons.jsx           # Per-language official-logo SVG components

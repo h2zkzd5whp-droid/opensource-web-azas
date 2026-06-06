@@ -126,6 +126,8 @@ opensource-web-azas/
         │   ├── auth.js                     # Auth routes
         │   └── code.js                     # Code routes
         ├── controllers/
+        |   ├── path/                       #temp folder for scriptsfile, execfile
+        |   ├── aiController.js             # Ai(LLM) controller
         │   ├── authController.js           # Auth controller
         │   └── codeController.js           # Code controller
         ├── models/
@@ -139,6 +141,16 @@ opensource-web-azas/
 
 ## Getting Started
 
+### 0. setting
+
+- install docker and connect the Docker Desktop app before running the code.
+- docker is based on linux , if you use windows os, install wsl2 or already installed than do "wsl --update" in terminal
+- open docker settings check on "Use the WSL 2 based engine" in General tab
+- move Docker setting -> Resource -> File Sharing and add your project root path, click Apply & restart
+- setting GEMINI_API in envfile
+```bash
+npm install @google/genai
+```
 ### 1. Database Setup
 
 ```bash

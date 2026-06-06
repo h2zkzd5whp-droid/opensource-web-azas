@@ -1,0 +1,47 @@
+.page{
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-Direction: column;
+  overflow: hidden;
+}
+
+.tab{
+  display: flex;
+  border-Bottom: 0.5px solid #2a2a3e;
+  background: var(--bg);
+  padding-Right: 0;
+}
+
+.tabbtn{
+  flex: 1;
+  padding: 10px 4px;
+  font-Size: 11px;
+  font-Weight: 600;
+  color: #e2e2f0;
+  border-Bottom: 2px solid #1e1e2e;
+  background: #1e1e2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-Spacing: 0.01em;
+  border-Left: none;
+  border-Right: none;
+  border-Top: none;
+}
+
+.tabbtn:global(.is-selected){
+  flex: 1;
+  padding: 10px 4px;
+  font-Size: 11px;
+  font-Weight: 400;
+  color: #e2e2f0;
+  border-Bottom: 2px solid #a78bfa;
+  background: #242436;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-Spacing: 0.01em;
+  border-Left: none;
+  border-Right: none;
+  border-Top: none;
+}
+

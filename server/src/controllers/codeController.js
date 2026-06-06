@@ -1,8 +1,113 @@
 const Code = require('../models/Code');
 
-// TODO: implement code execution (Judge0 CE API)
-exports.runCode = async (req, res, _next) => {
-  res.json({ message: 'runCode - TODO' });
+/*
+  ****required install docker****
+
+  API details
+    [POST] /api/run
+    Header: Content-Type: application/json
+    JSON
+    {
+        "language": "python",
+        "source": "print('Hello, World!')"
+    }
+
+    response JSON(example)
+    {
+        "stdout": "Hello, World!\n",
+        "stderr": "",
+        "exitCode": 0,
+        "executionTime": "300ms"
+    }
+
+  For some languages, such as Java, warning messages may be displayed in `stderr` 
+  during the compilation process depending on the environment settings. 
+  If `exitCode` is 0, it means the execution was successful, so you can rest assured.
+*/
+
+const { exec } = require('child_process');
+const fs = require('fs').promises;
+const path = require('path');
+
+const languageConfig = {
+    python: { 
+        image: 'python:3.12-slim', 
+        cmd: 'python -u /app/script.py', 
+        ext: 'py' 
+    },
+    javascript: { 
+        image: 'node:20-slim', 
+        cmd: 'node /app/script.js', 
+        ext: 'js' 
+    },
+    typescript: { 
+        image: 'node:20-slim', 
+        cmd: 'npx -p typescript tsc /app/script.ts --target es6 --module commonjs && node /app/script.js && rm /app/script.js', 
+        ext: 'ts' 
+    },
+    java: { 
+        image: 'eclipse-temurin:17-jdk-jammy', 
+        cmd: 'cp /app/script.java /app/Main.java && javac /app/Main.java && java -cp /app Main && rm /app/Main.java /app/Main.class /app/script.java', 
+        ext: 'java' 
+    },
+    cpp: { 
+        image: 'gcc:latest', 
+        cmd: 'g++ -o /app/app /app/script.cpp && /app/app && rm /app/app', 
+        ext: 'cpp' 
+    },
+    go: { 
+        image: 'golang:1.21-alpine', 
+        cmd: 'go build -o /app/app /app/script.go && /app/app; rm -f /app/app', 
+        ext: 'go' 
+    },
+    ruby: { 
+        image: 'ruby:3.2-slim', 
+        cmd: 'ruby /app/script.rb', 
+        ext: 'rb' 
+    }
+};
+
+exports.runCode = async (req, res, next) => {
+    const { language, source } = req.body;
+
+    if (!language) return res.status(400).json({ error: 'LANGUAGE_MISSING' });
+    if (!source) return res.status(400).json({ error: 'SOURCE_MISSING' });
+    if (!languageConfig[language]) return res.status(400).json({ error: 'UNSUPPORTED_LANGUAGE' });
+
+    const tempDir = path.join(__dirname, 'temp');
+    const config = languageConfig[language];
+    const filePath = path.join(tempDir, `script.${config.ext}`);
+
+    try {
+        await fs.mkdir(tempDir, { recursive: true });
+        await fs.writeFile(filePath, source);
+
+        const absoluteTempDir = path.resolve(tempDir).replace(/\\/g, '/');
+        const cmd = `docker run --rm -v "${absoluteTempDir}:/app" -w /app ${config.image} sh -c "${config.cmd}"`;
+        const startTime = Date.now();
+        //timeout = 10ms
+        exec(cmd, { timeout: 10000 }, async (error, stdout, stderr) => {
+            try { await fs.unlink(filePath); } catch { }
+
+            if (error && error.killed) return res.status(200).json({ 
+                stdout: "",
+                stderr: "Execution timeout",
+                exitCode: 124,
+                executionTime: `${Date.now() - startTime}ms`
+            });
+            
+            const exitCode = error ? error.code : 0;
+
+            res.status(200).json({
+                stdout: stdout || "",
+                stderr: stderr || "",
+                exitCode: exitCode,
+                executionTime: `${Date.now() - startTime}ms`
+            });
+        });
+    } catch (err) {
+        next(err);
+    }
 };
 
 exports.createCode = async (req, res, next) => {

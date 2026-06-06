@@ -37,6 +37,6 @@ CREATE TABLE IF NOT EXISTS TeamMembers (
 
 INSERT INTO TeamMembers (name, role, email, imgKey) VALUES
 ('KimHyunSik', 'AI Developer', 'gudtlr3308@naver.com', 'hsk.png'),
-('NamYooSeong', 'Backend Developer', 'ysn@naver.com', 'ysn.png'),
+('NamYooSeong', 'Backend Developer', 'smeteor0213@chungbuk.ac.kr', 'ysn.png'),
 ('JeonSeongHyun', 'LandingPage Developer', 'jsh147301@naver.com', 'shj.png'),
 ('Khulan Gurdor', 'Dashboard Developer', 'khulnnmr@gmail.com', 'khu.png');

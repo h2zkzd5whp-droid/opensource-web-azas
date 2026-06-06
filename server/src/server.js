@@ -18,7 +18,7 @@ function initializeDockerImages() {
         try {
             execSync(`docker inspect ${image}`, { stdio: 'ignore' });
             console.log(`${image} Available`);
-        } catch (e) {
+        } catch {
             console.log(`${image} Downloading image... (This may take some time)`);
             execSync(`docker pull ${image}`);
             console.log(`${image} Ready`);
@@ -29,7 +29,7 @@ function initializeDockerImages() {
 
 try {
     initializeDockerImages();
-} catch (err) {
+} catch {
     console.error("Docker environment initialization failed: Please check if Docker is installed and running.");
 }
 

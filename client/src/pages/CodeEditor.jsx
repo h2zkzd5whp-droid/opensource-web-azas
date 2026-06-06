@@ -43,10 +43,10 @@ export default function CodeEditor() {
 
   // AI 어시스턴트 통합 제어 훅
   const {
-    activeTab, setActiveTab, handleTabChange,
+    activeTab, handleTabChange,
     aiData, aiLoading, aiError, setAiError,
-    triggerAiExplainer, highlightEditorLine, applySuggestedCode,
-    resetAiState, setEditorInstance,triggerStyleReviewer,triggerCodeOptimizer, 
+    triggerAiExplainer, highlightEditorLine,
+    resetAiState, setEditorInstance,triggerStyleReviewer,triggerCodeOptimizer,
   } = useAiAssistant({ language, setSource, setDirty });
 
   const ext = SUPPORTED_LANGUAGES.find((l) => l.id === language)?.ext ?? '';
@@ -246,7 +246,6 @@ export default function CodeEditor() {
             aiLoading={aiLoading}
             aiError={aiError}
             setAiError={setAiError}
-            applySuggestedCode={applySuggestedCode}
             highlightEditorLine={highlightEditorLine}
           />
         </div>

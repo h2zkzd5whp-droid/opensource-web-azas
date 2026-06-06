@@ -9,7 +9,6 @@ export default function AiSidebar({
   aiLoading, 
   aiError, 
   setAiError,
-  applySuggestedCode, 
   highlightEditorLine
 }) {
   

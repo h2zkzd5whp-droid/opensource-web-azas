@@ -87,7 +87,7 @@ exports.runCode = async (req, res, next) => {
         const startTime = Date.now();
         //timeout = 10ms
         exec(cmd, { timeout: 10000 }, async (error, stdout, stderr) => {
-            try { await fs.unlink(filePath); } catch (e) { }
+            try { await fs.unlink(filePath); } catch { }
 
             if (error && error.killed) return res.status(200).json({ 
                 stdout: "",

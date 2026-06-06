@@ -1,0 +1,68 @@
+.wrapper {
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.label {
+  font-size: 12px;
+  color: #0f0f0f ;
+  opacity: 0.7; 
+  letter-spacing: 0.14em;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-family: 'Space Mono', 'Courier New', monospace;
+}
+
+
+/* 실제 스크롤 트랙 */
+.track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: marqueeRTL 28s linear infinite;
+}
+
+@keyframes marqueeRTL {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 개별 언어 카드 */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  border-radius: 7px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(223, 220, 220, 0.4);
+  white-space: nowrap;
+  user-select: none;
+  cursor: default;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f0f0f;
+  font-family: 'Space Mono', 'Courier New', monospace;
+}
+
+.ver {
+  font-size: 11px;
+  color: #0f0f0f;
+  font-family: 'Space Mono', 'Courier New', monospace;
+}

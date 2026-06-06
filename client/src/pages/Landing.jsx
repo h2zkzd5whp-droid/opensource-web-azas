@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import s from '../styles/Landing.module.css';
 import landingGif from '../assets/landingPage.gif';
 import { apiRequest } from '../utils/api';
+import LanguageMarquee from '../components/LanguageMarquee';
 
 const SLIDE_COUNT = 4;
 
@@ -99,6 +100,7 @@ export default function Landing() {
                   <Button as={Link} to="/code" variant="primary" size="md">Open editor →</Button>
                   <Button as={Link} to="/register" variant="ghost" size="md">Create account</Button>
                 </div>
+                <LanguageMarquee className={s.a}/> 
               </div>
               <div className={s.rightColFull}>
                 <img src={landingGif} alt="Preview GIF" className={s.gifImageFull} />

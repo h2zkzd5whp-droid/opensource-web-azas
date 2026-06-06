@@ -19,9 +19,12 @@ app.use((err, req, res, _next) => {
 
   // if docker code execution error
   if (req.path.includes('/run')) { 
-    return res.status(502).json({ 
-      error: 'SERVER_EXECUTION_ERROR', 
-      details: err.message 
+    return res.status(200).json({ 
+      stdout: "",
+      stderr: err.message || 'Docker execution error',
+      exitCode: 1,
+      executionTime: "0ms",
+      error: 'SERVER_EXECUTION_ERROR'
     });
   }
 
@@ -46,7 +49,8 @@ app.use((err, req, res, _next) => {
   res.status(statusCode).json({
     error: message,
     errorCode: errorCode,
-    statusCode: statusCode
+    statusCode: statusCode,
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
 });
 

@@ -2,12 +2,12 @@ import styles from '../styles/LanguageMarquee.module.css';
 
 const LANGUAGES = [
   { name: 'Python',     ver: 'v3.12',   color: '#3b82f6' },
-  { name: 'JavaScript', ver: 'ES2024',  color: '#f7b731' },
-  { name: 'TypeScript', ver: 'v5.4',    color: '#2563eb' },
-  { name: 'Rust',       ver: 'v1.78',   color: '#f97316' },
-  { name: 'Go',         ver: 'v1.22',   color: '#00acd7' },
+  { name: 'JavaScript', ver: 'v20(Node)',  color: '#f7b731' },
+  { name: 'TypeScript', ver: 'v5.x',    color: '#2563eb' },
+  { name: 'ruby',       ver: 'v3.2',   color: '#f97316' },
+  { name: 'Go',         ver: 'v1.21',   color: '#00acd7' },
   { name: 'C++',        ver: 'C++23',   color: '#9333ea' },
-  { name: 'Java',       ver: 'v21 LTS', color: '#e84d3d' },
+  { name: 'Java',       ver: 'v17 LTS', color: '#e84d3d' },
 ];
 
 export default function LanguageMarquee() {

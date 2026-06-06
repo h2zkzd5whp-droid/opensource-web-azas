@@ -10,6 +10,7 @@ app.use(express.json());
 // connect route
 app.use('/api', require('./routes/auth'));
 app.use('/api/code', require('./routes/code'));
+app.use('/api/team', require('./routes/team'));
 
 // error handling(기존 에러핸들링에서 도커서버와, llm호출 오류 분리하기 위해 if문 사용)
 app.use((err, req, res, _next) => {

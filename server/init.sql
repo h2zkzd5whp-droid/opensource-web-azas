@@ -26,3 +26,17 @@ CREATE TABLE IF NOT EXISTS Codes (
   updatedAt   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (userId) REFERENCES Users(userId)
 );
+
+CREATE TABLE IF NOT EXISTS TeamMembers (
+  memberId INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  role VARCHAR(100) NOT NULL,
+  email VARCHAR(255),
+  imgKey VARCHAR(255)
+);
+
+INSERT INTO TeamMembers (name, role, email, imgKey) VALUES
+('KimHyunSik', 'AI Developer', 'gudtlr3308@naver.com', 'hsk.png'),
+('NamYooSeong', 'Backend Developer', 'smeteor0213@chungbuk.ac.kr', 'ysn.png'),
+('JeonSeongHyun', 'LandingPage Developer', 'jsh147301@naver.com', 'shj.png'),
+('Khulan Gurdor', 'Dashboard Developer', 'khulnnmr@gmail.com', 'khu.png');

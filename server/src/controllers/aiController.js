@@ -1,7 +1,32 @@
 const { GoogleGenAI, Type } = require('@google/genai');
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API });
 const GEMINI_MODEL = 'gemini-2.5-flash';
+
+// 디버깅 로거
+const logRequest = (endpoint, data) => {
+  console.log(`[${new Date().toISOString()}] [AI ${endpoint}] Request:`, {
+    language: data.language,
+    codeLength: data.code?.length,
+    hasErrorLog: !!data.errorLog,
+    errorLogLength: data.errorLog?.length
+  });
+};
+
+const logResponse = (endpoint, data) => {
+  console.log(`[${new Date().toISOString()}] [AI ${endpoint}] Response:`, {
+    keys: Object.keys(data),
+    hasRequiredFields: !!data && Object.keys(data).length > 0
+  });
+};
+
+const logError = (endpoint, error) => {
+  console.error(`[${new Date().toISOString()}] [AI ${endpoint}] Error:`, {
+    message: error.message,
+    stack: error.stack,
+    statusCode: error.status
+  });
+};
 
 //Error Explainer
 exports.explainer = async (req, res, next) => {
@@ -10,6 +35,8 @@ exports.explainer = async (req, res, next) => {
   if (!code || !errorLog) {
     return res.status(400).json({ error: "Source code and errorlog is required." });
   }
+  
+  logRequest('explainer', { code, language, errorLog });
   
   const prompt = `[Language]: ${language}\n[Error Log]: ${errorLog}\n[Source Code]:\n${code}`;
 
@@ -42,9 +69,11 @@ exports.explainer = async (req, res, next) => {
         }
       }
     });
-
-    res.json(JSON.parse(response.text));
+    const parsedResponse = JSON.parse(response.text);
+    logResponse('explainer', parsedResponse);
+    res.json(parsedResponse);
   } catch (err) {
+    logError('explainer', err);
     next(err);
   }
 };
@@ -55,6 +84,8 @@ exports.reviewer = async (req, res, next) => {
   if (!code) {
     return res.status(400).json({ error: "no exist code to analyze." });
   }
+
+  logRequest('reviewer', { code, language });
 
   const prompt = `Review the following source code for readability, naming conventions, and style guide compliance. Provide line-by-line feedback.\n\n[Language]: ${language}\n[Source Code]:\n${code}`;
 
@@ -87,9 +118,11 @@ exports.reviewer = async (req, res, next) => {
         }
       }
     });
-
-    res.json(JSON.parse(response.text));
+    const parsedResponse = JSON.parse(response.text);
+    logResponse('reviewer', parsedResponse);
+    res.json(parsedResponse);
   } catch (err) {
+    logError('reviewer', err);
     next(err);
   }
 };
@@ -100,6 +133,8 @@ exports.optimizer =  async (req, res, next) => {
   if (!code) {
     return res.status(400).json({ error: "no exist code to optimize." });
   }
+
+  logRequest('optimizer', { code, language });
 
   const prompt = `Analyze this algorithm code to improve time and space complexity. Devise an optimized alternative while maintaining code readability.\n\n[Language]: ${language}\n[Source Code]:\n${code}`;
 
@@ -122,9 +157,11 @@ exports.optimizer =  async (req, res, next) => {
         }
       }
     });
-
-    res.json(JSON.parse(response.text));
+    const parsedResponse = JSON.parse(response.text);
+    logResponse('optimizer', parsedResponse);
+    res.json(parsedResponse);
   } catch (err) {
+    logError('optimizer', err);
     next(err);
   }
 };

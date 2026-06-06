@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import LanguageSelector from '../components/LanguageSelector';
 import Editor from '../components/Editor';
@@ -9,6 +8,8 @@ import ConfirmModal from '../components/ConfirmModal';
 import LoadCodeModal from '../components/LoadCodeModal';
 import ThemeApplier from '../components/ThemeApplier';
 import useCodeExecution from '../hooks/useCodeExecution';
+import useAiAssistant from '../hooks/useAiAssistant'; 
+import AiSidebar from '../components/AiSidebar';       
 import { useAuth } from '../contexts/AuthContext';
 import { SUPPORTED_LANGUAGES, DEFAULT_CODE } from '../utils/constants';
 import { apiRequest } from '../utils/api';
@@ -23,14 +24,6 @@ const splitExt = (title) => {
 const TERM_MIN = 80;
 const TERM_MAX_MARGIN = 200;
 
-const TAG_THEMES = [
-  { badge: 'bg-red-500/20 text-red-400 border-red-500/30' },
-  { badge: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-  { badge: 'bg-amber-500/20 text-amber-400 border-amber-500/30' },
-  { badge: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
-  { badge: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-];
-
 export default function CodeEditor() {
   const { codeId } = useParams();
   const navigate = useNavigate();
@@ -44,17 +37,17 @@ export default function CodeEditor() {
   const [pendingLang, setPendingLang] = useState(null);
   const [loadOpen, setLoadOpen] = useState(false);
   const [termHeight, setTermHeight] = useState(220);
+  
+  // 런타임 컴파일러 훅
   const { result, loading: running, error: runError, run } = useCodeExecution();
 
-  // AI 관련 상태 패턴 확장
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('explain'); // 'explain' | 'style' | 'optimize'
-  const [aiData, setAiData] = useState({ explain: null, style: null, optimize: null });
-  const [aiLoading, setAiLoading] = useState(false);
-
-  const editorRef = useRef(null);
-  const decorationsRef = useRef([]);
-  const dragRef = useRef(null);
+  // AI 어시스턴트 통합 제어 훅
+  const {
+    activeTab, setActiveTab, handleTabChange,
+    aiData, aiLoading, aiError, setAiError,
+    triggerAiExplainer, highlightEditorLine, applySuggestedCode,
+    resetAiState, setEditorInstance,triggerStyleReviewer,triggerCodeOptimizer, 
+  } = useAiAssistant({ language, setSource, setDirty });
 
   const ext = SUPPORTED_LANGUAGES.find((l) => l.id === language)?.ext ?? '';
   const editorTheme = user?.theme === 'light' ? 'light' : 'dark';
@@ -82,139 +75,37 @@ export default function CodeEditor() {
     return () => { active = false; };
   }, [codeId, navigate]);
 
-  //실행 에러 모니터링 자동 감지 트리거
-  useEffect(() => {
-    const hasError = runError || (result && result.success === false);
-    const log = runError?.message || result?.terminal || result?.errorLog;
+  const handleExecuteAndAnalyze = async () => {
+  try {
+    // 1. 실행 전 에러 및 이전 로딩 상태 초기화
+    setAiError(null); 
 
-    if (hasError && log) {
-      setActiveTab('explain');
-      triggerAiExplainer(log);
-    }
-  }, [result, runError]);
+    // 2. 런타임 코드 컴파일/실행 우선 처리
+    const execResult = await run(language, source);
+    
+    // 3. 실행 결과에서 에러 로그 추출
+    const targetResult = execResult || result;
+    const errorLog = runError?.message || targetResult?.stderr || targetResult?.errorLog || (targetResult?.success === false ? targetResult?.terminal : null);
 
-  // 에러 해설 기능 호출 
-  const triggerAiExplainer = async (errorLog) => {
-    setAiLoading(true);
-    setIsSidebarOpen(true);
-    clearDecorations();
+    console.log('전체 AI 분석 일괄 요청 시작...');
 
-    try {
-      const data = await apiRequest('/code/ai/explain-error', {
-        method: 'POST',
-        body: JSON.stringify({ code: source, language, errorLog }),
-      });
-      
-      setAiData(prev => ({ ...prev, explain: data }));
+    // 4. [핵심 변경] 3가지 AI 분석을 Promise.all로 한 번에 동시에 호출 (병렬 처리)
+    // 에러 로그가 없더라도 분석이 돌 수 있도록 가짜 에러 로그(fallback) 처리
+    const activeErrorLog = errorLog || '정상 실행 완료 (잠재적 에러 없음)';
 
-      if (editorRef.current && data.line) {
-        highlightEditorLine(data.line, 'bg-red-500/10 border-l-4 border-red-500');
-      }
-    } catch (err) {
-      console.error('AI Explain failed:', err);
-    } finally {
-      setAiLoading(false);
-    }
-  };
-
-  //스타일 가이드 리뷰 호출
-  const triggerStyleReviewer = async () => {
-    setAiLoading(true);
-    setIsSidebarOpen(true);
-    clearDecorations();
-
-    try {
-      const data = await apiRequest('/code/ai/analyze-style', {
-        method: 'POST',
-        body: JSON.stringify({ code: source, language }),
-      });
-      
-      setAiData(prev => ({ ...prev, style: data }));
-
-      // 스타일 위반 라인들에 다중 하이라이트 인덱싱 주입
-      if (editorRef.current && data.annotations?.length > 0) {
-        const editor = editorRef.current;
-        const newDecorations = data.annotations.map(ann => ({
-          range: new window.monaco.Range(ann.line, 1, ann.line, 100),
-          options: {
-            isWholeLine: true,
-            className: ann.severity === 'warning' ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'bg-blue-500/10 border-l-4 border-blue-500',
-          }
-        }));
-        decorationsRef.current = editor.deltaDecorations(decorationsRef.current, newDecorations);
-      }
-    } catch (err) {
-      console.error('AI Style Review failed:', err);
-    } finally {
-      setAiLoading(false);
-    }
-  };
-
-  //코드 최적화 알고리즘 분석 호출
-  const triggerCodeOptimizer = async () => {
-    setAiLoading(true);
-    setIsSidebarOpen(true);
-    clearDecorations();
-
-    try {
-      const data = await apiRequest('/code/ai/optimize', {
-        method: 'POST',
-        body: JSON.stringify({ code: source, language }),
-      });
-      
-      setAiData(prev => ({ ...prev, optimize: data }));
-    } catch (err) {
-      console.error('AI Optimization failed:', err);
-    } finally {
-      setAiLoading(false);
-    }
-  };
-
-  // 에디터 특정 라인 이동 및 단일 데코레이션 헬퍼
-  const highlightEditorLine = (line, className) => {
-    if (!editorRef.current) return;
-    const editor = editorRef.current;
-    editor.revealLineInCenterIfOutsideViewport(line);
-    decorationsRef.current = editor.deltaDecorations(decorationsRef.current, [
-      {
-        range: new window.monaco.Range(line, 1, line, 100),
-        options: { isWholeLine: true, className, glyphMarginClassName: 'bg-red-500 rounded-full' }
-      }
+    await Promise.all([
+      triggerAiExplainer(activeErrorLog),
+      triggerStyleReviewer(),
+      triggerCodeOptimizer()
     ]);
-  };
 
-  const clearDecorations = () => {
-    if (editorRef.current && decorationsRef.current.length > 0) {
-      decorationsRef.current = editorRef.current.deltaDecorations(decorationsRef.current, []);
-    }
-  };
+    console.log('모든 AI 분석 결과 수신 완료. 탭을 이동하며 결과를 확인하세요.');
 
-  const applySuggestedCode = (fixedCode) => {
-    if (editorRef.current && fixedCode) {
-      editorRef.current.setValue(fixedCode);
-      setSource(fixedCode);
-      setDirty(true);
-    }
-  };
-
-  const renderParsedExplanation = (text) => {
-    if (!text) return null;
-    const regex = /(\[TAG:\d+\])/g;
-    const parts = text.split(regex);
-
-    return parts.map((part, index) => {
-      if (part.match(/^\[TAG:(\d+)\]$/)) {
-        const tagNum = parseInt(part.match(/\d+/)[0], 10);
-        const theme = TAG_THEMES[(tagNum - 1) % TAG_THEMES.length];
-        return (
-          <span key={index} className={`inline-block px-1.5 py-0.5 mx-1 text-xs font-bold rounded border ${theme.badge}`}>
-            태그 {tagNum}
-          </span>
-        );
-      }
-      return <span key={index}>{part}</span>;
-    });
-  };
+  } catch (err) {
+    console.error('All-in-one Execution or AI Trigger failed:', err);
+    setAiError(err?.message || '통합 실행 중 오류가 발생했습니다.');
+  }
+};
 
   const handleNameChange = (next) => { setName(next); setDirty(true); };
   const handleSourceChange = (next) => { setSource(next); setDirty(true); };
@@ -224,11 +115,9 @@ export default function CodeEditor() {
     setSource(DEFAULT_CODE[next]);
     setName('');
     setDirty(false);
-    clearDecorations();
-    setAiData({ explain: null, style: null, optimize: null });
-    setIsSidebarOpen(false);
+    resetAiState(); 
     if (codeId) navigate('/code', { replace: true });
-  }, [codeId, navigate]);
+  }, [codeId, navigate, resetAiState]);
 
   const handleLanguageSelect = (next) => {
     if (next === language) return;
@@ -281,6 +170,7 @@ export default function CodeEditor() {
 
   const handleLoadSelect = (id) => { setLoadOpen(false); navigate(`/code/${id}`); };
 
+  const dragRef = useRef(null);
   const startResize = (e) => {
     e.preventDefault();
     dragRef.current = { startY: e.clientY, startHeight: termHeight };
@@ -308,10 +198,10 @@ export default function CodeEditor() {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
     };
-  }, [termHeight]);
+  }, []);
 
   return (
-    <div className={styles.page} style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+    <div className={styles.page} style={{ display: 'flex', flexDirection: 'column', height: '100vh',width: '100vw', overflow: 'hidden' }}>
       <ThemeApplier theme={editorTheme} />
       <Navbar
         editor
@@ -320,16 +210,17 @@ export default function CodeEditor() {
         ext={ext}
         dirty={dirty}
         onSave={save}
-        onRun={() => run(language, source)}
+        onRun={handleExecuteAndAnalyze} // 새로 통합한 핸들러 연결
         onLoad={() => setLoadOpen(true)}
         running={running}
+        activeTab={activeTab}
       />
       
       <div className={styles.body} style={{ display: 'flex', flex: 1, minHeight: 0, position: 'relative' }}>
         <LanguageSelector language={language} onSelect={handleLanguageSelect} />
         
-        {/* 메인 에디터 및 하단 콘솔 배치 */}
-        <div className={styles.main} style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        {/* [왼쪽 영역]: 코드 에디터 + 하단 실행 터미널 패널 */}
+        <div className={styles.main} style={{ flex: '0 0 70%', display: 'flex', flexDirection: 'column', minWidth: 0, borderRight: '1px solid #27272a' }}>
           <div className={styles.editorArea} style={{ flex: 1, minHeight: 0 }}>
             <Editor
               source={source}
@@ -337,131 +228,27 @@ export default function CodeEditor() {
               fontSize={editorFontSize}
               theme={editorTheme}
               onChange={handleSourceChange}
-              onMount={(editor) => { editorRef.current = editor; }}
+              onMount={(editor) => setEditorInstance(editor)} 
             />
           </div>
           <div className={styles.resizer} role="separator" aria-orientation="horizontal" onMouseDown={startResize} />
           <ExecutionPanel result={result} loading={running} error={runError} height={termHeight} />
         </div>
 
-        {/*복합 AI 분석 도우미 탭 기능 탑재 사이드바 */}
-        <div style={{ display: 'flex', height: '100%' }}>
-          <button 
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            style={{
-              position: 'absolute', right: isSidebarOpen ? '400px' : '0px', top: '16px',
-              width: '32px', height: '40px', backgroundColor: '#27272a', color: '#a1a1aa',
-              border: '1px solid #3f3f46', borderRight: 'none', borderRadius: '6px 0 0 6px',
-              zIndex: 50, transition: 'right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)', cursor: 'pointer'
-            }}
-          >
-            {isSidebarOpen ? '➔' : '🧠'}
-          </button>
-
-          <AnimatePresence initial={false}>
-            {isSidebarOpen && (
-              <motion.div
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 400, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={{ type: 'spring', damping: 26, stiffness: 190 }}
-                style={{
-                  height: '100%', backgroundColor: '#18181b', borderLeft: '1px solid #27272a',
-                  display: 'flex', flexDirection: 'column', boxShadow: '-10px 0 25px -5px rgba(0,0,0,0.5)',
-                  overflow: 'hidden', color: '#f4f4f5'
-                }}
-              >
-                {/* 탭 헤더 컨트롤러 */}
-                <div style={{ display: 'flex', borderBottom: '1px solid #27272a', backgroundColor: '#111113' }}>
-                  <button onClick={() => setActiveTab('explain')} style={{ flex: 1, padding: '12px 4px', fontSize: '12px', fontWeight: 600, color: activeTab === 'explain' ? '#818cf8' : '#71717a', borderBottom: activeTab === 'explain' ? '2px solid #6366f1' : 'none', backgroundColor: 'transparent', cursor: 'pointer' }}>에러 분석</button>
-                  <button onClick={() => { setActiveTab('style'); if(!aiData.style) triggerStyleReviewer(); }} style={{ flex: 1, padding: '12px 4px', fontSize: '12px', fontWeight: 600, color: activeTab === 'style' ? '#818cf8' : '#71717a', borderBottom: activeTab === 'style' ? '2px solid #6366f1' : 'none', backgroundColor: 'transparent', cursor: 'pointer' }}>스타일 리뷰</button>
-                  <button onClick={() => { setActiveTab('optimize'); if(!aiData.optimize) triggerCodeOptimizer(); }} style={{ flex: 1, padding: '12px 4px', fontSize: '12px', fontWeight: 600, color: activeTab === 'optimize' ? '#818cf8' : '#71717a', borderBottom: activeTab === 'optimize' ? '2px solid #6366f1' : 'none', backgroundColor: 'transparent', cursor: 'pointer' }}>코드 최적화</button>
-                </div>
-
-                {/* 메인 피드백 뷰포트 패널 */}
-                <div style={{ padding: '24px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  {aiLoading ? (
-                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', color: '#71717a' }}>
-                      <div style={{ width: '24px', height: '24px', border: '3px solid #3f3f46', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                      <p style={{ fontSize: '12px' }}>Gemini 인공지능 분석 중...</p>
-                    </div>
-                  ) : (
-                    <>
-                      {/* [1] 에러 해설 패널 */}
-                      {activeTab === 'explain' && (
-                        aiData.explain ? (
-                          <>
-                            <div style={{ backgroundColor: 'rgba(127,29,29,0.15)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '12px', padding: '14px' }}>
-                              <h4 style={{ fontSize: '11px', color: '#f87171', fontWeight: 700, marginBottom: '6px' }}>LINE {aiData.explain.line} 컴파일 실패 원인</h4>
-                              <p style={{ fontSize: '13px', color: '#e4e4e7', lineHeight: 1.5 }}>{aiData.explain.errorCause}</p>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                              <h4 style={{ fontSize: '11px', color: '#a1a1aa', fontWeight: 700 }}>입체 추적 도우미 가이드</h4>
-                              <div style={{ fontSize: '13px', color: '#d4d4d8', lineHeight: '1.7', whiteSpace: 'pre-wrap', backgroundColor: '#09090b', padding: '14px', borderRadius: '12px', border: '1px solid #27272a' }}>
-                                {renderParsedExplanation(aiData.explain.explanation)}
-                              </div>
-                            </div>
-                            <button onClick={() => applySuggestedCode(aiData.explain.fixedCode)} style={{ width: '100%', padding: '12px', backgroundColor: '#4f46e5', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', marginTop: 'auto' }}>🎯 정답 코드 에디터에 반영</button>
-                          </>
-                        ) : (
-                          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#52525b', fontSize: '12px', textAlign: 'center' }}>런타임/컴파일 에러가 비어있습니다.</div>
-                        )
-                      )}
-
-                      {/* [2] 스타일 리뷰 패널 */}
-                      {activeTab === 'style' && (
-                        aiData.style ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <div style={{ backgroundColor: '#1e1b4b', padding: '16px', borderRadius: '12px', border: '1px solid #312e81', textAlign: 'center' }}>
-                              <div style={{ fontSize: '11px', color: '#a5b4fc', fontWeight: 700 }}>종합 서식 품질 점수</div>
-                              <div style={{ fontSize: '32px', fontWeight: 800, color: '#818cf8', marginTop: '4px' }}>{aiData.style.score} / 100</div>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                              <h4 style={{ fontSize: '11px', color: '#a1a1aa', fontWeight: 700 }}>라인별 상세 개선 피드백</h4>
-                              {aiData.style.annotations?.map((ann, idx) => (
-                                <div key={idx} onClick={() => highlightEditorLine(ann.line, 'bg-amber-500/10 border-l-4 border-amber-500')} style={{ padding: '12px', backgroundColor: '#09090b', borderRadius: '8px', border: '1px solid #27272a', cursor: 'pointer' }}>
-                                  <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'center', marginBottom: '6px' }}>
-                                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#818cf8' }}>Line {ann.line}</span>
-                                    <span style={{ fontSize: '10px', px: '1.5', py: '0.5', borderRadius: '4px', backgroundColor: ann.severity === 'warning' ? '#78350f' : '#1e3a8a', color: ann.severity === 'warning' ? '#f59e0b' : '#3b82f6', marginLeft: 'auto' }}>{ann.severity}</span>
-                                  </div>
-                                  <p style={{ fontSize: '12.5px', color: '#e4e4e7', lineHeight: 1.4 }}>{ann.message}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ) : null
-                      )}
-
-                      {/* [3] 코드 최적화 패널 */}
-                      {activeTab === 'optimize' && (
-                        aiData.optimize ? (
-                          <>
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                              <div style={{ flex: 1, backgroundColor: '#27272a/40', padding: '10px', borderRadius: '8px', border: '1px solid #27272a', textAlign: 'center' }}>
-                                <div style={{ fontSize: '10px', color: '#a1a1aa' }}>현재 시간/공간 복잡도</div>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f87171', marginTop: '2px' }}>{aiData.optimize.currentComplexity}</div>
-                              </div>
-                              <div style={{ flex: 1, backgroundColor: '#27272a/40', padding: '10px', borderRadius: '8px', border: '1px solid #27272a', textAlign: 'center' }}>
-                                <div style={{ fontSize: '10px', color: '#a1a1aa' }}>최적화 후 복잡도</div>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#4ade80', marginTop: '2px' }}>{aiData.optimize.optimizedComplexity}</div>
-                              </div>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                              <h4 style={{ fontSize: '11px', color: '#a1a1aa', fontWeight: 700 }}>리팩토링 변경 핵심 내역</h4>
-                              <div style={{ fontSize: '13px', color: '#d4d4d8', lineHeight: '1.6', backgroundColor: '#09090b', padding: '14px', borderRadius: '12px', border: '1px solid #27272a', whiteSpace: 'pre-wrap' }}>
-                                {aiData.optimize.description}
-                              </div>
-                            </div>
-                            <button onClick={() => applySuggestedCode(aiData.optimize.optimizedCode)} style={{ width: '100%', padding: '12px', backgroundColor: '#059669', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', marginTop: 'auto' }}>🚀 최적화된 알고리즘 코드 전면 반영</button>
-                          </>
-                        ) : null
-                      )}
-                    </>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* [오른쪽 영역]: 30% 비율로 항시 상주하는 AI 분석 및 가이드 대시보드 컴포넌트 */}
+        <div style={{ flex: '0 0 27%', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative',overflow: 'hidden'}}>
+          {/*기존에 꼼수로 공중에 띄워져 있던 button 태그 삭제 완료 */}
+          <AiSidebar 
+            isOpen={true} 
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            aiData={aiData}
+            aiLoading={aiLoading}
+            aiError={aiError}
+            setAiError={setAiError}
+            applySuggestedCode={applySuggestedCode}
+            highlightEditorLine={highlightEditorLine}
+          />
         </div>
       </div>
 

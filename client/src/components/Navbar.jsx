@@ -22,6 +22,7 @@ export default function Navbar({
   onRun,
   onLoad,
   running,
+  activeTab, // 🌟 부모로부터 현재 활성화된 탭 ID를 추가로 전달받음
 }) {
   const navigate = useNavigate();
   const { user, logout, updateUser } = useAuth();
@@ -98,6 +99,13 @@ export default function Navbar({
     navigate('/login');
   }
 
+  const getRunButtonText = () => {
+    if (running) return 'Running…';
+    if (activeTab === 'style') return '▶ Run';
+    if (activeTab === 'optimize') return '▶ Run';
+    return '▶  Run';
+  };
+
   const avatarInitial = (user?.nickname || user?.email || '?')[0].toUpperCase();
   const fontSize = user?.fontSize || 14;
 
@@ -129,19 +137,15 @@ export default function Navbar({
             </Link>
             {editor && (
               <>
-                <button type="button" className={styles.navLink} onClick={onLoad}>
-                  Load
-                </button>
-                <button type="button" className={styles.navLink} onClick={onSave}>
-                  Save
-                </button>
+                <button type="button" className={styles.navLink} onClick={onLoad}>Load</button>
+                <button type="button" className={styles.navLink} onClick={onSave}>Save</button>
                 <button
                   type="button"
                   className={styles.navLink}
                   onClick={onRun}
                   disabled={running}
                 >
-                  {running ? 'Running…' : '▶  Run'}
+                  {getRunButtonText()}
                 </button>
               </>
             )}

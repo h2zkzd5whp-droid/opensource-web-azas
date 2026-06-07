@@ -11,18 +11,6 @@ import FloatingCommands from '../components/FloatingCommands';
 
 const SLIDE_COUNT = 4;
 
-// Role별 아바타 이모지 매핑
-const ROLE_AVATAR = {
-  'AI Developer': '🤖',
-  'Backend Developer': '⚙️',
-  'LandingPage Developer': '🎨',
-  'Dashboard Developer': '📊',
-};
-
-function getAvatar(role) {
-  return ROLE_AVATAR[role] ?? '👨‍💻';
-}
-
 
 export default function Landing() {
   const pageRef = useRef(null);
@@ -82,13 +70,10 @@ export default function Landing() {
           <div className={s.nav}>
             <Navbar />
           </div>
-
-          {/* Hero content — steps */}
           <div className={s.heroContent}>
 
             {/* Slide 1: Welcome & CTA (Split Layout) */}
             <div className={`${s.step1} ${s.stepWide1} ${step === 0 ? s.stepVisible : s.stepHidden}`}>
-              {/* 좌측 설명 및 버튼 구역 */}
               <div className={s.leftCol}>
                 <p className={s.eyebrow}></p>
                 <h1 className={s.heroTitle}>
@@ -105,8 +90,6 @@ export default function Landing() {
                 </div>
                 <LanguageMarquee className={s.a}/> 
               </div>
-
-              {/* 우측 그래픽 및 터미널 구역 (여기가 커지면 슬라이드 전체가 같이 커집니다) */}
               <div className={s.rightColFull}>
                 <img src={landingGif} alt="Preview GIF" className={s.gifImageFull} />
               </div>
@@ -131,7 +114,9 @@ export default function Landing() {
                   </div>
                   <div className={s.vectorBody}>
                     <div className={s.vectorGutter}>
-                      <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                      {Array.from({ length: 16 }, (_, i) => (
+                        <span key={i + 1}>{i + 1}</span>
+                      ))}
                     </div>
                     <pre className={s.vectorCode}>
                       <code>
@@ -155,53 +140,70 @@ export default function Landing() {
                 </div>
               </div>
               <div className={s.rightColPlaceholders}>
-                <div className={s.placeholderItem}>
-                  <span className={s.featureTag}>01 · Style Reviewer AI</span>
-                  <h4 className={s.placeholderTitleText}>Code Style Review</h4>
-                  <p className={s.placeholderDesc}>
-                    Detects readability issues, anti-patterns, and convention violations with line-by-line quality scores.
-                  </p>
-                </div>
-                <div className={s.placeholderItem}>
-                  <span className={s.featureTag}>02 · Performance Optimizer AI</span>
-                  <h4 className={s.placeholderTitleText}>Algorithm Optimization</h4>
-                  <p className={s.placeholderDesc}>
-                    Eliminates redundant operations and refactors code with complexity analysis ($O(N)$) for peak efficiency.
-                  </p>
-                </div>
-                <div className={s.placeholderItem}>
-                  <span className={s.featureTag}>03 · Debugging Expert AI</span>
-                  <h4 className={s.placeholderTitleText}>Error Debugging</h4>
-                  <p className={s.placeholderDesc}>
-                    Pinpoints root causes of compilation/runtime errors, providing corrected code and indexed explanations.
-                  </p>
-                </div>
+                {[
+                  {
+                    tag: "01 · Style Reviewer AI",
+                    title: "Intelligent Code Review",
+                    desc: "Evaluates your code quality line by line, detecting readability bottlenecks, anti-patterns, and convention violations in real time to suggest cleaner alternatives."
+                  },
+                  {
+                    tag: "02 · Performance Optimizer AI",
+                    title: "Algorithmic Optimization",
+                    desc: "Eliminates redundant calculations and runtime overhead, refactoring logic with live time/space complexity analysis ($O(N)$) for peak computational efficiency."
+                  },
+                  {
+                    tag: "03 · Debugging Expert AI",
+                    title: "Zero-Error Debugging",
+                    desc: "Instantly tracks down the root causes of compilation and runtime errors, providing ready-to-apply code corrections along with indexed, beginner-friendly explanations."
+                  },
+                  {
+                    tag: "04 · Core Environment",
+                    title: "Lightweight Online Compiler",
+                    desc: "Compile and execute your source code instantly inside your browser with a lightweight engine—completely independent of local tools or complex Docker environments."
+                  }
+                ].map((feature, idx) => (
+                  <div key={idx} className={s.placeholderItem}>
+                    <span className={s.featureTag}>{feature.tag}</span>
+                    <h4 className={s.placeholderTitleText}>{feature.title}</h4>
+                    <p className={s.placeholderDesc}>{feature.desc}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Slide 3: Compiler Features (3 Cards) */}
             <div className={`${s.step} ${step === 2 ? s.stepVisible : s.stepHidden}`}>
-              <p className={s.eyebrow}>Write, run, save.</p>
-              <h2 className={s.sectionHeading}>Compiler Features</h2>
+              <h2 className={s.sectionHeading}>Project Goals & Architecture</h2>
               <div className={s.compilerCards}>
                 <div className={s.card}>
-                  <div className={s.cardIcon}>✨</div>
-                  <h4 className={s.cardTitle}>Code Style Review</h4>
+                  <h4 className={s.cardTitle}>Beyond Static Compilation</h4>
                   <p className={s.cardDesc}>
-                    Detects readability issues, anti-patterns, and convention violations with precise line-by-line.
+                    We aim to transform the traditionally stagnant online compiler into a dynamic, interactive playground, injecting life and responsiveness into the coding experience.
                   </p>
                 </div>
+                
                 <div className={s.card}>
-                  <div className={s.cardIcon}>🏷️</div>
-                  <h4 className={s.cardTitle}>Dynamic Error Notation</h4>
+                  <h4 className={s.cardTitle}>On-Demand AI Insights</h4>
                   <p className={s.cardDesc}>
-                    Pinpoints compilation or runtime root causes using indexed tags for intuitive visual tracking.
+                    Rather than a passive background feature, AI is integrated into the core execution loop. Users can trigger intelligent code analysis and debugging insights on-demand, whenever they need clarity.
                   </p>
                 </div>
-                <div className={s.card}>
-                  <div className={s.cardIcon}>🌐</div>
-                  <h4 className={s.cardTitle}>Multi-Language Support</h4>
-                  <p className={s.cardDesc}>Write in JavaScript, Python, Java, and more with dedicated language environments.</p>
+              </div>
+              <div className={s.techStackContainer}>
+                <p className={s.techStackTitle}>SYSTEM ARCHITECTURE</p>
+                <div className={s.techStackGrid}>
+                  <div>
+                    <span className={s.stackCategory}>Frontend</span>
+                    <span className={s.stackValue}>React 19, Vite 8, Monaco</span>
+                  </div>
+                  <div>
+                    <span className={s.stackCategory}>Backend</span>
+                    <span className={s.stackValue}>Node.js 22, Express 4, MySQL 8</span>
+                  </div>
+                  <div>
+                    <span className={s.stackCategory}>Infrastructure</span>
+                    <span className={s.stackValue}>JWT, Axios, Isolated Sandbox</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -211,40 +213,47 @@ export default function Landing() {
               <p className={s.eyebrow}>Our Team</p>
               <h2 className={s.sectionHeading}>Contributors</h2>
               <div className={s.contributorsGrid}>
-                {members.map((member) => {
-                  // 1. DB 데이터 구조에 맞게 명확히 imgKey 추출
-                  const imageName = member.imgKey;
-                  // 2. src/assets 폴더 내의 모든 이미지 자원을 미리 맵으로 빌드 (Vite 표준 기법)
+                {(() => {
                   const images = import.meta.glob('../assets/team/*.{png,jpg,jpeg,svg}', { eager: true });
-                  // 3. 맵에서 해당 이미지 파일의 실제 서빙 URL을 안전하게 조회
-                  const matchedImage = images[`../assets/team/${imageName}`];
-                  const imageUrl = matchedImage ? matchedImage.default : null;
-                  return (
-                    <div key={member.memberId} className={s.contributorCard}>
-                      <div className={s.avatar}>
-                        {imageUrl ? (
+                  const MEMBER_DETAILS = {
+                    'KimHyunSik': 'Orchestrated core API design, database schema architectures, and secure user information infrastructure pipelines.',
+                    'NamYooSeong': 'Optimized server-side business logic and implemented highly resilient data communication architectures.',
+                    'JeonSeongHyun': 'Engineered high-fidelity UI/UX interactions, typography gradient details, and fully responsive layouts.',
+                    'Khulan Gurdor': ' Spearheaded component modularization, asynchronous state definitions, and interactive UX optimizations.'
+                  };
+
+                  return members.map((member) => {
+                    const imageName = member.imgKey;
+                    const matchedImage = images[`../assets/team/${imageName}`];
+                    const imageUrl = matchedImage ? matchedImage.default : null;
+                    return (
+                      <a 
+                        key={member.memberId} 
+                        href={member.githubUrl || "https://github.com"}
+                        target="_blank"                                 
+                        rel="noopener noreferrer"                      
+                        className={s.contributorCard}                  
+                      >
+                        <div className={s.avatar}>
                           <img
-                            src={`${imageUrl}`}
+                            src={imageUrl}
                             alt={`${member.name} 프로필`}
                             className={s.avatarImage}
-                            onError={(e) => {
-                              console.error(`이미지 렌더링 실패: ${imageUrl}`);
-                              e.target.style.display = 'none';
-                              e.target.parentElement.innerHTML = getAvatar(member.role);
-                            }}
                           />
-                        ) : (
-                          getAvatar(member.role)
-                        )}
-                      </div>
-                      <h4 className={s.contributorName}>{member.name}</h4>
-                      <p className={s.contributorRole}>{member.role}</p>
-                      <p className={s.contributorDesc}>{member.email}</p>
-                    </div>
-                  );
-                })}
+                        </div>
+                        <h4 className={s.contributorName}>{member.name}</h4>
+                        <p className={s.contributorRole}>{member.role}</p>
+                        <p className={s.contributorDesc} style={{ fontSize: '11px', color: '#a855f7', marginBottom: '8px', fontFamily: 'var(--mono)' }}>{member.email}</p>
+                        <p style={{ fontSize: '12px', opacity: 0.7, lineHeight: '1.45', marginTop: 'auto', textAlign: 'center' }}>
+                            {MEMBER_DETAILS[member.name] || 'Core Contributor of AZAS Editor'}
+                        </p>
+                      </a>
+                    );
+                  });
+                })()}
               </div>
             </div>
+
           </div>
         </div>
       </div>

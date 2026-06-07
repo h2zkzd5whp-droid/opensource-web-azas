@@ -6,6 +6,8 @@ import s from '../styles/Landing.module.css';
 import landingGif from '../assets/landingPage.gif';
 import { apiRequest } from '../utils/api';
 import LanguageMarquee from '../components/LanguageMarquee';
+import HyperTerminal from '../components/HyperTerminal';
+import FloatingCommands from '../components/FloatingCommands';
 
 const SLIDE_COUNT = 4;
 
@@ -78,33 +80,46 @@ export default function Landing() {
 
           {/* Nav */}
           <div className={s.nav}>
-            <Navbar transparent />
+            <Navbar />
           </div>
 
           {/* Hero content — steps */}
           <div className={s.heroContent}>
 
             {/* Slide 1: Welcome & CTA (Split Layout) */}
-            <div className={`${s.step} ${s.stepWide} ${step === 0 ? s.stepVisible : s.stepHidden}`}>
+            <div className={`${s.step1} ${s.stepWide1} ${step === 0 ? s.stepVisible : s.stepHidden}`}>
+              {/* 좌측 설명 및 버튼 구역 */}
               <div className={s.leftCol}>
                 <p className={s.eyebrow}></p>
                 <h1 className={s.heroTitle}>
                   AZAS Editor.<br />
-                  <span className={s.accent}>// With AI, No setup.</span>
+                  <span className={s.gradientText}>// Code with joy, intelligent feedback.</span>
                 </h1>
                 <p className={s.heroDescLeft}>
-                  A powerful, web-based multi-language editor & online compiler.
-                  Write, run, and share your snippets directly from your browser with ease.
+                  The online compiler that makes coding fun. Write interactive code,<br/>
+                  get real-time AI insights, and level up your skills — all in your browser.
                 </p>
                 <div className={s.ctaActionsLeft}>
-                  <Button as={Link} to="/code" variant="primary" size="md">Open editor →</Button>
-                  <Button as={Link} to="/register" variant="ghost" size="md">Create account</Button>
+                  <Button as={Link} to="/code" size="md">Open editor →</Button>
+                  <Button as={Link} to="/register" size="md">Create account</Button>
                 </div>
                 <LanguageMarquee className={s.a}/> 
               </div>
+
+              {/* 우측 그래픽 및 터미널 구역 (여기가 커지면 슬라이드 전체가 같이 커집니다) */}
               <div className={s.rightColFull}>
                 <img src={landingGif} alt="Preview GIF" className={s.gifImageFull} />
               </div>
+            </div>
+  
+            <div className={`${s.terminalContainer} ${step === 0 ? s.stepVisible : s.stepHidden}`}>
+                  <HyperTerminal />
+            </div>
+            <div className={`${s.terminalContainer1} ${step === 0 ? s.stepVisible : s.stepHidden}`}>
+                  <HyperTerminal style={{ width: '400px', height: '200px' }}/>
+            </div>
+            <div className={`${s.commandsContainer} ${step === 0 ? s.stepVisible : s.stepHidden}`}>
+                <FloatingCommands />
             </div>
 
             {/* Slide 2: Feature Mockup (Split Layout) */}

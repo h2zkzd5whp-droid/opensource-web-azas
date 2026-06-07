@@ -113,6 +113,7 @@ export default function Navbar({
     <header className={[styles.bar, transparent && styles.transparent].filter(Boolean).join(' ')}>
       <div className={styles.left}>
         <Brand as={Link} to="/" className={styles.brand} />
+        <Link to="/" className={styles.brandText}>AZAS Editor</Link>
         {editor && (
           <div className={styles.fileTitle}>
             <span className={styles.fileSep}>/</span>

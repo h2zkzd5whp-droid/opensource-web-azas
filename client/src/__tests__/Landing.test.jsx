@@ -48,7 +48,7 @@ describe('Landing — nav', () => {
 describe('Landing — step 0 (CTA)', () => {
   test('shows CTA heading on initial render', () => {
     renderLanding();
-    expect(screen.getByText(/AZAS Editor/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /AZAS Editor/i })).toBeInTheDocument();
   });
 
   test('Open editor link points to /code', () => {

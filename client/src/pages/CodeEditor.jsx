@@ -76,36 +76,14 @@ export default function CodeEditor() {
   }, [codeId, navigate]);
 
   const handleExecuteAndAnalyze = async () => {
-  try {
-    // 1. 실행 전 에러 및 이전 로딩 상태 초기화
-    setAiError(null); 
-
-    // 2. 런타임 코드 컴파일/실행 우선 처리
-    const execResult = await run(language, source);
-    
-    // 3. 실행 결과에서 에러 로그 추출
-    const targetResult = execResult || result;
-    const errorLog = runError?.message || targetResult?.stderr || targetResult?.errorLog || (targetResult?.success === false ? targetResult?.terminal : null);
-
-    console.log('전체 AI 분석 일괄 요청 시작...');
-
-    // 4. [핵심 변경] 3가지 AI 분석을 Promise.all로 한 번에 동시에 호출 (병렬 처리)
-    // 에러 로그가 없더라도 분석이 돌 수 있도록 가짜 에러 로그(fallback) 처리
-    const activeErrorLog = errorLog || '정상 실행 완료 (잠재적 에러 없음)';
-
-    await Promise.all([
-      triggerAiExplainer(activeErrorLog),
-      triggerStyleReviewer(),
-      triggerCodeOptimizer()
-    ]);
-
-    console.log('모든 AI 분석 결과 수신 완료. 탭을 이동하며 결과를 확인하세요.');
-
-  } catch (err) {
-    console.error('All-in-one Execution or AI Trigger failed:', err);
-    setAiError(err?.message || '통합 실행 중 오류가 발생했습니다.');
-  }
-};
+    try {
+      setAiError(null); 
+      // 런타임 코드 컴파일/실행 단독 처리
+      await run(language, source);
+    } catch (err) {
+      console.error('Execution failed:', err);
+    }
+  };
 
   const handleNameChange = (next) => { setName(next); setDirty(true); };
   const handleSourceChange = (next) => { setSource(next); setDirty(true); };
@@ -200,8 +178,11 @@ export default function CodeEditor() {
     };
   }, []);
 
+
+  const currentErrorLog = runError?.message || result?.stderr || result?.errorLog || (result?.success === false ? result?.terminal : null);
+
   return (
-    <div className={styles.page} style={{ display: 'flex', flexDirection: 'column', height: '100vh',width: '100vw', overflow: 'hidden' }}>
+    <div className={styles.page} style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', overflow: 'hidden' }}>
       <ThemeApplier theme={editorTheme} />
       <Navbar
         editor
@@ -210,7 +191,7 @@ export default function CodeEditor() {
         ext={ext}
         dirty={dirty}
         onSave={save}
-        onRun={handleExecuteAndAnalyze} // 새로 통합한 핸들러 연결
+        onRun={handleExecuteAndAnalyze} 
         onLoad={() => setLoadOpen(true)}
         running={running}
         activeTab={activeTab}
@@ -235,9 +216,8 @@ export default function CodeEditor() {
           <ExecutionPanel result={result} loading={running} error={runError} height={termHeight} />
         </div>
 
-        {/* [오른쪽 영역]: 30% 비율로 항시 상주하는 AI 분석 및 가이드 대시보드 컴포넌트 */}
-        <div style={{ flex: '0 0 27%', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative',overflow: 'hidden'}}>
-          {/*기존에 꼼수로 공중에 띄워져 있던 button 태그 삭제 완료 */}
+        {/* [오른쪽 영역]: AI 분석 및 가이드 대시보드 컴포넌트 */}
+        <div style={{ flex: '0 0 27%', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden'}}>
           <AiSidebar 
             isOpen={true} 
             activeTab={activeTab}
@@ -247,6 +227,11 @@ export default function CodeEditor() {
             aiError={aiError}
             setAiError={setAiError}
             highlightEditorLine={highlightEditorLine}
+            
+            triggerAiExplainer={triggerAiExplainer}
+            triggerStyleReviewer={triggerStyleReviewer}
+            triggerCodeOptimizer={triggerCodeOptimizer}
+            errorLog={currentErrorLog}
           />
         </div>
       </div>

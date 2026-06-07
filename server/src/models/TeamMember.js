@@ -6,7 +6,7 @@ const pool = require('../config/db.js');
  */
 exports.findAll = async () => {
   const [rows] = await pool.query(
-    'SELECT memberId, name, role, email, imgKey FROM TeamMembers ORDER BY memberId ASC'
+    'SELECT memberId, name, role, email, imgKey,githubUrl FROM TeamMembers ORDER BY memberId ASC'
   );
   return rows;
 };

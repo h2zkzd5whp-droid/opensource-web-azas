@@ -32,11 +32,13 @@ CREATE TABLE IF NOT EXISTS TeamMembers (
   name VARCHAR(50) NOT NULL,
   role VARCHAR(100) NOT NULL,
   email VARCHAR(255),
-  imgKey VARCHAR(255)
+  imgKey VARCHAR(255),
+  githubUrl VARCHAR(255)
+
 );
 
-INSERT INTO TeamMembers (name, role, email, imgKey) VALUES
-('KimHyunSik', 'AI Developer', 'gudtlr3308@naver.com', 'hsk.png'),
-('NamYooSeong', 'Backend Developer', 'smeteor0213@chungbuk.ac.kr', 'ysn.png'),
-('JeonSeongHyun', 'LandingPage Developer', 'jsh147301@naver.com', 'shj.png'),
-('Khulan Gurdor', 'Dashboard Developer', 'khulnnmr@gmail.com', 'khu.png');
+INSERT INTO TeamMembers (name, role, email, imgKey,githubUrl) VALUES
+('KimHyeonSik', 'Backend Developerr', 'gudtlr3308@naver.com', 'hsk.png','https://github.com/suda5936'),
+('NamYooSeong', 'Backend Developer', 'smeteor0213@chungbuk.ac.kr', 'ysn.png','https://github.com/h2zkzd5whp-droid'),
+('JeonSeongHyun', 'Frontend Developer', 'jsh147301@naver.com', 'shj.png','https://github.com/whiteblack1858'),
+('Khulan Gurdor', 'Frontend Developer', 'khulnnmr@gmail.com', 'khu.png','https://github.com/gen426');

@@ -10,7 +10,7 @@
 
 .label {
   font-size: 12px;
-  color: #0f0f0f ;
+  color: #ebe5e5 ;
   opacity: 0.7; 
   letter-spacing: 0.14em;
   text-align: center;
@@ -40,7 +40,7 @@
   padding: 9px 18px;
   border-radius: 7px;
   border: 1px solid rgba(0, 0, 0, 0.15);
-  background: rgba(223, 220, 220, 0.4);
+  background: rgb(231, 229, 229);
   white-space: nowrap;
   user-select: none;
   cursor: default;
@@ -55,14 +55,14 @@
 }
 
 .name {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: #0f0f0f;
   font-family: 'Space Mono', 'Courier New', monospace;
 }
 
 .ver {
-  font-size: 11px;
+  font-size: 13px;
   color: #0f0f0f;
   font-family: 'Space Mono', 'Courier New', monospace;
 }

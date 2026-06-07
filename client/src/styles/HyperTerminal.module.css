@@ -1,0 +1,92 @@
+.hyperWindow {
+  height: 300px;
+  width: 600px;
+  background: #000000; /* Hyper의 아이덴티티: 퓨어 블랙 */
+  border-radius: 5px; /* 약간 각진 미니멀한 라운딩 */
+  border: 1px solid #333333; /* 아주 어둡고 얇은 경계선 */
+  
+  /* Hyper 특유의 묵직하면서도 부드러운 섀도우 효과 */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+              0 0 40px rgba(255, 255, 255, 0.03); 
+  
+  overflow: hidden;
+  font-family: "Menlo", "Monaco", "Inconsolata", "Fira Code", monospace;
+}
+
+.hyperHeader {
+  position: relative;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: #000000;
+}
+
+/* macOS 신호등 스타일 */
+.trafficLights {
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+/* 가운데 정렬된 타이틀 (보통 현재 디렉토리인 ~ 표시) */
+.windowTitle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #7d7d7d;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.hyperBody {
+  padding: 18px 22px 26px;
+  background: #000000;
+  min-height: 120px; /* 고정 높이감을 주어 웅장함 유지 */
+}
+
+.terminalContent {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  text-align: left;
+  letter-spacing: -0.01em;
+}
+
+/* Hyper 로고 모양인 삼각형 프롬프트 (혹은 원하시는 기호로 대체 가능) */
+.prompt {
+  color: #00ff66; /* Neon Green 포인트 또는 var(--text) */
+  font-size: 11px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* 블록형 텍스트 커서 애니메이션 */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background: #ffffff;
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: blink 1s infinite;
+}

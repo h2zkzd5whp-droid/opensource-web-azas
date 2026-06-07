@@ -1,0 +1,50 @@
+.floatingContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1500px;
+  height: 1100px;
+  pointer-events: none; 
+  overflow: hidden;
+  z-index: 1;
+}
+
+.floatingItem {
+  position: absolute;
+  bottom: -30px;
+  font-family: monospace;
+  color: #c493f1;
+  background: rgba(168, 85, 247, 0.03);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: floatUp ease-in-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.3;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  35% {
+    opacity: 0.8;
+  }
+  55% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-220px) scale(1.05);
+    opacity: 0;
+  }
+}

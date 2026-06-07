@@ -161,8 +161,8 @@ export default function Landing() {
                     title: "Lightweight Online Compiler",
                     desc: "Compile and execute your source code instantly inside your browser with a lightweight engine—completely independent of local tools or complex Docker environments."
                   }
-                ].map((feature, idx) => (
-                  <div key={idx} className={s.placeholderItem}>
+                ].map((feature) => (
+                  <div key={feature.tag} className={s.placeholderItem}>
                     <span className={s.featureTag}>{feature.tag}</span>
                     <h4 className={s.placeholderTitleText}>{feature.title}</h4>
                     <p className={s.placeholderDesc}>{feature.desc}</p>

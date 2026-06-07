@@ -9,7 +9,11 @@ export default function AiSidebar({
   aiLoading, 
   aiError, 
   setAiError,
-  highlightEditorLine
+  highlightEditorLine,
+  triggerAiExplainer,
+  triggerStyleReviewer,
+  triggerCodeOptimizer,
+  errorLog
 }) {
   
   const renderParsedExplanation = (text) => {
@@ -30,6 +34,25 @@ export default function AiSidebar({
       return <span key={index}>{part}</span>;
     });
   };
+
+  const actionButtonStyle = {
+    width: '100%',
+    padding: '10px',
+    backgroundColor: '#1e1e2e',
+    color: '#a78bfa',
+    border: '1px solid #4c1d95',
+    borderRadius: '6px',
+    fontSize: '12px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.15s ease',
+    marginBottom: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '6px'
+  };
+
   return (
     <div className={styles.page}>
       {/* 상단 탭 패널 */}
@@ -110,7 +133,7 @@ export default function AiSidebar({
                 {aiError}
               </p>
               <p style={{ fontSize: '11px', color: '#555' }}>
-                상단 Run 버튼을 눌러 다시 분석을 요청하세요.
+                아래 재요청 버튼을 눌러 다시 분석을 요청하세요.
               </p>
             </div>
             <button
@@ -166,283 +189,313 @@ export default function AiSidebar({
               <span style={{ fontSize: '11px', color: '#555' }}>AI 분석 엔진</span>
             </div>
 
-            {/* [1] 에러 분석 패널 */}
-            {activeTab === 'explain' &&
-              (aiData.explain ? (
-                <>
-                  <div
-                    style={{
-                      backgroundColor: '#2e1414',
-                      border: '0.5px solid rgba(248,113,113,0.3)',
-                      borderRadius: '8px',
-                      padding: '12px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'inline-block',
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        background: 'rgba(248,113,113,0.15)',
-                        color: '#f87171',
-                        fontSize: '10px',
-                        fontWeight: 600,
-                        marginBottom: '6px',
-                        letterSpacing: '0.03em',
-                      }}
-                    >
-                      LINE {aiData.explain.line} 예외 검출 확인
-                    </div>
-                    <p style={{ fontSize: '12px', color: '#e2e2f0', lineHeight: 1.6 }}>
-                      {aiData.explain.errorCause}
-                    </p>
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: 0 }}>
-                    <h4 style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>
-                      AI 정밀 추적 분석 가이드
-                    </h4>
-                    <div
-                      style={{
-                        backgroundColor: '#0e0e14',
-                        padding: '12px',
-                        borderRadius: '8px',
-                        border: '0.5px solid #2a2a3e',
-                      }}
-                    >
-                      <p
-                        style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.6 }}
-                      >
-                        {renderParsedExplanation(aiData.explain.explanation)}
-                      </p>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#3a3a55',
-                    fontSize: '12px',
-                    textAlign: 'center',
-                    gap: '6px',
-                    lineHeight: 1.6,
-                  }}
+            {/*에러 분석 패널 */}
+            {activeTab === 'explain' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
+                {/*개별 호출 버튼 장착 */}
+                <button 
+                  style={actionButtonStyle} 
+                  onClick={() => triggerAiExplainer(errorLog || '정상 실행 완료 (잠재적 에러 없음)')}
                 >
-                  <p>상단 ▶ Run 버튼을 누르면</p>
-                  <p>실행 결과와 함께 모든 AI 분석이 시작됩니다.</p>
-                </div>
-              ))}
+                  {aiData.explain ? '에러 분석 재요청' : '에러 분석 실행'}
+                </button>
 
-            {/* [2] 스타일 리뷰 패널 */}
-            {activeTab === 'style' &&
-              (aiData.style ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
-                  {/* 점수 카드 */}
-                  <div
-                    style={{
-                      background: '#1e1e2e',
-                      padding: '14px',
-                      borderRadius: '8px',
-                      border: '0.5px solid #2a2a3e',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '10px', color: '#555', marginBottom: '4px' }}>
-                      코드 품질 서식 점수
-                    </div>
+                {aiData.explain ? (
+                  <>
                     <div
                       style={{
-                        fontSize: '28px',
-                        fontWeight: 600,
-                        background: 'linear-gradient(135deg, #a78bfa, #38bdf8)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                      }}
-                    >
-                      {aiData.style.score}
-                      <span style={{ fontSize: '14px', color: '#555', WebkitTextFillColor: '#555' }}>
-                        {' '}/ 100
-                      </span>
-                    </div>
-                  </div>
-
-                  <h4 style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>
-                    구문 분석 개선점 피드백
-                  </h4>
-
-                  {aiData.style.annotations?.map((ann, idx) => (
-                    <div
-                      key={idx}
-                      onClick={() =>
-                        highlightEditorLine(ann.line, 'bg-amber-500/10 border-l-4 border-amber-500')
-                      }
-                      style={{
-                        backgroundColor: '#0e0e14',
-                        border: '0.5px solid #2a2a3e',
+                        backgroundColor: '#2e1414',
+                        border: '0.5px solid rgba(248,113,113,0.3)',
                         borderRadius: '8px',
-                        padding: '10px 12px',
-                        cursor: 'pointer',
-                        transition: 'border-color 0.15s',
+                        padding: '12px',
                       }}
                     >
                       <div
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginBottom: '5px',
+                          display: 'inline-block',
+                          padding: '2px 8px',
+                          borderRadius: '4px',
+                          background: 'rgba(248,113,113,0.15)',
+                          color: '#f87171',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          marginBottom: '6px',
+                          letterSpacing: '0.03em',
                         }}
                       >
-                        <span
+                        LINE {aiData.explain.line} 예외 검출 확인
+                      </div>
+                      <p style={{ fontSize: '12px', color: '#e2e2f0', lineHeight: 1.6 }}>
+                        {aiData.explain.errorCause}
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: 0 }}>
+                      <h4 style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>
+                        AI 정밀 추적 분석 가이드
+                      </h4>
+                      <div
+                        style={{
+                          backgroundColor: '#0e0e14',
+                          padding: '12px',
+                          borderRadius: '8px',
+                          border: '0.5px solid #2a2a3e',
+                        }}
+                      >
+                        <p
+                        style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.6 }}
+                        >
+                          {renderParsedExplanation(aiData.explain.explanation)}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#3a3a55',
+                      fontSize: '12px',
+                      textAlign: 'center',
+                      gap: '6px',
+                      lineHeight: 1.6,
+                      padding: '40px 0'
+                    }}
+                  >
+                    <p>위 버튼을 누르면 컴파일 에러 로그를 기반으로</p>
+                    <p>원인을 정밀 진단하여 심층 분석합니다.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/*스타일 리뷰 패널 */}
+            {activeTab === 'style' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
+                {/*개별 호출 버튼 장착 */}
+                <button style={actionButtonStyle} onClick={triggerStyleReviewer}>
+                  {aiData.style ? '스타일 리뷰 재요청' : '코드 스타일 리뷰 실행'}
+                </button>
+
+                {aiData.style ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
+                    {/* 점수 카드 */}
+                    <div
+                      style={{
+                        background: '#1e1e2e',
+                        padding: '14px',
+                        borderRadius: '8px',
+                        border: '0.5px solid #2a2a3e',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ fontSize: '10px', color: '#555', marginBottom: '4px' }}>
+                        코드 품질 서식 점수
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '28px',
+                          fontWeight: 600,
+                          background: 'linear-gradient(135deg, #a78bfa, #38bdf8)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                      >
+                        {aiData.style.score}
+                        <span style={{ fontSize: '14px', color: '#555', WebkitTextFillColor: '#555' }}>
+                          {' '}/ 100
+                        </span>
+                      </div>
+                    </div>
+
+                    <h4 style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>
+                      구문 분석 개선점 피드백
+                    </h4>
+
+                    {aiData.style.annotations?.map((ann, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() =>
+                          highlightEditorLine(ann.line, 'bg-amber-500/10 border-l-4 border-amber-500')
+                        }
+                        style={{
+                          backgroundColor: '#0e0e14',
+                          border: '0.5px solid #2a2a3e',
+                          borderRadius: '8px',
+                          padding: '10px 12px',
+                          cursor: 'pointer',
+                          transition: 'border-color 0.15s',
+                        }}
+                      >
+                        <div
                           style={{
-                            display: 'inline-flex',
+                            display: 'flex',
                             alignItems: 'center',
-                            gap: '4px',
-                            fontSize: '10px',
-                            fontWeight: 600,
-                            color: '#a78bfa',
+                            justifyContent: 'space-between',
+                            marginBottom: '5px',
                           }}
                         >
                           <span
                             style={{
-                              background: '#1e1e3e',
-                              color: '#a78bfa',
-                              padding: '1px 6px',
-                              borderRadius: '3px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
                               fontSize: '10px',
+                              fontWeight: 600,
+                              color: '#a78bfa',
                             }}
                           >
-                            L{ann.line}
+                            <span
+                              style={{
+                                background: '#1e1e3e',
+                                color: '#a78bfa',
+                                padding: '1px 6px',
+                                borderRadius: '3px',
+                                fontSize: '10px',
+                              }}
+                            >
+                              L{ann.line}
+                            </span>
                           </span>
-                        </span>
-                        <span
-                          style={{
-                            padding: '1px 8px',
-                            borderRadius: '4px',
-                            fontSize: '10px',
-                            fontWeight: 500,
-                            background:
-                              ann.severity === 'warning'
-                                ? 'rgba(245,158,11,0.15)'
-                                : 'rgba(56,189,248,0.15)',
-                            color: ann.severity === 'warning' ? '#f59e0b' : '#38bdf8',
-                          }}
+                          <span
+                            style={{
+                              padding: '1px 8px',
+                              borderRadius: '4px',
+                              fontSize: '10px',
+                              fontWeight: 500,
+                              background:
+                                ann.severity === 'warning'
+                                  ? 'rgba(245,158,11,0.15)'
+                                  : 'rgba(56,189,248,0.15)',
+                              color: ann.severity === 'warning' ? '#f59e0b' : '#38bdf8',
+                            }}
+                          >
+                            {ann.severity}
+                          </span>
+                        </div>
+                        <p
+                        style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.6 }}
                         >
-                          {ann.severity}
-                        </span>
+                          {ann.message}
+                        </p>
                       </div>
-                      <p
-                        style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.6 }}
-                      >
-                        {ann.message}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#3a3a55',
-                    fontSize: '12px',
-                    textAlign: 'center',
-                    gap: '6px',
-                  }}
-                >
-                  <p>상단 ▶ Run 버튼을 누르면</p>
-                  <p>자동으로 코드 스타일 가이드 리뷰를 진행합니다.</p>
-                </div>
-              ))}
-
-            {/* [3] 코드 최적화 패널 */}
-            {activeTab === 'optimize' &&
-              (aiData.optimize ? (
-                <>
-                  {/* 복잡도 비교 카드 */}
-                  <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-                    <div
-                      style={{
-                        flex: 1,
-                        backgroundColor: '#0e0e14',
-                        padding: '10px',
-                        borderRadius: '8px',
-                        border: '0.5px solid #2a2a3e',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div style={{ fontSize: '10px', color: '#555', marginBottom: '4px' }}>
-                        기존 알고리즘
-                      </div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#f87171' }}>
-                        {aiData.optimize.currentComplexity}
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        backgroundColor: '#0e0e14',
-                        padding: '10px',
-                        borderRadius: '8px',
-                        border: '0.5px solid #2a2a3e',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div style={{ fontSize: '10px', color: '#555', marginBottom: '4px' }}>
-                        리팩토링 후
-                      </div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#34d399' }}>
-                        {aiData.optimize.optimizedComplexity}
-                      </div>
-                    </div>
+                    ))}
                   </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: 0 }}>
-                    <h4 style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>
-                      구조 설계 변경 사항 내역
-                    </h4>
-                    <div
-                      style={{
-                        backgroundColor: '#0e0e14',
-                        padding: '12px',
-                        borderRadius: '8px',
-                        border: '0.5px solid #2a2a3e',
-                      }}
-                    >
-                      <p
-                        style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.6 }}
-                      >
-                        {aiData.optimize.description}
-                      </p>
-                    </div>
+                ) : (
+                  <div
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#3a3a55',
+                      fontSize: '12px',
+                      textAlign: 'center',
+                      gap: '6px',
+                      padding: '40px 0'
+                    }}
+                  >
+                    <p>위 버튼을 누르면 현재 코드 구문을 체크하여</p>
+                    <p>서식 스타일 및 컨벤션 리뷰 가이드를 진행합니다.</p>
                   </div>
-                </>
-              ) : (
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#3a3a55',
-                    fontSize: '12px',
-                    textAlign: 'center',
-                    gap: '6px',
-                  }}
-                >
-                  <p>상단 ▶ Run 버튼을 누르면</p>
-                  <p>빅오(Big-O) 시간 복잡도 연산 효율성을 진단합니다.</p>
-                </div>
-              ))}
+                )}
+              </div>
+            )}
+
+            {/*코드 최적화 패널 */}
+            {activeTab === 'optimize' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
+                {/*개별 호출 버튼 장착 */}
+                <button style={actionButtonStyle} onClick={triggerCodeOptimizer}>
+                  {aiData.optimize ? '알고리즘 최적화 재요청' : '코드 알고리즘 최적화 실행'}
+                </button>
+
+                {aiData.optimize ? (
+                  <>
+                    {/* 복잡도 비교 카드 */}
+                    <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                      <div
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#0e0e14',
+                          padding: '10px',
+                          borderRadius: '8px',
+                          border: '0.5px solid #2a2a3e',
+                          textAlign: 'center',
+                        }}
+                      >
+                        <div style={{ fontSize: '10px', color: '#555', marginBottom: '4px' }}>
+                          기존 알고리즘
+                        </div>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#f87171' }}>
+                          {aiData.optimize.currentComplexity}
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#0e0e14',
+                          padding: '10px',
+                          borderRadius: '8px',
+                          border: '0.5px solid #2a2a3e',
+                          textAlign: 'center',
+                        }}
+                      >
+                        <div style={{ fontSize: '10px', color: '#555', marginBottom: '4px' }}>
+                          리팩토링 후
+                        </div>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#34d399' }}>
+                          {aiData.optimize.optimizedComplexity}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: 0 }}>
+                      <h4 style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>
+                        구조 설계 변경 사항 내역
+                      </h4>
+                      <div
+                        style={{
+                          backgroundColor: '#0e0e14',
+                          padding: '12px',
+                          borderRadius: '8px',
+                          border: '0.5px solid #2a2a3e',
+                        }}
+                      >
+                        <p
+                        style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.6 }}
+                        >
+                          {aiData.optimize.description}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#3a3a55',
+                      fontSize: '12px',
+                      textAlign: 'center',
+                      gap: '6px',
+                      padding: '40px 0'
+                    }}
+                  >
+                    <p>위 버튼을 누르면 빅오(Big-O) 시간 및 공간 복잡도를</p>
+                    <p>연산하여 최적화 및 리팩토링 구조를 추천합니다.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </motion.div>
         )}
       </div>

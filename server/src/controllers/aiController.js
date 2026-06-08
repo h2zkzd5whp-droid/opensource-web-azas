@@ -79,7 +79,8 @@ exports.reviewer = async (req, res, next) => {
       config: {
         systemInstruction: config.systemInstruction,
         responseMimeType: "application/json",
-        responseSchema: config.responseSchema
+        responseSchema: config.responseSchema,
+        temperature: 0.0,
       }
     });
 

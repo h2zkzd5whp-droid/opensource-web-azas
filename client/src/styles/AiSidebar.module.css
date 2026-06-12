@@ -45,3 +45,136 @@
   border-Top: none;
 }
 
+/*AI 정밀 코드 품질 진단*/
+.dashboardCard {
+  background-color: #141423;
+  padding: 16px;
+  border-radius: 10px;
+  border: 0.5px solid #2a2a3e;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dashboardTitle {
+  font-size: 12px;
+  color: #a78bfa;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.metricContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #ccc;
+}
+
+.metricScore {
+  font-weight: bold;
+}
+
+/*4대 지표별 개별 컬러 테마 */
+.readabilityColor { color: #34d399; }
+.readabilityBar { background-color: #34d399; }
+
+.performanceColor { color: #60a5fa; }
+.performanceBar { background-color: #60a5fa; }
+
+.maintainabilityColor { color: #a78bfa; }
+.maintainabilityBar { background-color: #a78bfa; }
+
+.safetyColor { color: #f87171; }
+.safetyBar { background-color: #f87171; }
+
+.runButton {
+  width: 100%;
+  padding: 12px;
+  background-color: #a78bfa;
+  color: #1e1e2e;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.runButton:hover {
+  background-color: #c084fc;
+}
+
+.runButton:active {
+  transform: scale(0.98);
+}
+
+.runButton:disabled {
+  background-color: #2a2a3e;
+  color: #555;
+  cursor: not-allowed;
+}
+
+/*스타일 분석 전용 로딩 바 */
+.progressWrapper {
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 8px;
+  background-color: #222235;
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #a78bfa);
+  border-radius: 4px;
+  position: relative;
+}
+
+.pingPongBall {
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  right: -6px;
+  top: -14px;  /* 막대 위에서 튀기 시작 */
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+}
+
+
+.resultSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.metricBarGroup {
+  background: #141423;
+  padding: 16px;
+  border-radius: 10px;
+  border: 0.5px solid #2a2a3e;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

@@ -1,0 +1,115 @@
+.dashboardCard {
+  background-color: #141423;
+  padding: 16px;
+  border-radius: 10px;
+  border: 0.5px solid #2a2a3e;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 상단 타이틀 + 버튼 그룹 컨테이너 */
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2a2a3e;
+  padding-bottom: 8px;
+}
+
+.dashboardTitle {
+  font-size: 11px;
+  color: #8e8ea8;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* 버튼 모음 */
+.buttonGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.controlBtn {
+  background-color: #1e1e2e;
+  color: #a78bfa;
+  border: 0.5px solid #3a3a55;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controlBtn:hover:not(:disabled) {
+  background-color: #242436;
+  border-color: #c084fc;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.2);
+}
+
+.controlBtn:disabled {
+  opacity: 0.25;
+  color: #555;
+  border-color: #222;
+  cursor: not-allowed;
+}
+
+/* 활성화되었을 때의 스타일 매핑 */
+.activeBtn {
+  background-color: rgba(167, 139, 250, 0.15);
+  border-color: #a78bfa;
+  color: #fff;
+}
+
+/* 차트 그래픽 기본 스타일셋 */
+.chartContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.chartSvg {
+  width: 100%;
+  max-width: 210px;
+  height: auto;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: #222235;
+  stroke-width: 0.75;
+  fill: none;
+}
+
+.axisLine {
+  stroke: #1b1b2a;
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.chartPolygon {
+  fill: rgba(167, 139, 250, 0.18);
+  stroke: #a78bfa;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.chartPoint {
+  fill: #c084fc;
+  stroke: #141423;
+  stroke-width: 1.5;
+}
+
+.chartLabel {
+  font-size: 10px;
+  fill: #64748b;
+  font-weight: 500;
+}
+
+.chartValue {
+  font-size: 11px;
+  fill: #a78bfa;
+  font-weight: bold;
+}

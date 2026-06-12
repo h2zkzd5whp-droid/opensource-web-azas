@@ -85,11 +85,11 @@ export default function useAiAssistant({ language, setSource, setDirty }) {
         method: 'POST',
         body: JSON.stringify({ code: currentSource, language }),
       });
-      if (!data || typeof data.score !== 'number') throw new Error('AI 응답 서식이 올바르지 않습니다.');
+      if (!data || typeof data.readability !== 'number') throw new Error('AI 응답 서식이 올바르지 않습니다.');
 
       setAiData(prev => ({ ...prev, style: data }));
 
-      if (data.annotations?.length > 0 && window.monaco) {
+      if (data.annotations && data.annotations.length > 0) {
         const newDecorations = data.annotations.map(ann => ({
           range: new window.monaco.Range(ann.line, 1, ann.line, 100),
           options: {

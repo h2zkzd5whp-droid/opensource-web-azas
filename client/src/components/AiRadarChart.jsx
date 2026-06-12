@@ -13,7 +13,7 @@ export default function AiRadarChart({ data, forceShow = false }) {
   const [animateTrigger, setAnimateTrigger] = useState(0);
 
   useEffect(() => {
-    if (forceShow) setShowChart(true);
+    if (forceShow) Promise.resolve().then(() => setShowChart(true)); //연쇄 렌더링 차단
   }, [forceShow]);
 
   const rScore = data?.readability ?? 0;

@@ -42,9 +42,12 @@ export default function AiSidebar({
 
   useEffect(() => {
     if (!aiLoading) {
-      setLoadingProgress(0);
-      setLoadingMessage('초정밀 검사 매뉴얼에 의거하여 코드를 진단하는 중입니다...');
-      return;
+    //비동기 격리
+      const syncTimer = setTimeout(() => {
+        setLoadingProgress(0);
+        setLoadingMessage('초정밀 검사 매뉴얼에 의거하여 코드를 진단하는 중입니다...');
+      }, 0);
+      return () => clearTimeout(syncTimer);
     }
 
     //게이지 증가 (뒤로 갈수록 느려짐)

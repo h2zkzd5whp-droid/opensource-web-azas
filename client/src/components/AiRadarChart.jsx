@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { animate, motion } from 'framer-motion';
+import { animate } from 'framer-motion';
 import styles from '../styles/AiRadarChart.module.css';
 
 export default function AiRadarChart({ data, forceShow = false }) {
@@ -31,10 +31,10 @@ export default function AiRadarChart({ data, forceShow = false }) {
       const base = 1.2;
       const config = { ease: [0.25, 1, 0.5, 1] };
 
-      const animR = animate(0, rScore, { ...config, duration: (rScore/100)*speed + base, onUpdate: setCurrR });
-      const animP = animate(0, pScore, { ...config, duration: (pScore/100)*speed + base, onUpdate: setCurrP });
-      const animM = animate(0, mScore, { ...config, duration: (mScore/100)*speed + base, onUpdate: setCurrM });
-      const animS = animate(0, sScore, { ...config, duration: (sScore/100)*speed + base, onUpdate: setCurrS });
+      const animR = animate(0, rScore, { ...config, duration: (rScore/100)*speed + base, onUpdate: (val) => setCurrR(val) });
+      const animP = animate(0, pScore, { ...config, duration: (pScore/100)*speed + base, onUpdate: (val) => setCurrP(val) });
+      const animM = animate(0, mScore, { ...config, duration: (mScore/100)*speed + base, onUpdate: (val) => setCurrM(val) });
+      const animS = animate(0, sScore, { ...config, duration: (sScore/100)*speed + base, onUpdate: (val) => setCurrS(val) });
 
       return () => { animR.stop(); animP.stop(); animM.stop(); animS.stop(); };
     }

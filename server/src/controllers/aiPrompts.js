@@ -50,6 +50,7 @@ module.exports = {
       
       "[OUTPUT FORMAT SPECIFICATION]\n" +
       "- Write the values for 'errorCause', 'explanation', and 'solution' in Korean.\n" +
+      "- Crucially, inside the 'explanation' and text blocks, refer to each tag identifier as 'tag 1', 'tag 2' instead of '태그 1', '태그 2'.\n" +
       "- You must output strictly in the specified JSON format matching the provided responseSchema.",
       
     getPrompt: ({ language, errorLog, code }) => 

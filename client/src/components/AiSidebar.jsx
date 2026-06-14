@@ -64,7 +64,7 @@ export default function AiSidebar({
             const theme = TAG_THEMES[(num - 1) % TAG_THEMES.length] || TAG_THEMES[0];
             return (
               <span key={tIdx} className={`inline-block px-1 py-0.2 mx-0.5 text-[10px] font-bold rounded border ${theme.badge}`}>
-                태그 {num}
+                tag {num}
               </span>
             );
           }
@@ -271,7 +271,7 @@ export default function AiSidebar({
                                 }}
                               >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                                  <span className={`px-1.5 py-0.5 text-[10px] font-black rounded border ${theme.badge}`}>태그 {block.id}</span>
+                                  <span className={`px-1.5 py-0.5 text-[10px] font-black rounded border ${theme.badge}`}>tag {block.id}</span>
                                   <span style={{ fontSize: '11px', color: '#a78bfa', fontWeight: '600' }}>{cleanTitle}</span>
                                 </div>
                                 <div style={{ paddingLeft: '2px' }}>{renderBlockBody(block.body, currentError)}</div>
@@ -290,9 +290,10 @@ export default function AiSidebar({
                     )}
                   </>
                 ) : (
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#3a3a55', fontSize: '12px', textAlign: 'center', gap: '6px', padding: '40px 0' }}>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#a5a5b3', fontSize: '12px', textAlign: 'center', gap: '6px', padding: '40px 0' }}>
                     <p>종합 정적 진단 실행 버튼을 누르면 코드 내부의</p>
                     <p>모든 잠재 결함을 전수 파싱하여 검출합니다.</p>
+                    <p>Run을 완료한 상태에서 시도해주세요.</p>
                   </div>
                 )}
               </div>

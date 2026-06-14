@@ -1,13 +1,13 @@
 import MonacoEditor from '@monaco-editor/react';
 
-// light 모드에서 흰색 앱바/사이드와 구분이 가도록 살짝 회색을 입힌 커스텀 테마
+// light 모드에서 흰색 앱바/사이드와 구분이 가도록 눈이 편안한 소프트 그레이 톤 테마
 const handleBeforeMount = (monaco) => {
   monaco.editor.defineTheme('ajas-light', {
     base: 'vs',
     inherit: true,
     rules: [],
     colors: {
-      'editor.background': '#f1f1ef',
+      'editor.background': '#f8f8fa',
     },
   });
 };

@@ -215,21 +215,10 @@ export default function useAiAssistant({ language}) {
 
       if (!data || !data.errors) throw new Error('AI 응답 서식이 올바르지 않습니다.');
 
-      // 1. 에러 필터링 로직
-      const filteredErrors = data.errors.filter(err => {
-        const cause = err.errorCause; // err.errorCause safety load
-        
-        // error 키워드 파싱
-        return (
-          cause.includes('Error') || 
-          cause.includes('Runtime') || 
-          cause.includes('Traceback')
-        );
-      });
-
+      // AI가 분석한 결함 내역을 그대로 표출하도록 엄격한 필터링 완화
       setAiData(prev => ({
         ...prev, 
-        explain: { ...data, errors: filteredErrors } 
+        explain: { ...data, errors: data.errors } 
       }));
       
     } catch (err) {

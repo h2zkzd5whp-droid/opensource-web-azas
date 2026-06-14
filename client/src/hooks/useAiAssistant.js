@@ -21,7 +21,7 @@ export default function useAiAssistant({ language}) {
 
   const editorRef = useRef(null);
   const [editorReady, setEditorReady] = useState(false);
-  
+  const lineHighlightRef = useRef([]);
   const decorationsRef = useRef([]);      
   const lineHighlightRef = useRef([]);    
 
@@ -139,7 +139,7 @@ export default function useAiAssistant({ language}) {
     }
 
     decorationsRef.current = editor.deltaDecorations(decorationsRef.current, newDecorations);
-  }, [aiData.explain, selectedErrorIdx, editorReady]);
+  }, [aiData.explain, selectedErrorIdx]);
 
   useEffect(() => {
     if (!editorRef.current || !window.monaco || !aiData.explain?.errors) return;
@@ -183,7 +183,7 @@ export default function useAiAssistant({ language}) {
     return () => {
       mouseDownDisposable.dispose();
     };
-  }, [aiData.explain, selectedErrorIdx, editorReady]);
+  }, [aiData.explain, selectedErrorIdx]);
 
   const highlightEditorLine = (line, className) => {
     if (!editorRef.current || !window.monaco) return;

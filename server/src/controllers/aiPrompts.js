@@ -12,73 +12,93 @@ try {
   evaluationManual = "Use standard engineering rubric for Readability, Performance, Maintainability, and Safety.";
 }
 
+// 공백/주석 미스매치를 방지, 코드 라인마다 절대적인 인덱스를 붙여주는 헬퍼 함수
+const helpers = {
+  formatWithLineNumbers: (code) => {
+    if (!code) return "";
+    return code
+      .split('\n')
+      .map((line, index) => `${index + 1}: ${line}`)
+      .join('\n');
+  }
+};
+
 module.exports = {
-  // 1. 디버깅 및 에러 설명 프롬프트
+  // 1. 디버깅 및 에러 종합 정적 진단 프롬프트
   explainer: {
     systemInstruction: 
-      "You are an expert senior software engineer helping developers debug complex compilation or runtime errors. " +
-      "Identify the exact root cause, pinpoint the most relevant line, and provide a clear solution.\n\n" +
+      "You are an expert static analysis tool and quality assurance engineer specializing strictly in compiler-level syntax and runtime exceptions. " +
+      "Scan the entire input source code comprehensively and detect ALL potential bugs, syntax errors, logical exceptions, or unhandled runtime exceptions (such as ZeroDivisionError, IndexError, TypeError, AttributeError, KeyError, and SyntaxError).\n\n" +
       
-      "[CRITICAL INSTRUCTION 1: ACCURATE LINE COUNTING]\n" +
-      "- Before analyzing, carefully trace the input code line by line.\n" +
-      "- If the input code doesn't have line numbers, mentally assign line numbers starting from 1.\n" +
-      "- You must double-check and ensure the 'errorLine' matches the exact physical line of the code where the bug resides.\n\n" +
+      "- [SCOPE CRITICAL LIMITATION] You must focus ONLY on runtime exceptions, unhandled crashes, logical bugs, and grammar violations. Do NOT analyze or report stylistic suggestions, code formatting issues, variable casing, or readability enhancements. Code style is completely handled by a separate style tab.\n" +
+      "- Crucially, even if the functions are not explicitly invoked or called, you MUST look inside every function definition and block to identify and diagnose all implicit runtime/compilation errors.\n" +
+      "- You must output a list of ALL discovered errors inside the 'errors' array matching the provided responseSchema. Do not stop at finding just one error.\n\n" +
       
-      "[CRITICAL INSTRUCTION 2: VISUAL INDEXING & STRUCTURED TAGGING]\n" +
-      "- To explain the error clearly without conflicts, use dynamic numbered tags like [TAG:1], [TAG:2], [TAG:3] etc., to index different code identifiers, variables, types, or expressions involved in the error.\n" +
-      "- Increment the number (1, 2, 3...) for each unique code element you reference so that they never overlap.\n" +
-      "- You MUST embed these exact tags naturally inside the 'explanation' field text.\n" +
-      "- Crucially, you must NOT leave these tags as dead strings. You must map each tag inside the 'tagMappings' array in the output JSON.\n\n" +
+      "[CRITICAL INSTRUCTION 1: ACCURATE LINE MATCHING]\n" +
+      "- The input source code is provided with absolute line numbers at the beginning of each line in 'X: code' format (where X is the line number).\n" +
+      "- You MUST use these exact prefix line numbers for 'errorLine', 'tagMappings', and any line mentioned in the 'explanation'.\n\n" +
       
-      "[CRITICAL INSTRUCTION 3: FORMATTING & READABILITY (INDENTATION)]\n" +
-      "- The text inside the 'explanation' field must be highly readable and structured.\n" +
-      "- You MUST use explicit newline characters (\\n\\n), bullet points (-), and bold text (**) inside the JSON string to simulate proper indentation, spacing, and hierarchy. Never output a solid wall of text.\n\n" +
+      "[CRITICAL INSTRUCTION 2: STRICT SEQUENTIAL TAGGING PER ERROR]\n" +
+      "- Within EACH error item block, you must assign internal token tag numbers sequentially starting from 1 (i.e., [TAG:1], [TAG:2], [TAG:3]...).\n" +
+      "- Continuous sequence numbers must be observed strictly without skips. Map them perfectly to the local 'tagMappings' array for that specific error.\n\n" +
+      
+      "[CRITICAL INSTRUCTION 3: TAG-BY-TAG STRUCTURED EXPANDABLE LAYOUT]\n" +
+      "- The 'explanation' field of EACH error item must follow the strict structural Markdown layout separated by explicit double newlines (\\n\\n):\n" +
+      "  ###[TAG:1] (Line 라인번호: '토큰명')\n" +
+      "  - **원인 및 분석:** 해당 토큰이 가지고 있는 명확한 문제점 분석.\n" +
+      "  - **연관 관계:** (해당 시) 타 태그와의 논리적 연계 설명.\n\n" +
       
       "[OUTPUT FORMAT SPECIFICATION]\n" +
-      "- Write the values for 'errorCause', 'explanation', and 'solution' in Korean. (Example: '5번 라인의 [TAG:1] 변수는 정의되지 않았습니다.')\n" +
+      "- Write the values for 'errorCause', 'explanation', and 'solution' in Korean.\n" +
       "- You must output strictly in the specified JSON format matching the provided responseSchema.",
       
     getPrompt: ({ language, errorLog, code }) => 
-      `[Language]: ${language}\n[Error Log]: ${errorLog}\n[Source Code]:\n${code}`,
+      `[Language]: ${language}\n[Initial Error Log (if any)]: ${errorLog}\n[Source Code (Absolute Line Numbers Prepend)]:\n${helpers.formatWithLineNumbers(code)}`,
       
     responseSchema: {
       type: Type.OBJECT,
       properties: {
-        errorLine: { 
-          type: Type.INTEGER, 
-          description: "The line number most relevant to the error based on physical line counting" 
-        },
-        errorCause: { 
-          type: Type.STRING, 
-          description: "Summary of the root cause written in Korean" 
-        },
-        explanation: { 
-          type: Type.STRING, 
-          description: "Detailed explanation written in Korean. MUST naturally embed [TAG:n] tokens and use explicit \\n\\n, bold, and bullets for clean indentation." 
-        },
-        tagMappings: {
+        errors: {
           type: Type.ARRAY,
-          description: "Internal tracking array for mapping the [TAG:n] tokens used inside the explanation field",
+          description: "코드 전체 공간에서 종합 검출된 모든 예외 처리 부재 및 문법 오류 객체 리스트",
           items: {
             type: Type.OBJECT,
             properties: {
-              tag: { type: Type.STRING, description: "e.g., '[TAG:1]'" },
-              token: { type: Type.STRING, description: "The exact variable name or code identifier referenced" },
-              line: { type: Type.INTEGER, description: "The physical line number where this token is located" }
+              errorLine: { 
+                type: Type.INTEGER, 
+                description: "해당 오류가 도출되는 핵심 절대 라인 번호" 
+              },
+              errorCause: { 
+                type: Type.STRING, 
+                description: "예외 유형 카테고리 요약 명칭 (Korean)" 
+              },
+              explanation: { 
+                type: Type.STRING, 
+                description: "###[TAG:n] 규칙을 완벽히 수반한 구조화 마크다운 해설 문자열" 
+              },
+              tagMappings: {
+                type: Type.ARRAY,
+                description: "해당 오류 내부에서 지정된 [TAG:n] 식별용 추적 바인딩 배열",
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    tag: { type: Type.STRING, description: "e.g., '[TAG:1]'" },
+                    token: { type: Type.STRING, description: "정확한 타겟 변수/식별 문자열" },
+                    line: { type: Type.INTEGER, description: "해당 토큰의 절대 라인 번호" }
+                  },
+                  required: ["tag", "token", "line"]
+                }
+              },
+              solution: { 
+                type: Type.STRING, 
+                description: "해당 파트의 단계별 대응 수리 코드 설계 조언 가이드 (Korean)" 
+              }
             },
-            required: ["tag", "token", "line"]
+            required: ["errorLine", "errorCause", "explanation", "tagMappings", "solution"]
           }
-        },
-        fixedCode: { 
-          type: Type.STRING, 
-          description: "The complete fixed code or the core corrected code snippet" 
-        },
-        solution: { 
-          type: Type.STRING, 
-          description: "Step-by-step solution steps written in Korean with explicit \\n\\n, bullets, and bold styling" 
         }
       },
-      required: ["errorLine", "errorCause", "explanation", "tagMappings", "fixedCode", "solution"]
+      required: ["errors"]
     }
   },
 
@@ -91,9 +111,14 @@ module.exports = {
       "Your sole mission is to audit the provided code across 4 core engineering axes: Readability(가독성), Performance(성능효율성), Maintainability(유지보수), and Safety(예외안정).\n" +
       "You must parse the issues and classify them strictly into the designated response schema structure.\n\n" +
 
+      "[CRITICAL INSTRUCTION: ACCURATE LINE MATCHING]\n" +
+      "- The input source code is provided with absolute line numbers at the beginning of each line in 'X: code' format (where X is the line number).\n" +
+      "- In your JSON response, every single 'line' property inside the annotations array MUST exactly match these prepended line numbers (X).\n" +
+      "- Do NOT recount or shift indexes for empty lines or comments. Match the physical line numbers exactly.\n\n" +
+
       "[DETAILED CODE AUDIT REFERENCE MANUAL]\n" +
       "You must evaluate the input code against the following master rubric criteria. Do not deviate, compromise, or introduce arbitrary rules:\n\n" +
-      evaluationManual + // 👈 파일에서 읽어온 방대한 정밀 매뉴얼 매끄럽게 결합
+      evaluationManual +
       "\n\n" +
 
       "[CRITICAL INSTRUCTION: DETERMINISTIC SCORING RULES]\n" +
@@ -110,7 +135,7 @@ module.exports = {
       "- Ensure you match the responseSchema structural signature perfectly. Never omit any arrays.",
       
     getPrompt: ({ language, code }) => 
-      `Audit the following source code strictly matching the criteria detailed in the [OFFICIAL EVALUATION MANUAL]. Provide deterministic grouping and linear line order sorting.\n\n[Language]: ${language}\n[Source Code]:\n${code}`,
+      `Audit the following source code strictly matching the criteria detailed in the [OFFICIAL EVALUATION MANUAL]. Provide deterministic grouping and linear line order sorting.\n\n[Language]: ${language}\n[Source Code (Absolute Line Numbers Prepend)]:\n${helpers.formatWithLineNumbers(code)}`,
       
     responseSchema: {
       type: Type.OBJECT,
@@ -179,25 +204,4 @@ module.exports = {
       required: ["score", "readability", "performance", "maintainability", "safety", "annotations"]
     }
   },
-
-  // 3. 알고리즘 최적화 프롬프트
-  optimizer: {
-    systemInstruction: 
-      "You are an expert in algorithms and computer performance optimization. Eliminate redundant operations and refactor the code efficiently. " +
-      "CRITICAL: You must output strictly in the specified JSON format. Write the 'description' field in Korean.",
-      
-    getPrompt: ({ language, code }) => 
-      `Analyze this algorithm code to improve time and space complexity. Devise an optimized alternative while maintaining code readability.\n\n[Language]: ${language}\n[Source Code]:\n${code}`,
-      
-    responseSchema: {
-      type: Type.OBJECT,
-      properties: {
-        currentComplexity: { type: Type.STRING, description: "Current time/space complexity (e.g., O(N^2))" },
-        optimizedComplexity: { type: Type.STRING, description: "Anticipated complexity after optimization (e.g., O(N log N))" },
-        optimizedCode: { type: Type.STRING, description: "The completely refactored and optimized source code" },
-        description: { type: Type.STRING, description: "Core explanation of what was changed and why, written in Korean" }
-      },
-      required: ["currentComplexity", "optimizedComplexity", "optimizedCode", "description"]
-    }
-  }
 };

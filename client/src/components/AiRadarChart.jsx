@@ -50,9 +50,6 @@ export default function AiRadarChart({ data, forceShow = false }) {
     <div className={styles.dashboardCard}>
       <div className={styles.headerRow}>
         <h4 className={styles.dashboardTitle}>AI 정밀 코드 품질 진단</h4>
-        <div className={styles.buttonGroup}>
-          <button className={styles.controlBtn} onClick={() => setAnimateTrigger(prev => prev + 1)} disabled={!showChart}>🔄 되돌리기</button>
-        </div>
       </div>
       <div className={styles.chartContainer}>
         <svg viewBox="0 0 200 210" className={styles.chartSvg}>

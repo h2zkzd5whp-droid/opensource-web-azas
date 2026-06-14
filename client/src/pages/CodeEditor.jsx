@@ -46,7 +46,8 @@ export default function CodeEditor() {
     activeTab, handleTabChange,
     aiData, aiLoading, aiError, setAiError,
     triggerAiExplainer, highlightEditorLine,
-    resetAiState, setEditorInstance,triggerStyleReviewer,triggerCodeOptimizer,
+    resetAiState, setEditorInstance, triggerStyleReviewer,
+    highlightedTag,selectedErrorIdx, setSelectedErrorIdx
   } = useAiAssistant({ language, setSource, setDirty });
 
   const ext = SUPPORTED_LANGUAGES.find((l) => l.id === language)?.ext ?? '';
@@ -196,7 +197,7 @@ export default function CodeEditor() {
         running={running}
         activeTab={activeTab}
       />
-      
+
       <div className={styles.body} style={{ display: 'flex', flex: 1, minHeight: 0, position: 'relative' }}>
         <LanguageSelector language={language} onSelect={handleLanguageSelect} />
         
@@ -227,10 +228,11 @@ export default function CodeEditor() {
             aiError={aiError}
             setAiError={setAiError}
             highlightEditorLine={highlightEditorLine}
-            
+            highlightedTag={highlightedTag}
+            selectedErrorIdx={selectedErrorIdx}     
+            setSelectedErrorIdx={setSelectedErrorIdx} 
             triggerAiExplainer={triggerAiExplainer}
             triggerStyleReviewer={triggerStyleReviewer}
-            triggerCodeOptimizer={triggerCodeOptimizer}
             errorLog={currentErrorLog}
           />
         </div>

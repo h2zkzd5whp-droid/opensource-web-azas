@@ -48,7 +48,7 @@ export default function AiRadarChart({ data, forceShow = false }) {
   return (
     <div className={styles.dashboardCard}>
       <div className={styles.headerRow}>
-        <h4 className={styles.dashboardTitle}>AI 정밀 코드 품질 진단</h4>
+        <h4 className={styles.dashboardTitle}>점수 차트</h4>
       </div>
       <div className={styles.chartContainer}>
         <svg viewBox="0 0 200 210" className={styles.chartSvg}>

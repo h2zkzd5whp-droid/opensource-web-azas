@@ -92,14 +92,14 @@ export default function AiSidebar({
   }, [highlightedTag]);
 
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [loadingMessage, setLoadingMessage] = useState('초정밀 검사 매뉴얼에 의거하여 코드를 진단하는 중입니다...');
+  const [loadingMessage, setLoadingMessage] = useState('매뉴얼에 의거하여 코드를 진단하는 중입니다...');
 
   useEffect(() => {
     if (!aiLoading) {
       //비동기 격리
       const syncTimer = setTimeout(() => {
         setLoadingProgress(0);
-        setLoadingMessage('초정밀 검사 매뉴얼에 의거하여 코드를 진단하는 중입니다...');
+        setLoadingMessage('매뉴얼에 의거하여 코드를 진단하는 중입니다...');
       }, 0);
       return () => clearTimeout(syncTimer);
     }
@@ -233,13 +233,13 @@ export default function AiSidebar({
                       <>
                         <div style={{ backgroundColor: '#2e1414', border: '0.5px solid rgba(248,113,113,0.3)', borderRadius: '8px', padding: '12px' }}>
                           <div style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '4px', background: 'rgba(248,113,113,0.15)', color: '#f87171', fontSize: '10px', fontWeight: 600, marginBottom: '6px' }}>
-                            LINE {currentError.errorLine} 핵심 탐지 리포트
+                            LINE {currentError.errorLine} detection error
                           </div>
                           <p style={{ fontSize: '12px', color: '#e2e2f0', lineHeight: 1.6, margin: 0 }}>{currentError.errorCause}</p>
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: 0 }}>
-                          <h4 style={{ fontSize: '11px', color: '#6e6e80', fontWeight: 500, margin: 0 }}>AI 정밀 추적 분석 가이드</h4>
+                          <h4 style={{ fontSize: '11px', color: '#6e6e80', fontWeight: 500, margin: 0 }}>Guide</h4>
                           
                           {renderParsedExplanation(currentError.explanation).map((block) => {
                             if (!block.isTag) {
@@ -308,7 +308,7 @@ export default function AiSidebar({
                 {!aiLoading && aiData.style && (
                   <>
                     <motion.div className={styles.metricBarGroup} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} style={{ marginTop: '12px' }}>
-                      <h4 className={styles.dashboardTitle} style={{ fontSize: '12px', color: '#e2e2f0', marginBottom: '4px' }}>실시간 지표 분석 결과</h4>
+                      <h4 className={styles.dashboardTitle} style={{ fontSize: '12px', color: '#e2e2f0', marginBottom: '4px' }}>분석 결과 점수</h4>
                       {['readability', 'performance', 'maintainability', 'safety'].map((key, i) => {
                         const titles = { readability: '가독성', performance: '성능효율성', maintainability: '유지보수성', safety: '예외안정성' };
                         return (
@@ -327,7 +327,7 @@ export default function AiSidebar({
                     {styleStep >= 2 && <motion.div initial={{ opacity: 0, scale: 0.93 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }}><AiRadarChart data={aiData.style} forceShow={true} /></motion.div>}
                     {styleStep >= 3 && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '8px' }}>
-                        <h4 style={{ fontSize: '12px', color: '#a78bfa', fontWeight: 600, borderBottom: '0.5px solid #2a2a3e', paddingBottom: '6px', margin: 0 }}>매뉴얼 기반 상세 정밀 피드백</h4>
+                        <h4 style={{ fontSize: '12px', color: '#a78bfa', fontWeight: 600, borderBottom: '0.5px solid #2a2a3e', paddingBottom: '6px', margin: 0 }}>매뉴얼 기반 피드백</h4>
                         {Object.entries(aiData.style.annotations || {}).map(([category, list]) => {
                           const sectorTitles = { readability: '가독성 분석 피드백', performance: '성능 효율성 분석 피드백', maintainability: '유지보수성 분석 피드백', safety: '예외 안정성 분석 피드백' };
                           const sectorColors = { readability: '#38bdf8', performance: '#34d399', maintainability: '#a78bfa', safety: '#f87171' };

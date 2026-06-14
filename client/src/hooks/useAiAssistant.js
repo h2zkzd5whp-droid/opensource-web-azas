@@ -20,14 +20,15 @@ export default function useAiAssistant({ language}) {
   const [highlightedTag, setHighlightedTag] = useState(null);  // 클릭 활성화된 내부 태그 번호
 
   const editorRef = useRef(null);
-  const [editorReady, setEditorReady] = useState(false);
-  const lineHighlightRef = useRef([]);
-  const decorationsRef = useRef([]);      
-  const lineHighlightRef = useRef([]);    
+  const monacoRef = useRef(null);
+  const decorationsRef = useRef([]);
+  const lineHighlightRef = useRef([]);   
 
-  const setEditorInstance = (editor) => { 
-    editorRef.current = editor; 
-    setEditorReady(prev => !prev);
+  // editor와 monaco 인스턴스를 onMount 시점에 함께 주입받아 ref로 보관한다.
+  // 전역 window.monaco에 의존하면 F5 재마운트 시 비어 있어 데코레이션이 깨지므로 사용하지 않는다.
+  const setEditorInstance = (editor, monaco) => {
+    editorRef.current = editor;
+    if (monaco) monacoRef.current = monaco;
   };
 
   const getLatestSource = () => { 
@@ -186,15 +187,15 @@ export default function useAiAssistant({ language}) {
   }, [aiData.explain, selectedErrorIdx]);
 
   const highlightEditorLine = (line, className) => {
-    if (!editorRef.current || !window.monaco) return;
+    if (!editorRef.current || !monacoRef.current) return;
     const editor = editorRef.current;
     editor.revealLineInCenterIfOutsideViewport(line);
     
     // decorationsRef가 아닌 lineHighlightRef를 표출하므로 태그 스티커가 소멸되지 않고 생존합니다.
     lineHighlightRef.current = editor.deltaDecorations(lineHighlightRef.current, [
       {
-        range: new window.monaco.Range(line, 1, line, 100),
-        options: { isWholeLine: true, className: className || 'bg-purple-500/10 border-l-4 border-purple-500' }
+        range: new monacoRef.current.Range(line, 1, line, 100),
+        options: { isWholeLine: true, className }
       }
     ]);
   };
@@ -250,9 +251,11 @@ export default function useAiAssistant({ language}) {
 
       setAiData(prev => ({ ...prev, style: data }));
 
-      if (data.annotations && data.annotations.length > 0) {
+      // 에디터·monaco 인스턴스가 아직 준비되지 않았으면(예: F5 직후) 데코레이션만 건너뛴다.
+      // 점수·텍스트 결과(setAiData)는 위에서 이미 반영되므로 리뷰 자체는 정상 표시된다.
+      if (data.annotations && data.annotations.length > 0 && editorRef.current && monacoRef.current) {
         const newDecorations = data.annotations.map(ann => ({
-          range: new window.monaco.Range(ann.line, 1, ann.line, 100),
+          range: new monacoRef.current.Range(ann.line, 1, ann.line, 100),
           options: {
             isWholeLine: true,
             className: ann.severity === 'warning' ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'bg-blue-500/10 border-l-4 border-blue-500',

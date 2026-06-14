@@ -4,6 +4,90 @@ import { TAG_THEMES } from '../hooks/useAiAssistant';
 import styles from '../styles/AiSidebar.module.css';
 import AiRadarChart from './AiRadarChart';
 
+const PIPELINE_STAGES = [
+  'Source Code', 'Lexical Analysis', 'Syntax Parsing', 'AST Generation', 
+  'Semantic Analysis', 'IR Optimization', 'Code Generation', 
+  'Machine Code', 'Linking', 'Execution'
+];
+
+const SystemMonitor = () => {
+  const [cpu, setCpu] = useState(10);
+  const [mem, setMem] = useState(40);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCpu(Math.floor(Math.random() * 80) + 15);
+      setMem(Math.floor(Math.random() * 30) + 50);
+    }, 400);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className={styles.sysMonContainer}>
+      <div className={styles.sysMonHeader}>System Monitor</div>
+      <div className={styles.sysMonRow}>
+        <span className={styles.sysMonLabel}>CPU</span>
+        <div className={styles.sysMonTrack}>
+          <motion.div className={styles.sysMonFillCpu} animate={{ width: `${cpu}%` }} transition={{ duration: 0.4 }} />
+        </div>
+        <span className={styles.sysMonValue}>{cpu}%</span>
+      </div>
+      <div className={styles.sysMonRow}>
+        <span className={styles.sysMonLabel}>MEM</span>
+        <div className={styles.sysMonTrack}>
+          <motion.div className={styles.sysMonFillMem} animate={{ width: `${mem}%` }} transition={{ duration: 0.4 }} />
+        </div>
+        <span className={styles.sysMonValue}>{mem}%</span>
+      </div>
+    </div>
+  );
+};
+
+const CompilationPipeline = ({ progress, message }) => {
+  let activeIndex = Math.floor((progress / 100) * PIPELINE_STAGES.length);
+  if (activeIndex >= PIPELINE_STAGES.length) activeIndex = PIPELINE_STAGES.length - 1;
+
+  return (
+    <div className={styles.pipelineWrapper}>
+      <SystemMonitor />
+      
+      <div className={styles.pipelineNodes}>
+        {PIPELINE_STAGES.map((stage, idx) => {
+          const isActive = idx === activeIndex;
+          const isPast = idx < activeIndex;
+          
+          return (
+            <div key={stage} className={styles.pipelineNodeRow}>
+              <div className={styles.nodeCircleWrapper}>
+                <motion.div 
+                  className={`${styles.nodeCircle} ${isActive ? styles.nodeActive : ''} ${isPast ? styles.nodePast : ''}`}
+                  animate={isActive ? { scale: [1, 1.4, 1], boxShadow: ["0px 0px 0px rgba(167,139,250,0)", "0px 0px 10px rgba(167,139,250,0.8)", "0px 0px 0px rgba(167,139,250,0)"] } : {}}
+                  transition={{ repeat: isActive ? Infinity : 0, duration: 1 }}
+                />
+                {idx < PIPELINE_STAGES.length - 1 && (
+                  <div className={`${styles.nodeLine} ${isPast ? styles.linePast : ''}`}>
+                    {isPast && (
+                      <motion.div className={styles.nodeLineFill} initial={{ height: 0 }} animate={{ height: '100%' }} transition={{ duration: 0.3 }} />
+                    )}
+                  </div>
+                )}
+              </div>
+              <span className={`${styles.nodeLabel} ${isActive ? styles.labelActive : ''} ${isPast ? styles.labelPast : ''}`}>
+                {stage}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={styles.loadingMessageContainer}>
+        <motion.div className={styles.loadingSpinner} animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} />
+        <p className={styles.loadingMessage}>{message}</p>
+      </div>
+    </div>
+  );
+};
+
 export default function AiSidebar({ 
   activeTab, 
   onTabChange,
@@ -172,12 +256,7 @@ export default function AiSidebar({
       {/* 메인 컨텐츠 영역 */}
       <div style={{ flex: 1, overflow: 'auto', padding: '12px', scrollBehavior: 'smooth' }}>
         {aiLoading ? (
-          <div className={styles.progressWrapper} style={{ padding: '20px 8px', marginTop: '20px' }}>
-            <div className={styles.progressTrack}>
-              <motion.div className={styles.progressBar} animate={{ width: `${loadingProgress}%` }} transition={{ duration: 0.3, ease: "easeOut" }} />
-            </div>
-            <p style={{ fontSize: '11px', color: '#a78bfa', marginTop: '12px', textAlign: 'center', lineHeight: 1.6 }}>{loadingMessage}</p>
-          </div>
+          <CompilationPipeline progress={loadingProgress} message={loadingMessage} />
         ) : aiError ? (
           <div 
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10px', gap: '8px' }}>

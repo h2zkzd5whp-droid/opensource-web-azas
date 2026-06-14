@@ -127,13 +127,69 @@
   cursor: not-allowed;
 }
 
-/*스타일 분석 전용 로딩 바 */
-.progressWrapper {
-  width: 100%;
-  margin-top: 20px;
+/* System Monitor Styles */
+.sysMonContainer {
+  background-color: #1a1a2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sysMonHeader {
+  font-size: 10px;
+  color: #a78bfa;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sysMonRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sysMonLabel {
+  font-size: 10px;
+  color: #a6adc8;
+  width: 24px;
+}
+
+.sysMonTrack {
+  flex: 1;
+  height: 6px;
+  background-color: #0e0e14;
+  border-radius: 3px;
+  overflow: hidden;
   position: relative;
 }
 
+.sysMonFillCpu {
+  height: 100%;
+  background: linear-gradient(90deg, #34d399, #10b981);
+  border-radius: 3px;
+}
+
+.sysMonFillMem {
+  height: 100%;
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
+  border-radius: 3px;
+}
+
+.sysMonValue {
+  font-size: 10px;
+  color: #e2e2f0;
+  width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Original Progress Bar Styles used by Style Review Panel */
 .progressTrack {
   width: 100%;
   height: 8px;
@@ -150,15 +206,115 @@
   position: relative;
 }
 
-.pingPongBall {
-  width: 12px;
-  height: 12px;
-  background-color: #fff;
+/* Pipeline Styles */
+.pipelineWrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 4px;
+}
+
+.pipelineNodes {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.pipelineNodeRow {
+  display: flex;
+  align-items: stretch;
+  min-height: 36px;
+}
+
+.nodeCircleWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20px;
+  margin-right: 12px;
+}
+
+.nodeCircle {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  background-color: #2a2a3e;
+  border: 2px solid #141423;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.nodeActive {
+  background-color: #a78bfa;
+  border-color: #8b5cf6;
+}
+
+.nodePast {
+  background-color: #6366f1;
+  border-color: #4f46e5;
+}
+
+.nodeLine {
+  width: 2px;
+  flex: 1;
+  background-color: #2a2a3e;
+  margin-top: -2px;
+  margin-bottom: -2px;
+  z-index: 1;
+  position: relative;
+}
+
+.linePast {
+  background-color: transparent;
+}
+
+.nodeLineFill {
+  width: 100%;
+  background-color: #6366f1;
   position: absolute;
-  right: -6px;
-  top: -14px;  /* 막대 위에서 튀기 시작 */
-  box-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+  top: 0;
+  left: 0;
+}
+
+.nodeLabel {
+  font-size: 11px;
+  color: #6e6e80;
+  padding-top: -2px; /* align with circle */
+  line-height: 10px;
+  transition: all 0.3s ease;
+}
+
+.labelActive {
+  color: #a78bfa;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.labelPast {
+  color: #a6adc8;
+}
+
+.loadingMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(167, 139, 250, 0.2);
+  border-top-color: #a78bfa;
+  border-radius: 50%;
+}
+
+.loadingMessage {
+  font-size: 11px;
+  color: #a78bfa;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0;
 }
 
 

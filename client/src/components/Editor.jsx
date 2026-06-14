@@ -22,7 +22,8 @@ export default function Editor({ source, language, fontSize, theme, onChange, on
       onChange={(value) => onChange(value ?? '')}
       beforeMount={handleBeforeMount}
       
-      // 모나코 마운트 시 부모 컴포넌트로 editor 인스턴스를 올려보냄
+      // 모나코 마운트 시 부모 컴포넌트로 editor·monaco 인스턴스를 함께 올려보냄
+      // (전역 window.monaco는 채워진다는 보장이 없어 F5 재마운트 시 깨지므로 명시적으로 주입)
       onMount={(editor, monaco) => {
         if (onMount) {
           onMount(editor, monaco);

@@ -5,7 +5,7 @@ const path = require('path');
 //txt파일 로딩
 let evaluationManual = "";
 try {
-  const manualPath = path.join(__dirname, '../controllers/manual.txt'); // 프로젝트 구조에 맞게 경로 지정
+  const manualPath = path.join(__dirname, '../controllers/manual.txt');
   evaluationManual = fs.readFileSync(manualPath, 'utf8');
 } catch (err) {
   console.warn("[WARNING] 정밀 진단 매뉴얼 파일을 로드할 수 없어 인라인 압축 텍스트를 사용합니다.", err);

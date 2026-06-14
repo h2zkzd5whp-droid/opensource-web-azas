@@ -209,7 +209,7 @@ export default function CodeEditor() {
               fontSize={editorFontSize}
               theme={editorTheme}
               onChange={handleSourceChange}
-              onMount={(editor) => setEditorInstance(editor)} 
+              onMount={(editor, monaco) => setEditorInstance(editor, monaco)}
             />
           </div>
           <div className={styles.resizer} role="separator" aria-orientation="horizontal" onMouseDown={startResize} />

@@ -9,7 +9,7 @@ export const TAG_THEMES = [
   { badge: 'bg-purple-500/20 text-purple-400 border-purple-500/30', color: '#8b5cf6', text: '⑤' },
 ];
 
-export default function useAiAssistant({ language, setSource, setDirty }) {
+export default function useAiAssistant({ language}) {
   const [activeTab, setActiveTab] = useState('explain'); 
   const [aiData, setAiData] = useState({ explain: null, style: null }); 
   const [aiLoading, setAiLoading] = useState(false);

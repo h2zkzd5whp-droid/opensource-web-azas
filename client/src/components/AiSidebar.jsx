@@ -42,7 +42,7 @@ export default function AiSidebar({
     return blocks;
   };
 
-  const renderBlockBody = (body, localErrorObj) => {
+  const renderBlockBody = (body) => {
     const lines = body.split('\n');
     return lines.map((line, lIdx) => {
       let processedLine = line.trim();
@@ -243,7 +243,7 @@ export default function AiSidebar({
                           
                           {renderParsedExplanation(currentError.explanation).map((block) => {
                             if (!block.isTag) {
-                              return <div key={block.id} style={{ fontSize: '12px', color: '#aaa', padding: '2px' }}>{renderBlockBody(block.body, currentError)}</div>;
+                              return <div key={block.id} style={{ fontSize: '12px', color: '#aaa', padding: '2px' }}>{renderBlockBody(block.body)}</div>;
                             }
 
                             const theme = TAG_THEMES[(block.id - 1) % TAG_THEMES.length] || TAG_THEMES[0];
@@ -274,7 +274,7 @@ export default function AiSidebar({
                                   <span className={`px-1.5 py-0.5 text-[10px] font-black rounded border ${theme.badge}`}>tag {block.id}</span>
                                   <span style={{ fontSize: '11px', color: '#a78bfa', fontWeight: '600' }}>{cleanTitle}</span>
                                 </div>
-                                <div style={{ paddingLeft: '2px' }}>{renderBlockBody(block.body, currentError)}</div>
+                                <div style={{ paddingLeft: '2px' }}>{renderBlockBody(block.body)}</div>
                               </motion.div>
                             );
                           })}

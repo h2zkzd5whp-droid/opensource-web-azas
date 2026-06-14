@@ -10,7 +10,6 @@ export default function AiRadarChart({ data, forceShow = false }) {
 
   // 부모에게서 받은 forceShow(시퀀스 제어용)가 true가 되면 내부 showChart도 true로
   const [showChart, setShowChart] = useState(false);
-  const [animateTrigger, setAnimateTrigger] = useState(0);
 
   useEffect(() => {
     if (forceShow) Promise.resolve().then(() => setShowChart(true)); //연쇄 렌더링 차단
@@ -38,7 +37,7 @@ export default function AiRadarChart({ data, forceShow = false }) {
 
       return () => { animR.stop(); animP.stop(); animM.stop(); animS.stop(); };
     }
-  }, [showChart, animateTrigger, rScore, pScore, mScore, sScore]);
+  }, [showChart, rScore, pScore, mScore, sScore]);
 
   const pRead = { x: cx, y: cy - (currR / 100) * rMax };
   const pPerf = { x: cx + (currP / 100) * rMax, y: cy };

@@ -47,7 +47,7 @@ const languageConfig = {
     },
     java: { 
         image: 'eclipse-temurin:17-jdk-jammy', 
-        cmd: 'cp /app/script.java /app/Main.java && javac /app/Main.java && java -cp /app Main && rm /app/Main.java /app/Main.class /app/script.java', 
+        cmd: 'cp /app/script.java /app/Main.java && javac /app/Main.java && java -cp /app Main && rm /app/Main.java /app/Main*.class /app/script.java', 
         ext: 'java' 
     },
     cpp: { 

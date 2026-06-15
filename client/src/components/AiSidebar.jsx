@@ -18,7 +18,7 @@ const SystemMonitor = () => {
     const timer = setInterval(() => {
       setCpu(Math.floor(Math.random() * 80) + 15);
       setMem(Math.floor(Math.random() * 30) + 50);
-    }, 400);
+    }, 800);
     return () => clearInterval(timer);
   }, []);
 

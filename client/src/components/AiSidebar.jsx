@@ -370,7 +370,7 @@ export default function AiSidebar({
                   </>
                 ) : (
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#a5a5b3', fontSize: '12px', textAlign: 'center', gap: '6px', padding: '40px 0' }}>
-                    <p>종합 정적 진단 실행 버튼을 누르면 코드 내부의</p>
+                    <p>에러 분석 시작 버튼을 누르면 코드 내부의</p>
                     <p>모든 잠재 결함을 전수 파싱하여 검출합니다.</p>
                     <p>Run을 완료한 상태에서 시도해주세요.</p>
                   </div>
@@ -384,6 +384,10 @@ export default function AiSidebar({
                 <button onClick={() => { if (!aiLoading) triggerStyleReviewer(); }} disabled={aiLoading} style={actionButtonStyle}>
                   {aiData.style ? '코드 스타일 재분석' : '코드 스타일 분석 시작'}
                 </button>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#a5a5b3', fontSize: '12px', textAlign: 'center', gap: '6px', padding: '40px 0' }}>
+                    <p>코트 스타일 분석 시작 버튼을 누르면 메뉴얼을 기반으로</p>
+                    <p>사용자의 코드 스타일에 점수를 부여합니다.</p>
+                  </div>
                 {!aiLoading && aiData.style && (
                   <>
                     <motion.div className={styles.metricBarGroup} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} style={{ marginTop: '12px' }}>

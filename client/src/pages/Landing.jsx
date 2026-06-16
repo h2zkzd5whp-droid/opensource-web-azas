@@ -147,17 +147,12 @@ export default function Landing() {
                     desc: "Evaluates your code quality line by line, detecting readability bottlenecks, anti-patterns, and convention violations in real time to suggest cleaner alternatives."
                   },
                   {
-                    tag: "02 · Performance Optimizer AI",
-                    title: "Algorithmic Optimization",
-                    desc: "Eliminates redundant calculations and runtime overhead, refactoring logic with live time/space complexity analysis ($O(N)$) for peak computational efficiency."
-                  },
-                  {
-                    tag: "03 · Debugging Expert AI",
+                    tag: "02 · Debugging Expert AI",
                     title: "Zero-Error Debugging",
                     desc: "Instantly tracks down the root causes of compilation and runtime errors, providing ready-to-apply code corrections along with indexed, beginner-friendly explanations."
                   },
                   {
-                    tag: "04 · Core Environment",
+                    tag: "03 · Core Environment",
                     title: "Lightweight Online Compiler",
                     desc: "Compile and execute your source code instantly inside your browser with a lightweight engine—completely independent of local tools or complex Docker environments."
                   }
